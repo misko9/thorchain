@@ -17,7 +17,6 @@ import (
 
 	wasm "github.com/CosmWasm/wasmd/x/wasm/types"
 	ibcconntypes "github.com/cosmos/ibc-go/v8/modules/core/03-connection/types"
-	tokenfactory "github.com/strangelove-ventures/tokenfactory/x/tokenfactory/types"
 )
 
 var (
@@ -34,10 +33,6 @@ var (
 	ChainImage = ibc.NewDockerImage("thornode", "local", "1025:1025")
 
 	DefaultGenesis = []cosmos.GenesisKV{
-		// tokenfactory: set create cost in set denom or in gas usage.
-		cosmos.NewGenesisKV("app_state.tokenfactory.params.denom_creation_fee", nil),
-		cosmos.NewGenesisKV("app_state.tokenfactory.params.denom_creation_gas_consume", 1), // cost 1 gas to create a new denom
-
 	}
 
 	DefaultChainConfig = ibc.ChainConfig{
@@ -90,7 +85,6 @@ func GetEncodingConfig() *moduletestutil.TestEncodingConfig {
 	cfg := cosmos.DefaultEncoding()
 	// TODO: add encoding types here for the modules you want to use
 	wasm.RegisterInterfaces(cfg.InterfaceRegistry)
-	tokenfactory.RegisterInterfaces(cfg.InterfaceRegistry)
 	return &cfg
 }
 
