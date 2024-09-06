@@ -14,9 +14,6 @@ import (
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	wasm "github.com/CosmWasm/wasmd/x/wasm/types"
-	ibcconntypes "github.com/cosmos/ibc-go/v8/modules/core/03-connection/types"
 )
 
 var (
@@ -84,7 +81,6 @@ var (
 func GetEncodingConfig() *moduletestutil.TestEncodingConfig {
 	cfg := cosmos.DefaultEncoding()
 	// TODO: add encoding types here for the modules you want to use
-	wasm.RegisterInterfaces(cfg.InterfaceRegistry)
 	return &cfg
 }
 
@@ -165,14 +161,4 @@ func TxCommandBuilderNode(ctx context.Context, node *cosmos.ChainNode, cmd []str
 
 	command = append(command, extraFlags...)
 	return command
-}
-
-func getTransferChannel(channels []ibc.ChannelOutput) (string, error) {
-	for _, channel := range channels {
-		if channel.PortID == "transfer" && channel.State == ibcconntypes.OPEN.String() {
-			return channel.ChannelID, nil
-		}
-	}
-
-	return "", fmt.Errorf("no open transfer channel found: %+v", channels)
 }

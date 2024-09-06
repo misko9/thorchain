@@ -29,8 +29,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-
-	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 )
 
 // SimAppChainID hardcoded chainID for simulation
@@ -152,7 +150,6 @@ func TestAppImportExport(t *testing.T) {
 			stakingtypes.UnbondingTypeKey, stakingtypes.ValidatorUpdatesKey,
 		},
 		feegrant.StoreKey:      {feegrant.FeeAllowanceQueueKeyPrefix},
-		wasmtypes.StoreKey:     {wasmtypes.TXCounterPrefix},
 	}
 
 	storeKeys := app.GetStoreKeys()

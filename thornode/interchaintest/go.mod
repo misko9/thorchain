@@ -20,9 +20,7 @@ replace (
 
 require (
 	cosmossdk.io/math v1.3.0
-	github.com/CosmWasm/wasmd v0.50.0
 	github.com/cosmos/cosmos-sdk v0.50.9
-	github.com/cosmos/ibc-go/v8 v8.4.0
 	github.com/strangelove-ventures/interchaintest/v8 v8.5.0
 	github.com/stretchr/testify v1.9.0
 	go.uber.org/zap v1.27.0
@@ -51,7 +49,6 @@ require (
 	github.com/ChainSafe/go-schnorrkel v1.1.0 // indirect
 	github.com/ChainSafe/go-schnorrkel/1 v0.0.0-00010101000000-000000000000 // indirect
 	github.com/ComposableFi/go-subkey/v2 v2.0.0-tm03420 // indirect
-	github.com/CosmWasm/wasmvm v1.5.2 // indirect
 	github.com/DataDog/datadog-go v3.2.0+incompatible // indirect
 	github.com/DataDog/zstd v1.5.5 // indirect
 	github.com/FactomProject/basen v0.0.0-20150613233007-fe3947df716e // indirect
@@ -84,6 +81,7 @@ require (
 	github.com/cosmos/gogoproto v1.5.0 // indirect
 	github.com/cosmos/iavl v1.1.2 // indirect
 	github.com/cosmos/ibc-go/modules/capability v1.0.0 // indirect
+	github.com/cosmos/ibc-go/v8 v8.4.0 // indirect
 	github.com/cosmos/ics23/go v0.10.0 // indirect
 	github.com/cosmos/interchain-security/v5 v5.0.0 // indirect
 	github.com/cosmos/ledger-cosmos-go v0.13.3 // indirect

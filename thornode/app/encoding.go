@@ -9,7 +9,6 @@ import (
 
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	"github.com/rollchains/thornode/app/params"
 )
 
@@ -24,7 +23,6 @@ func MakeEncodingConfig(t testing.TB) params.EncodingConfig {
 		nil,
 		true,
 		simtestutil.NewAppOptionsWithFlagHome(t.TempDir()),
-		[]wasmkeeper.Option{},
 	)
 	return makeEncodingConfig(tempApp)
 }

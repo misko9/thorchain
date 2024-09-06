@@ -35,18 +35,10 @@ require (
 	cosmossdk.io/x/nft v0.1.0
 	cosmossdk.io/x/tx v0.13.3
 	cosmossdk.io/x/upgrade v0.1.1
-	github.com/CosmWasm/wasmd v0.50.0
-	github.com/CosmWasm/wasmvm v1.5.4
 	github.com/cometbft/cometbft v0.38.10
 	github.com/cosmos/cosmos-db v1.0.2
 	github.com/cosmos/cosmos-sdk v0.50.8
 	github.com/cosmos/gogoproto v1.5.0
-	github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8 v8.0.2-0.20240228211029-91e486ec4dbb
-	github.com/cosmos/ibc-apps/modules/rate-limiting/v8 v8.0.0
-	github.com/cosmos/ibc-go/modules/capability v1.0.1
-	github.com/cosmos/ibc-go/modules/light-clients/08-wasm v0.1.1-0.20231213092650-57fcdb9a9a9d
-	github.com/cosmos/ibc-go/v8 v8.4.0
-	github.com/prometheus/client_golang v1.19.0
 	github.com/spf13/cast v1.6.0
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
@@ -63,7 +55,6 @@ require (
 	cosmossdk.io/collections v0.4.0 // indirect
 	cosmossdk.io/depinject v1.0.0 // indirect
 	cosmossdk.io/errors v1.0.1 // indirect
-	cosmossdk.io/x/evidence v0.1.0 // indirect
 	filippo.io/edwards25519 v1.0.0 // indirect
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect
 	github.com/99designs/keyring v1.2.1 // indirect
@@ -73,7 +64,6 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
 	github.com/bgentry/speakeasy v0.1.1-0.20220910012023-760eaf8b6816 // indirect
-	github.com/bits-and-blooms/bitset v1.8.0 // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.3.2 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
@@ -100,7 +90,6 @@ require (
 	github.com/desertbit/timer v0.0.0-20180107155436-c41aec40b27f // indirect
 	github.com/dgraph-io/badger/v4 v4.2.0 // indirect
 	github.com/dgraph-io/ristretto v0.1.1 // indirect
-	github.com/distribution/reference v0.5.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/dvsekhvalnov/jose2go v1.6.0 // indirect
 	github.com/emicklei/dot v1.6.1 // indirect
@@ -124,7 +113,6 @@ require (
 	github.com/google/btree v1.1.2 // indirect
 	github.com/google/flatbuffers v2.0.8+incompatible // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
-	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/orderedcode v0.0.1 // indirect
 	github.com/google/s2a-go v0.1.7 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -151,7 +139,6 @@ require (
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/hdevalence/ed25519consensus v0.1.0 // indirect
 	github.com/huandu/skiplist v1.2.0 // indirect
-	github.com/iancoleman/orderedmap v0.3.0 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/improbable-eng/grpc-web v0.15.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
@@ -173,13 +160,14 @@ require (
 	github.com/mtibben/percent v0.2.1 // indirect
 	github.com/oasisprotocol/curve25519-voi v0.0.0-20230904125328-1f23a7beb09a // indirect
 	github.com/oklog/run v1.1.0 // indirect
-	github.com/opencontainers/go-digest v1.0.0 // indirect
+	github.com/onsi/ginkgo v1.16.4 // indirect
 	github.com/opencontainers/image-spec v1.1.0-rc5 // indirect
 	github.com/opencontainers/runc v1.1.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
 	github.com/petermattis/goid v0.0.0-20231207134359-e60b3f734c67 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
+	github.com/prometheus/client_golang v1.19.0 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.52.2 // indirect
 	github.com/prometheus/procfs v0.13.0 // indirect
@@ -223,7 +211,6 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240709173604-40e1e62336c5 // indirect
 	google.golang.org/grpc v1.65.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gotest.tools/v3 v3.5.1 // indirect
 	nhooyr.io/websocket v1.8.10 // indirect
