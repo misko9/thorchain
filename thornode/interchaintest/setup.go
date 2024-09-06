@@ -21,9 +21,6 @@ import (
 )
 
 var (
-	VotingPeriod     = "15s"
-	MaxDepositPeriod = "10s"
-
 	Denom   = "rune"
 	Name    = "thornode"
 	ChainID = "localchain-1"
@@ -37,11 +34,6 @@ var (
 	ChainImage = ibc.NewDockerImage("thornode", "local", "1025:1025")
 
 	DefaultGenesis = []cosmos.GenesisKV{
-		// default
-		cosmos.NewGenesisKV("app_state.gov.params.voting_period", VotingPeriod),
-		cosmos.NewGenesisKV("app_state.gov.params.max_deposit_period", MaxDepositPeriod),
-		cosmos.NewGenesisKV("app_state.gov.params.min_deposit.0.denom", Denom),
-		cosmos.NewGenesisKV("app_state.gov.params.min_deposit.0.amount", "1"),
 		// tokenfactory: set create cost in set denom or in gas usage.
 		cosmos.NewGenesisKV("app_state.tokenfactory.params.denom_creation_fee", nil),
 		cosmos.NewGenesisKV("app_state.tokenfactory.params.denom_creation_gas_consume", 1), // cost 1 gas to create a new denom
