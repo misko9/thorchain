@@ -49,9 +49,6 @@ import (
 	"cosmossdk.io/x/circuit"
 	circuitkeeper "cosmossdk.io/x/circuit/keeper"
 	circuittypes "cosmossdk.io/x/circuit/types"
-	"cosmossdk.io/x/evidence"
-	evidencekeeper "cosmossdk.io/x/evidence/keeper"
-	evidencetypes "cosmossdk.io/x/evidence/types"
 	"cosmossdk.io/x/feegrant"
 	feegrantkeeper "cosmossdk.io/x/feegrant/keeper"
 	feegrantmodule "cosmossdk.io/x/feegrant/module"
@@ -125,9 +122,6 @@ import (
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	paramproposal "github.com/cosmos/cosmos-sdk/x/params/types/proposal"
-	"github.com/cosmos/cosmos-sdk/x/slashing"
-	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -237,7 +231,6 @@ type ChainApp struct {
 	BankKeeper            bankkeeper.BaseKeeper
 	CapabilityKeeper      *capabilitykeeper.Keeper
 	StakingKeeper         *stakingkeeper.Keeper
-	SlashingKeeper        slashingkeeper.Keeper
 	MintKeeper            mintkeeper.Keeper
 	DistrKeeper           distrkeeper.Keeper
 	GovKeeper             govkeeper.Keeper
@@ -245,7 +238,6 @@ type ChainApp struct {
 	UpgradeKeeper         *upgradekeeper.Keeper
 	ParamsKeeper          paramskeeper.Keeper
 	AuthzKeeper           authzkeeper.Keeper
-	EvidenceKeeper        evidencekeeper.Keeper
 	FeeGrantKeeper        feegrantkeeper.Keeper
 	GroupKeeper           groupkeeper.Keeper
 	NFTKeeper             nftkeeper.Keeper
@@ -361,13 +353,11 @@ func NewChainApp(
 		crisistypes.StoreKey,
 		minttypes.StoreKey,
 		distrtypes.StoreKey,
-		slashingtypes.StoreKey,
 		govtypes.StoreKey,
 		paramstypes.StoreKey,
 		consensusparamtypes.StoreKey,
 		upgradetypes.StoreKey,
 		feegrant.StoreKey,
-		evidencetypes.StoreKey,
 		circuittypes.StoreKey,
 		authzkeeper.StoreKey,
 		nftkeeper.StoreKey,
@@ -498,14 +488,6 @@ func NewChainApp(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
-	app.SlashingKeeper = slashingkeeper.NewKeeper(
-		appCodec,
-		legacyAmino,
-		runtime.NewKVStoreService(keys[slashingtypes.StoreKey]),
-		app.StakingKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-	)
-
 	invCheckPeriod := cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod))
 	app.CrisisKeeper = crisiskeeper.NewKeeper(
 		appCodec,
@@ -576,7 +558,6 @@ func NewChainApp(
 	app.StakingKeeper.SetHooks(
 		stakingtypes.NewMultiStakingHooks(
 			app.DistrKeeper.Hooks(),
-			app.SlashingKeeper.Hooks(),
 		),
 	)
 
@@ -616,18 +597,6 @@ func NewChainApp(
 		app.AccountKeeper,
 		app.BankKeeper,
 	)
-
-	// create evidence keeper with router
-	evidenceKeeper := evidencekeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(keys[evidencetypes.StoreKey]),
-		app.StakingKeeper,
-		app.SlashingKeeper,
-		app.AccountKeeper.AddressCodec(),
-		runtime.ProvideCometInfoService(),
-	)
-	// If evidence needs to be handled for the app, set routes in router here and seal
-	app.EvidenceKeeper = *evidenceKeeper
 
 	// Create the tokenfactory keeper
 	app.TokenFactoryKeeper = tokenfactorykeeper.NewKeeper(
@@ -844,14 +813,9 @@ func NewChainApp(
 		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
 		gov.NewAppModule(appCodec, &app.GovKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(govtypes.ModuleName)),
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, nil, app.GetSubspace(minttypes.ModuleName)),
-		slashing.NewAppModule(
-			appCodec, app.SlashingKeeper, app.AccountKeeper, app.BankKeeper,
-			app.StakingKeeper,
-			app.GetSubspace(slashingtypes.ModuleName), app.interfaceRegistry),
 		distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper, app.GetSubspace(distrtypes.ModuleName)),
 		staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(stakingtypes.ModuleName)),
 		upgrade.NewAppModule(app.UpgradeKeeper, app.AccountKeeper.AddressCodec()),
-		evidence.NewAppModule(app.EvidenceKeeper),
 		params.NewAppModule(app.ParamsKeeper),
 		authzmodule.NewAppModule(appCodec, app.AuthzKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 		groupmodule.NewAppModule(appCodec, app.GroupKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
@@ -894,16 +858,11 @@ func NewChainApp(
 	app.ModuleManager.SetOrderPreBlockers(
 		upgradetypes.ModuleName,
 	)
-	// During begin block slashing happens after distr.BeginBlocker so that
-	// there is nothing left over in the validator fee pool, so as to keep the
-	// CanWithdrawInvariant invariant.
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	// NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
 	app.ModuleManager.SetOrderBeginBlockers(
 		minttypes.ModuleName,
 		distrtypes.ModuleName,
-		slashingtypes.ModuleName,
-		evidencetypes.ModuleName,
 		stakingtypes.ModuleName,
 		genutiltypes.ModuleName,
 		authz.ModuleName,
@@ -955,12 +914,10 @@ func NewChainApp(
 		banktypes.ModuleName,
 		distrtypes.ModuleName,
 		stakingtypes.ModuleName,
-		slashingtypes.ModuleName,
 		govtypes.ModuleName,
 		minttypes.ModuleName,
 		crisistypes.ModuleName,
 		genutiltypes.ModuleName,
-		evidencetypes.ModuleName,
 		authz.ModuleName,
 		feegrant.ModuleName,
 		nft.ModuleName,
@@ -1368,7 +1325,6 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(stakingtypes.ModuleName)
 	paramsKeeper.Subspace(minttypes.ModuleName)
 	paramsKeeper.Subspace(distrtypes.ModuleName)
-	paramsKeeper.Subspace(slashingtypes.ModuleName)
 	paramsKeeper.Subspace(govtypes.ModuleName)
 	paramsKeeper.Subspace(crisistypes.ModuleName)
 

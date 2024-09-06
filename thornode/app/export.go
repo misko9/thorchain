@@ -11,7 +11,6 @@ import (
 
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
@@ -238,22 +237,5 @@ func (app *ChainApp) prepForZeroHeightGenesis(ctx sdk.Context, jailAllowedAddrs 
 	_, err = app.StakingKeeper.ApplyAndReturnValidatorSetUpdates(ctx)
 	if err != nil {
 		log.Fatal(err)
-	}
-
-	// Handle slashing state.
-
-	// reset start height on signing infos
-	err = app.SlashingKeeper.IterateValidatorSigningInfos(
-		ctx,
-		func(addr sdk.ConsAddress, info slashingtypes.ValidatorSigningInfo) (stop bool) {
-			info.StartHeight = 0
-			if err := app.SlashingKeeper.SetValidatorSigningInfo(ctx, addr, info); err != nil {
-				panic(err)
-			}
-			return false
-		},
-	)
-	if err != nil {
-		panic(err)
 	}
 }
