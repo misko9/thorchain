@@ -93,9 +93,6 @@ from_scratch () {
   # mint
   update_test_genesis `printf '.app_state["mint"]["params"]["mint_denom"]="%s"' $DENOM`
 
-  # crisis
-  update_test_genesis `printf '.app_state["crisis"]["constant_fee"]={"denom":"%s","amount":"1000"}' $DENOM`
-
   # === CUSTOM MODULES ===
   # Allocate genesis accounts
   BINARY genesis add-genesis-account $KEY 10000000$DENOM,900test --keyring-backend $KEYRING --append
