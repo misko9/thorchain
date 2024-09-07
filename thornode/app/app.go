@@ -62,8 +62,6 @@ import (
 	consensusparamkeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
 	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 
-	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
-	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/cosmos/cosmos-sdk/x/mint"
 	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
@@ -75,7 +73,6 @@ import (
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	distr "github.com/cosmos/cosmos-sdk/x/distribution"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 )
 
@@ -109,7 +106,6 @@ var (
 // module account permissions
 var maccPerms = map[string][]string{
 	authtypes.FeeCollectorName:     nil,
-	distrtypes.ModuleName:          nil,
 	minttypes.ModuleName:           {authtypes.Minter},
 	stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
 	stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
@@ -137,7 +133,6 @@ type ChainApp struct {
 	BankKeeper            bankkeeper.BaseKeeper
 	StakingKeeper         *stakingkeeper.Keeper
 	MintKeeper            mintkeeper.Keeper
-	DistrKeeper           distrkeeper.Keeper
 	UpgradeKeeper         *upgradekeeper.Keeper
 	ParamsKeeper          paramskeeper.Keeper
 	ConsensusParamsKeeper consensusparamkeeper.Keeper
@@ -228,7 +223,6 @@ func NewChainApp(
 		authtypes.StoreKey, banktypes.StoreKey,
 		stakingtypes.StoreKey,
 		minttypes.StoreKey,
-		distrtypes.StoreKey,
 		paramstypes.StoreKey,
 		consensusparamtypes.StoreKey,
 		upgradetypes.StoreKey,
@@ -321,15 +315,7 @@ func NewChainApp(
 		authtypes.FeeCollectorName,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
-	app.DistrKeeper = distrkeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(keys[distrtypes.StoreKey]),
-		app.AccountKeeper,
-		app.BankKeeper,
-		app.StakingKeeper,
-		authtypes.FeeCollectorName,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-	)
+
 
 	// get skipUpgradeHeights from the app options
 	skipUpgradeHeights := map[int64]bool{}
@@ -347,14 +333,6 @@ func NewChainApp(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
-	// register the staking hooks
-	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
-	app.StakingKeeper.SetHooks(
-		stakingtypes.NewMultiStakingHooks(
-			app.DistrKeeper.Hooks(),
-		),
-	)
-
 	// --- Module Options ---
 
 	// NOTE: Any module instantiated in the module manager that is later modified
@@ -363,7 +341,6 @@ func NewChainApp(
 		auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts, app.GetSubspace(authtypes.ModuleName)),
 		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper, app.GetSubspace(banktypes.ModuleName)),
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, nil, app.GetSubspace(minttypes.ModuleName)),
-		distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper, app.GetSubspace(distrtypes.ModuleName)),
 		staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(stakingtypes.ModuleName)),
 		upgrade.NewAppModule(app.UpgradeKeeper, app.AccountKeeper.AddressCodec()),
 		params.NewAppModule(app.ParamsKeeper),
@@ -390,7 +367,6 @@ func NewChainApp(
 	// NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
 	app.ModuleManager.SetOrderBeginBlockers(
 		minttypes.ModuleName,
-		distrtypes.ModuleName,
 		stakingtypes.ModuleName,
 		// additional non simd modules
 	)
@@ -413,7 +389,6 @@ func NewChainApp(
 		// simd modules
 		authtypes.ModuleName,
 		banktypes.ModuleName,
-		distrtypes.ModuleName,
 		stakingtypes.ModuleName,
 		govtypes.ModuleName,
 		minttypes.ModuleName,
@@ -765,7 +740,6 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(banktypes.ModuleName)
 	paramsKeeper.Subspace(stakingtypes.ModuleName)
 	paramsKeeper.Subspace(minttypes.ModuleName)
-	paramsKeeper.Subspace(distrtypes.ModuleName)
 
 	return paramsKeeper
 }
