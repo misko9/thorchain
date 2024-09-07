@@ -1,5 +1,6 @@
 package main
-
+/*
+// Thorchain has a custom testnet setup for their validators. This covers a typical cosmos chain.
 // DONTCOVER
 
 import (
@@ -35,8 +36,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/version"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	"github.com/cosmos/cosmos-sdk/x/genutil"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/rollchains/thornode/app"
@@ -579,3 +578,4 @@ func startTestnet(cmd *cobra.Command, args startArgs) error {
 
 	return nil
 }
+*/
