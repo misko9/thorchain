@@ -1,13 +1,5 @@
 package app
 
-	// Create the thorchain Keeper
-	app.ThorchainKeeper = thorchainkeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(keys[thorchaintypes.StoreKey]),
-		logger,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-	)
-
 import (
 	"encoding/json"
 	"fmt"
@@ -77,9 +69,6 @@ import (
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	thorchain "gitlab.com/thorchain/thornode/x/thorchain"
-	thorchainkeeper "gitlab.com/thorchain/thornode/x/thorchain/keeper"
-	thorchaintypes "gitlab.com/thorchain/thornode/x/thorchain/types"
 )
 
 const (
@@ -142,7 +131,6 @@ type ChainApp struct {
 	UpgradeKeeper         *upgradekeeper.Keeper
 	ParamsKeeper          paramskeeper.Keeper
 	ConsensusParamsKeeper consensusparamkeeper.Keeper
-	ThorchainKeeper thorchainkeeper.Keeper
 
 	// the module manager
 	ModuleManager      *module.Manager
@@ -234,7 +222,6 @@ func NewChainApp(
 		consensusparamtypes.StoreKey,
 		upgradetypes.StoreKey,
 		// non sdk store keys
-		thorchaintypes.StoreKey,
 	)
 
 	tkeys := storetypes.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -358,7 +345,6 @@ func NewChainApp(
 		params.NewAppModule(app.ParamsKeeper),
 		consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper),
 		// non sdk modules
-		thorchain.NewAppModule(appCodec, app.ThorchainKeeper),
 
 	)
 
@@ -389,7 +375,6 @@ func NewChainApp(
 		stakingtypes.ModuleName,
 		genutiltypes.ModuleName,
 		// additional non simd modules
-		thorchaintypes.ModuleName,
 	)
 
 	app.ModuleManager.SetOrderEndBlockers(
@@ -397,7 +382,6 @@ func NewChainApp(
 		stakingtypes.ModuleName,
 		genutiltypes.ModuleName,
 		// additional non simd modules
-		thorchaintypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -419,7 +403,6 @@ func NewChainApp(
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
 		consensusparamtypes.ModuleName,
-		thorchaintypes.ModuleName,
 	}
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
 	app.ModuleManager.SetOrderExportGenesis(genesisModuleOrder...)
@@ -765,7 +748,6 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(banktypes.ModuleName)
 	paramsKeeper.Subspace(stakingtypes.ModuleName)
 	paramsKeeper.Subspace(minttypes.ModuleName)
-	paramsKeeper.Subspace(thorchaintypes.ModuleName)
 
 	return paramsKeeper
 }
