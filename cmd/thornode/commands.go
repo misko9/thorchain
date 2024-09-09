@@ -31,6 +31,8 @@ import (
 	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
 //	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
+
+	"gitlab.com/thorchain/thornode/cmd/thornode/cmd"
 )
 
 // initCometBFTConfig helps to override default CometBFT Config values.
@@ -97,6 +99,8 @@ func initRootCmd(
 		confixcmd.ConfigCommand(),
 		pruning.Cmd(newApp, app.DefaultNodeHome),
 		snapshot.Cmd(newApp),
+		cmd.GetEd25519Keys(),
+		cmd.GetPubKeyCmd(),
 	)
 
 	server.AddCommands(rootCmd, app.DefaultNodeHome, newApp, appExport, addModuleInitFlags)
