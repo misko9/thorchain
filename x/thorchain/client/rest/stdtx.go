@@ -8,6 +8,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
+	sdkmath "cosmossdk.io/math"
 )
 
 // Interface implementation checks
@@ -58,7 +59,7 @@ func (fee StdFee) Bytes() []byte {
 // originally part of the submitted transaction because the fee is computed
 // as fee = ceil(gasWanted * gasPrices).
 func (fee StdFee) GasPrices() sdk.DecCoins {
-	return sdk.NewDecCoinsFromCoins(fee.Amount...).QuoDec(sdk.NewDec(int64(fee.Gas)))
+	return sdk.NewDecCoinsFromCoins(fee.Amount...).QuoDec(sdkmath.LegacyNewDec(int64(fee.Gas)))
 }
 
 // StdTx is the legacy transaction format for wrapping a Msg with Fee and Signatures.

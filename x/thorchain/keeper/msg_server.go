@@ -1,29 +1,29 @@
 package keeper
 
-import (
-	"context"
+// import (
+// 	"context"
 
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+// 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	"cosmossdk.io/errors"
-	"gitlab.com/thorchain/thornode/x/thorchain/types"
-)
+// 	"cosmossdk.io/errors"
+// 	"gitlab.com/thorchain/thornode/x/thorchain/types"
+// )
 
-type msgServer struct {
-	k Keeper
-}
+// type msgServer struct {
+// 	k Keeper
+// }
 
-var _ types.MsgServer = msgServer{}
+// var _ types.MsgServer = msgServer{}
 
-// NewMsgServerImpl returns an implementation of the module MsgServer interface.
-func NewMsgServerImpl(keeper Keeper) types.MsgServer {
-	return &msgServer{k: keeper}
-}
+// // NewMsgServerImpl returns an implementation of the module MsgServer interface.
+// func NewMsgServerImpl(keeper Keeper) types.MsgServer {
+// 	return &msgServer{k: keeper}
+// }
 
-func (ms msgServer) UpdateParams(ctx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
-	if ms.k.authority != msg.Authority {
-		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", ms.k.authority, msg.Authority)
-	}
+// func (ms msgServer) UpdateParams(ctx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+// 	if ms.k.authority != msg.Authority {
+// 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", ms.k.authority, msg.Authority)
+// 	}
 
-	return nil, ms.k.Params.Set(ctx, msg.Params)
-}
+// 	return nil, ms.k.Params.Set(ctx, msg.Params)
+// }

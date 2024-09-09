@@ -20,6 +20,7 @@ import (
 	se "github.com/cosmos/cosmos-sdk/types/errors"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	log "github.com/rs/zerolog/log"
+	sdkmath "cosmossdk.io/math"
 )
 
 const (
@@ -34,26 +35,26 @@ var (
 	KeyringServiceName           = sdk.KeyringServiceName
 	NewRoute                     = sdk.NewRoute
 	NewKVStoreKeys               = sdk.NewKVStoreKeys
-	NewUint                      = sdk.NewUint
-	ParseUint                    = sdk.ParseUint
-	NewInt                       = sdk.NewInt
-	NewDec                       = sdk.NewDec
-	ZeroInt                      = sdk.ZeroInt
-	ZeroUint                     = sdk.ZeroUint
-	ZeroDec                      = sdk.ZeroDec
-	OneUint                      = sdk.OneUint
+	NewUint                      = sdkmath.NewUint
+	ParseUint                    = sdkmath.ParseUint
+	NewInt                       = sdkmath.NewInt
+	NewDec                       = sdkmath.LegacyNewDec
+	ZeroInt                      = sdkmath.ZeroInt
+	ZeroUint                     = sdkmath.ZeroUint
+	ZeroDec                      = sdkmath.LegacyZeroDec
+	OneUint                      = sdkmath.OneUint
 	NewCoin                      = sdk.NewCoin
 	NewCoins                     = sdk.NewCoins
 	ParseCoins                   = sdk.ParseCoinsNormalized
-	NewDecWithPrec               = sdk.NewDecWithPrec
-	NewDecFromBigInt             = sdk.NewDecFromBigInt
-	NewIntFromBigInt             = sdk.NewIntFromBigInt
-	NewUintFromBigInt            = sdk.NewUintFromBigInt
+	NewDecWithPrec               = sdkmath.LegacyNewDecWithPrec
+	NewDecFromBigInt             = sdkmath.LegacyNewDecFromBigInt
+	NewIntFromBigInt             = sdkmath.NewIntFromBigInt
+	NewUintFromBigInt            = sdkmath.NewUintFromBigInt
 	AccAddressFromBech32         = sdk.AccAddressFromBech32
 	VerifyAddressFormat          = sdk.VerifyAddressFormat
 	GetFromBech32                = sdk.GetFromBech32
 	NewAttribute                 = sdk.NewAttribute
-	NewDecFromStr                = sdk.NewDecFromStr
+	NewDecFromStr                = sdkmath.LegacyNewDecFromStr
 	GetConfig                    = sdk.GetConfig
 	NewEvent                     = sdk.NewEvent
 	RegisterCodec                = sdk.RegisterLegacyAminoCodec
@@ -67,7 +68,7 @@ var (
 	StoreTypeTransient           = sdk.StoreTypeTransient
 	StoreTypeIAVL                = sdk.StoreTypeIAVL
 	NewContext                   = sdk.NewContext
-	NewUintFromString            = sdk.NewUintFromString
+	NewUintFromString            = sdkmath.NewUintFromString
 
 	GetPubKeyFromBech32     = legacybech32.UnmarshalPubKey // nolint SA1019 deprecated
 	Bech32ifyPubKey         = legacybech32.MarshalPubKey   // nolint SA1019 deprecated
@@ -82,8 +83,8 @@ var (
 type (
 	Context    = sdk.Context
 	Route      = sdk.Route
-	Uint       = sdk.Uint
-	Int        = sdk.Int
+	Uint       = sdkmath.Uint
+	Int        = sdkmath.Int
 	Coin       = sdk.Coin
 	Coins      = sdk.Coins
 	AccAddress = sdk.AccAddress
@@ -91,7 +92,7 @@ type (
 	Result     = sdk.Result
 	Event      = sdk.Event
 	Events     = sdk.Events
-	Dec        = sdk.Dec
+	Dec        = sdkmath.Dec
 	Msg        = sdk.Msg
 	Iterator   = sdk.Iterator
 	Handler    = sdk.Handler
@@ -126,7 +127,7 @@ func RoundToDecimal(amt Uint, dec int64) Uint {
 		if prec == 0 { // sanity check
 			return amt
 		}
-		precisionAdjust := sdk.NewUintFromBigInt(big.NewInt(0).Exp(big.NewInt(10), big.NewInt(prec), nil))
+		precisionAdjust := sdkmath.NewUintFromBigInt(big.NewInt(0).Exp(big.NewInt(10), big.NewInt(prec), nil))
 		amt = amt.Quo(precisionAdjust).Mul(precisionAdjust)
 	}
 	return amt

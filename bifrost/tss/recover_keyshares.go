@@ -42,7 +42,7 @@ func RecoverKeyShares(conf config.Bifrost, thorchain thorclient.ThorchainBridge)
 		return fmt.Errorf("fail to get signer membership")
 	}
 	vault := membership[len(membership)-1]
-	keysharesPath := filepath.Join(app.DefaultNodeHome(), fmt.Sprintf("localstate-%s.json", vault))
+	keysharesPath := filepath.Join(app.DefaultNodeHome, fmt.Sprintf("localstate-%s.json", vault))
 
 	// skip recovery if keyshares for the nodes current vault already exist
 	if _, err = os.Stat(keysharesPath); !os.IsNotExist(err) {

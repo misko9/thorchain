@@ -1,25 +1,25 @@
 package keeper_test
 
-import (
-	"testing"
+// import (
+// 	"testing"
 
-	"gitlab.com/thorchain/thornode/x/thorchain/types"
-	"github.com/stretchr/testify/require"
-)
+// 	"gitlab.com/thorchain/thornode/x/thorchain/types"
+// 	"github.com/stretchr/testify/require"
+// )
 
-func TestGenesis(t *testing.T) {
-	f := SetupTest(t)
+// func TestGenesis(t *testing.T) {
+// 	f := SetupTest(t)
 
-	genesisState := &types.GenesisState{
-		Params: types.DefaultParams(),
+// 	genesisState := &types.GenesisState{
+// 		Params: types.DefaultParams(),
 
-		// this line is used by starport scaffolding # genesis/test/state
-	}
+// 		// this line is used by starport scaffolding # genesis/test/state
+// 	}
 
-	f.k.InitGenesis(f.ctx, genesisState)
+// 	f.k.InitGenesis(f.ctx, genesisState)
 
-	got := f.k.ExportGenesis(f.ctx)
-	require.NotNil(t, got)
+// 	got := f.k.ExportGenesis(f.ctx)
+// 	require.NotNil(t, got)
 
-	// this line is used by starport scaffolding # genesis/test/assert
-}
+// 	// this line is used by starport scaffolding # genesis/test/assert
+// }

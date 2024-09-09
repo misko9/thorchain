@@ -4,12 +4,12 @@ import (
 	"net/http"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/tx"
+//	"github.com/cosmos/cosmos-sdk/client/tx"
 //	"github.com/cosmos/cosmos-sdk/types/rest"
 
-	"gitlab.com/thorchain/thornode/common"
-	"gitlab.com/thorchain/thornode/common/cosmos"
-	"gitlab.com/thorchain/thornode/x/thorchain/types"
+//	"gitlab.com/thorchain/thornode/common"
+//	"gitlab.com/thorchain/thornode/common/cosmos"
+//	"gitlab.com/thorchain/thornode/x/thorchain/types"
 )
 
 // type deposit struct {

@@ -1,30 +1,30 @@
 package keeper
 
-import (
-	"context"
+// import (
+// 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+// 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"gitlab.com/thorchain/thornode/x/thorchain/types"
-)
+// 	"gitlab.com/thorchain/thornode/x/thorchain/types"
+// )
 
-var _ types.QueryServer = Querier{}
+// var _ types.QueryServer = Querier{}
 
-type Querier struct {
-	Keeper
-}
+// type Querier struct {
+// 	Keeper
+// }
 
-func NewQuerier(keeper Keeper) Querier {
-	return Querier{Keeper: keeper}
-}
+// func NewQuerier(keeper Keeper) Querier {
+// 	return Querier{Keeper: keeper}
+// }
 
-func (k Querier) Params(c context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
+// func (k Querier) Params(c context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
+// 	ctx := sdk.UnwrapSDKContext(c)
 
-	p, err := k.Keeper.Params.Get(ctx)
-	if err != nil {
-		return nil, err
-	}
+// 	p, err := k.Keeper.Params.Get(ctx)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	return &types.QueryParamsResponse{Params: &p}, nil
-}
+// 	return &types.QueryParamsResponse{Params: &p}, nil
+// }

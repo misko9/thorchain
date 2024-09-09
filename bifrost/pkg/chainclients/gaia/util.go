@@ -10,6 +10,8 @@ import (
 	ctypes "github.com/cosmos/cosmos-sdk/types"
 	signingtypes "github.com/cosmos/cosmos-sdk/types/tx/signing"
 	btypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	sdkmath "cosmossdk.io/math"
+
 	"github.com/gogo/protobuf/jsonpb"
 	"github.com/gogo/protobuf/proto"
 	"gitlab.com/thorchain/thornode/common"
@@ -87,7 +89,7 @@ func fromCosmosToThorchain(c cosmos.Coin) (common.Coin, error) {
 	}
 	return common.Coin{
 		Asset:    thorAsset,
-		Amount:   ctypes.NewUintFromBigInt(amount),
+		Amount:   sdkmath.NewUintFromBigInt(amount),
 		Decimals: int64(decimals),
 	}, nil
 }
@@ -110,7 +112,7 @@ func fromThorchainToCosmos(coin common.Coin) (cosmos.Coin, error) {
 		decimalDiff := int64(common.THORChainDecimals - decimals)
 		amount.Quo(amount, exp.Exp(big.NewInt(10), big.NewInt(decimalDiff), nil))
 	}
-	return cosmos.NewCoin(asset.CosmosDenom, ctypes.NewIntFromBigInt(amount)), nil
+	return cosmos.NewCoin(asset.CosmosDenom, sdkmath.NewIntFromBigInt(amount)), nil
 }
 
 func getGRPCConn(host string, tls bool) (*grpc.ClientConn, error) {

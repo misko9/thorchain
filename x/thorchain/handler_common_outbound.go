@@ -8,7 +8,7 @@ import (
 	"github.com/armon/go-metrics"
 	"github.com/blang/semver"
 	"github.com/cosmos/cosmos-sdk/telemetry"
-	"github.com/cosmos/cosmos-sdk/types"
+	sdkmath "cosmossdk.io/math"
 
 	"gitlab.com/thorchain/thornode/common"
 	"gitlab.com/thorchain/thornode/common/cosmos"
@@ -259,7 +259,7 @@ func calcReclaim(reclaimable1, reclaimable2, spent cosmos.Uint) (reclaim1, recla
 	}
 
 	// Split the spent clout in half
-	halfSpent := spent.Quo(types.NewUint(2))
+	halfSpent := spent.Quo(sdkmath.NewUint(2))
 
 	// If either clout is less than half the spent amount, allocate all to that clout
 	if reclaimable1.LT(halfSpent) {
@@ -296,7 +296,7 @@ func isOutboundFakeGasTX(tx ObservedTx) bool {
 		return false
 	}
 
-	if !tx.Tx.Coins[0].Amount.Equal(types.NewUint(1)) {
+	if !tx.Tx.Coins[0].Amount.Equal(sdkmath.NewUint(1)) {
 		return false
 	}
 

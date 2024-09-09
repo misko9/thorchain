@@ -20,6 +20,8 @@ import (
 	signingtypes "github.com/cosmos/cosmos-sdk/types/tx/signing"
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
 	btypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	sdkmath "cosmossdk.io/math"
+
 	"gitlab.com/thorchain/thornode/bifrost/metrics"
 	"gitlab.com/thorchain/thornode/bifrost/thorclient"
 	stypes "gitlab.com/thorchain/thornode/bifrost/thorclient/types"
@@ -244,7 +246,7 @@ func (s *CosmosTestSuite) TestSign(c *C) {
 	c.Check(meta.AccountNumber, Equals, int64(0))
 	c.Check(meta.SeqNumber, Equals, int64(0))
 
-	gas := types.NewCoins(types.NewCoin("uatom", types.NewInt(100)))
+	gas := types.NewCoins(types.NewCoin("uatom", sdkmath.NewInt(100)))
 
 	txb, err := buildUnsigned(
 		txConfig,

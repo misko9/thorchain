@@ -16,6 +16,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
+	sdkmath "cosmossdk.io/math"
 	"github.com/rs/zerolog/log"
 	abci "github.com/cometbft/cometbft/abci/types"
 	tmhttp "github.com/cometbft/cometbft/rpc/client/http"
@@ -452,14 +453,14 @@ func queryRUNEPool(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 
 	// calculate provider shares
 	providerValue := common.GetSafeShare(runePool.PoolUnits, runePool.TotalUnits(), runePoolValue)
-	providerPnl := sdk.NewIntFromBigInt(providerValue.BigInt()).Sub(runePool.CurrentDeposit())
+	providerPnl := sdkmath.NewIntFromBigInt(providerValue.BigInt()).Sub(runePool.CurrentDeposit())
 
 	// calculate reserve shares
 	reserveValue := common.GetSafeShare(runePool.ReserveUnits, runePool.TotalUnits(), runePoolValue)
 	reserveCurrentDeposit := pol.CurrentDeposit().
 		Sub(runePool.CurrentDeposit()).
 		Add(cosmos.NewIntFromBigInt(pendingRune.BigInt()))
-	reservePnl := sdk.NewIntFromBigInt(reserveValue.BigInt()).Sub(reserveCurrentDeposit)
+	reservePnl := sdkmath.NewIntFromBigInt(reserveValue.BigInt()).Sub(reserveCurrentDeposit)
 
 	result := openapi.RUNEPoolResponse{
 		Pol: openapi.POL{
@@ -1690,7 +1691,7 @@ func queryDerivedPool(ctx cosmos.Context, path []string, req abci.RequestQuery, 
 	_ = mgr.NetworkMgr().BeginBlock(ctx.WithBlockHeight(ctx.BlockHeight()+1), mgr)
 
 	// sum rune depth of anchor pools
-	runeDepth := sdk.ZeroUint()
+	runeDepth := sdkmath.ZeroUint()
 	for _, anchor := range mgr.Keeper().GetAnchors(ctx, asset) {
 		aPool, _ := mgr.Keeper().GetPool(ctx, anchor)
 		runeDepth = runeDepth.Add(aPool.BalanceRune)
