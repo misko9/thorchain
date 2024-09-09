@@ -1,5 +1,5 @@
-package module
-
+package thorchain
+/*
 import (
 	"context"
 	"encoding/json"
@@ -148,3 +148,4 @@ func (a AppModule) RegisterServices(cfg module.Configurator) {
 func (a AppModule) ConsensusVersion() uint64 {
 	return ConsensusVersion
 }
+*/

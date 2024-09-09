@@ -1,5 +1,5 @@
-package module
-
+package thorchain
+/*
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 	modulev1 "gitlab.com/thorchain/thornode/api/thorchain/v1"
@@ -29,3 +29,4 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 		},
 	}
 }
+*/

@@ -1,5 +1,5 @@
-package module
-
+package thorchain
+/*
 import (
 	"os"
 
@@ -61,3 +61,4 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 
 	return ModuleOutputs{Module: m, Keeper: k, Out: depinject.Out{}}
 }
+*/
