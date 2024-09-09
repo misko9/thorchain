@@ -11,7 +11,7 @@ import (
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	sdkRest "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
+	//sdkRest "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	"github.com/gorilla/mux"
@@ -69,8 +69,9 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncod
 // RegisterRESTRoutes register rest routes
 func (AppModuleBasic) RegisterRESTRoutes(ctx client.Context, rtr *mux.Router) {
 	rest.RegisterRoutes(ctx, rtr, StoreKey)
-	sdkRest.RegisterTxRoutes(ctx, rtr)
-	sdkRest.RegisterRoutes(ctx, rtr, StoreKey)
+	//sdkRest.RegisterTxRoutes(ctx, rtr)
+	//sdkRest.RegisterRoutes(ctx, rtr, StoreKey)
+	panic("x/thorchain RegisterRESTRoutes not implemented fully")
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the mint module.

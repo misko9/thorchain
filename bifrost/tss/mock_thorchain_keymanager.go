@@ -4,16 +4,17 @@ import (
 	"encoding/base64"
 
 	ctypes "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
+//	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
 	"github.com/cometbft/cometbft/crypto"
 )
 
 // MockThorchainKeymanager is to mock the TSS , so as we could test it
 type MockThorchainKeyManager struct{}
 
-func (k *MockThorchainKeyManager) Sign(legacytx.StdSignMsg) ([]byte, error) {
-	return nil, nil
-}
+// TODO: commented out to get passed deprecated modules, circle back to this
+// func (k *MockThorchainKeyManager) Sign(legacytx.StdSignMsg) ([]byte, error) {
+// 	return nil, nil
+// }
 
 func (k *MockThorchainKeyManager) GetPrivKey() crypto.PrivKey {
 	return nil

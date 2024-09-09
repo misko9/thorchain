@@ -2,7 +2,7 @@ package tss
 
 import (
 	"github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
+//	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
 	"github.com/cometbft/cometbft/crypto"
 )
 
@@ -28,7 +28,7 @@ type cipherparamsJSON struct {
 
 // ThorchainKeyManager it is a composite of binance chain keymanager
 type ThorchainKeyManager interface {
-	Sign(legacytx.StdSignMsg) ([]byte, error)
+//	Sign(legacytx.StdSignMsg) ([]byte, error)
 	GetPrivKey() crypto.PrivKey
 	GetAddr() types.AccAddress
 

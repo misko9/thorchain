@@ -2,12 +2,12 @@ package thorchain
 
 import (
 	"fmt"
-	"runtime"
+//	"runtime"
 	"strings"
 
 	"github.com/blang/semver"
-	sdkerrs "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
+//	sdkerrs "github.com/cosmos/cosmos-sdk/types/errors"
+//	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
 
 	"gitlab.com/thorchain/thornode/common"
 	"gitlab.com/thorchain/thornode/common/cosmos"
@@ -23,43 +23,44 @@ type MsgHandler interface {
 // NewExternalHandler returns a handler for "thorchain" type messages.
 func NewExternalHandler(mgr Manager) cosmos.Handler {
 	return func(ctx cosmos.Context, msg cosmos.Msg) (_ *cosmos.Result, err error) {
-		defer func() {
-			if r := recover(); r != nil {
-				// print stack
-				stack := make([]byte, 1024)
-				length := runtime.Stack(stack, true)
-				ctx.Logger().Error("panic", "msg", msg)
-				fmt.Println(string(stack[:length]))
-				err = fmt.Errorf("panic: %v", r)
-			}
-		}()
+		panic("x/thorchain NewExternalHandler not implemented")
+		// defer func() {
+		// 	if r := recover(); r != nil {
+		// 		// print stack
+		// 		stack := make([]byte, 1024)
+		// 		length := runtime.Stack(stack, true)
+		// 		ctx.Logger().Error("panic", "msg", msg)
+		// 		fmt.Println(string(stack[:length]))
+		// 		err = fmt.Errorf("panic: %v", r)
+		// 	}
+		// }()
 
-		ctx = ctx.WithEventManager(cosmos.NewEventManager())
-		handlerMap := getHandlerMapping(mgr)
-		legacyMsg, ok := msg.(legacytx.LegacyMsg)
-		if !ok {
-			return nil, cosmos.ErrUnknownRequest("unknown message type")
-		}
-		h, ok := handlerMap[legacyMsg.Type()]
-		if !ok {
-			errMsg := fmt.Sprintf("Unrecognized thorchain Msg type: %v", legacyMsg.Type())
-			return nil, cosmos.ErrUnknownRequest(errMsg)
-		}
-		result, err := h.Run(ctx, msg)
-		if err != nil {
-			if _, code, _ := sdkerrs.ABCIInfo(err, false); code == 1 {
-				// This would be redacted, so wrap it.
-				err = sdkerrs.Wrap(errInternal, err.Error())
-			}
-			return nil, err
-		}
-		if result == nil {
-			result = &cosmos.Result{}
-		}
-		if len(ctx.EventManager().Events()) > 0 {
-			result.Events = ctx.EventManager().ABCIEvents()
-		}
-		return result, nil
+		// ctx = ctx.WithEventManager(cosmos.NewEventManager())
+		// handlerMap := getHandlerMapping(mgr)
+		// legacyMsg, ok := msg.(legacytx.LegacyMsg)
+		// if !ok {
+		// 	return nil, cosmos.ErrUnknownRequest("unknown message type")
+		// }
+		// h, ok := handlerMap[legacyMsg.Type()]
+		// if !ok {
+		// 	errMsg := fmt.Sprintf("Unrecognized thorchain Msg type: %v", legacyMsg.Type())
+		// 	return nil, cosmos.ErrUnknownRequest(errMsg)
+		// }
+		// result, err := h.Run(ctx, msg)
+		// if err != nil {
+		// 	if _, code, _ := sdkerrs.ABCIInfo(err, false); code == 1 {
+		// 		// This would be redacted, so wrap it.
+		// 		err = sdkerrs.Wrap(errInternal, err.Error())
+		// 	}
+		// 	return nil, err
+		// }
+		// if result == nil {
+		// 	result = &cosmos.Result{}
+		// }
+		// if len(ctx.EventManager().Events()) > 0 {
+		// 	result.Events = ctx.EventManager().ABCIEvents()
+		// }
+		// return result, nil
 	}
 }
 
@@ -98,30 +99,31 @@ func getHandlerMappingV65(mgr Manager) map[string]MsgHandler {
 // NewInternalHandler returns a handler for "thorchain" internal type messages.
 func NewInternalHandler(mgr Manager) cosmos.Handler {
 	return func(ctx cosmos.Context, msg cosmos.Msg) (*cosmos.Result, error) {
-		handlerMap := getInternalHandlerMapping(mgr)
-		legacyMsg, ok := msg.(legacytx.LegacyMsg)
-		if !ok {
-			return nil, cosmos.ErrUnknownRequest("invalid message type")
-		}
-		h, ok := handlerMap[legacyMsg.Type()]
-		if !ok {
-			errMsg := fmt.Sprintf("Unrecognized thorchain Msg type: %v", legacyMsg.Type())
-			return nil, cosmos.ErrUnknownRequest(errMsg)
-		}
+		panic("x/thorchain NewInternalHandler not implemented")
+		// handlerMap := getInternalHandlerMapping(mgr)
+		// legacyMsg, ok := msg.(legacytx.LegacyMsg)
+		// if !ok {
+		// 	return nil, cosmos.ErrUnknownRequest("invalid message type")
+		// }
+		// h, ok := handlerMap[legacyMsg.Type()]
+		// if !ok {
+		// 	errMsg := fmt.Sprintf("Unrecognized thorchain Msg type: %v", legacyMsg.Type())
+		// 	return nil, cosmos.ErrUnknownRequest(errMsg)
+		// }
 
-		// CacheContext() returns a context which caches all changes and only forwards
-		// to the underlying context when commit() is called. Call commit() only when
-		// the handler succeeds, otherwise return error and the changes will be discarded.
-		// On commit, cached events also have to be explicitly emitted.
-		cacheCtx, commit := ctx.CacheContext()
-		res, err := h.Run(cacheCtx, msg)
-		if err == nil {
-			// Success, commit the cached changes and events
-			commit()
-			ctx.EventManager().EmitEvents(cacheCtx.EventManager().Events())
-		}
+		// // CacheContext() returns a context which caches all changes and only forwards
+		// // to the underlying context when commit() is called. Call commit() only when
+		// // the handler succeeds, otherwise return error and the changes will be discarded.
+		// // On commit, cached events also have to be explicitly emitted.
+		// cacheCtx, commit := ctx.CacheContext()
+		// res, err := h.Run(cacheCtx, msg)
+		// if err == nil {
+		// 	// Success, commit the cached changes and events
+		// 	commit()
+		// 	ctx.EventManager().EmitEvents(cacheCtx.EventManager().Events())
+		// }
 
-		return res, err
+		// return res, err
 	}
 }
 
