@@ -1,5 +1,13 @@
 package app
 
+	// Create the thorchain Keeper
+	app.ThorchainKeeper = thorchainkeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(keys[thorchaintypes.StoreKey]),
+		logger,
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
+
 import (
 	"encoding/json"
 	"fmt"
@@ -7,13 +15,11 @@ import (
 	"os"
 	"sort"
 	"sync"
-
 	abci "github.com/cometbft/cometbft/abci/types"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/gogoproto/proto"
 	"github.com/spf13/cast"
-
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 	reflectionv1 "cosmossdk.io/api/cosmos/reflection/v1"
 	"cosmossdk.io/client/v2/autocli"
@@ -24,7 +30,6 @@ import (
 	"cosmossdk.io/x/upgrade"
 	upgradekeeper "cosmossdk.io/x/upgrade/keeper"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
-
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -61,7 +66,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/consensus"
 	consensusparamkeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
 	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
-
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
@@ -71,9 +75,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
-
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	thorchain "gitlab.com/thorchain/thornode/x/thorchain"
+	thorchainkeeper "gitlab.com/thorchain/thornode/x/thorchain/keeper"
+	thorchaintypes "gitlab.com/thorchain/thornode/x/thorchain/types"
 )
 
 const (
@@ -136,6 +142,7 @@ type ChainApp struct {
 	UpgradeKeeper         *upgradekeeper.Keeper
 	ParamsKeeper          paramskeeper.Keeper
 	ConsensusParamsKeeper consensusparamkeeper.Keeper
+	ThorchainKeeper thorchainkeeper.Keeper
 
 	// the module manager
 	ModuleManager      *module.Manager
@@ -227,6 +234,7 @@ func NewChainApp(
 		consensusparamtypes.StoreKey,
 		upgradetypes.StoreKey,
 		// non sdk store keys
+		thorchaintypes.StoreKey,
 	)
 
 	tkeys := storetypes.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -350,6 +358,8 @@ func NewChainApp(
 		params.NewAppModule(app.ParamsKeeper),
 		consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper),
 		// non sdk modules
+		thorchain.NewAppModule(appCodec, app.ThorchainKeeper),
+
 	)
 
 	// BasicModuleManager defines the module BasicManager is in charge of setting up basic,
@@ -379,6 +389,7 @@ func NewChainApp(
 		stakingtypes.ModuleName,
 		genutiltypes.ModuleName,
 		// additional non simd modules
+		thorchaintypes.ModuleName,
 	)
 
 	app.ModuleManager.SetOrderEndBlockers(
@@ -386,6 +397,7 @@ func NewChainApp(
 		stakingtypes.ModuleName,
 		genutiltypes.ModuleName,
 		// additional non simd modules
+		thorchaintypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -407,6 +419,7 @@ func NewChainApp(
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
 		consensusparamtypes.ModuleName,
+		thorchaintypes.ModuleName,
 	}
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
 	app.ModuleManager.SetOrderExportGenesis(genesisModuleOrder...)
@@ -752,6 +765,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(banktypes.ModuleName)
 	paramsKeeper.Subspace(stakingtypes.ModuleName)
 	paramsKeeper.Subspace(minttypes.ModuleName)
+	paramsKeeper.Subspace(thorchaintypes.ModuleName)
 
 	return paramsKeeper
 }
