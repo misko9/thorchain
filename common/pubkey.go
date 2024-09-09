@@ -21,7 +21,7 @@ import (
 	"github.com/gcash/bchutil"
 
 	eth "github.com/ethereum/go-ethereum/crypto"
-	"github.com/tendermint/tendermint/crypto"
+	"github.com/cometbft/cometbft/crypto"
 
 	"gitlab.com/thorchain/thornode/common/cosmos"
 )

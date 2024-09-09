@@ -18,7 +18,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	cKeys "github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/rs/zerolog/log"
-	"github.com/tendermint/tendermint/crypto"
+	"github.com/cometbft/cometbft/crypto"
 	"gitlab.com/thorchain/thornode/bifrost/tss/go-tss/blame"
 	"gitlab.com/thorchain/thornode/bifrost/tss/go-tss/keysign"
 	tssMessages "gitlab.com/thorchain/thornode/bifrost/tss/go-tss/messages"

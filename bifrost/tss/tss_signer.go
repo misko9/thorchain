@@ -14,7 +14,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/tendermint/btcd/btcec"
-	"github.com/tendermint/tendermint/crypto"
+	"github.com/cometbft/cometbft/crypto"
 	"gitlab.com/thorchain/thornode/bifrost/tss/go-tss/keysign"
 
 	"gitlab.com/thorchain/thornode/bifrost/thorclient"

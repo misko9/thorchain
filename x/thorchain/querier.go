@@ -17,8 +17,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	"github.com/rs/zerolog/log"
-	abci "github.com/tendermint/tendermint/abci/types"
-	tmhttp "github.com/tendermint/tendermint/rpc/client/http"
+	abci "github.com/cometbft/cometbft/abci/types"
+	tmhttp "github.com/cometbft/cometbft/rpc/client/http"
 	"gitlab.com/thorchain/thornode/bifrost/tss/go-tss/conversion"
 
 	"gitlab.com/thorchain/thornode/common"

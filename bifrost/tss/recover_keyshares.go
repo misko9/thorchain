@@ -12,7 +12,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
 	"github.com/itchio/lzma"
 	"github.com/rs/zerolog/log"
-	coretypes "github.com/tendermint/tendermint/rpc/core/types"
+	coretypes "github.com/cometbft/cometbft/rpc/core/types"
 
 	"gitlab.com/thorchain/thornode/app"
 	"gitlab.com/thorchain/thornode/bifrost/thorclient"

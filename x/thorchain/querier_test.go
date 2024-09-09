@@ -6,7 +6,7 @@ import (
 
 	"github.com/blang/semver"
 
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/cometbft/cometbft/abci/types"
 	. "gopkg.in/check.v1"
 
 	"github.com/cosmos/cosmos-sdk/crypto/hd"

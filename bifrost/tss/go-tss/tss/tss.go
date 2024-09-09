@@ -15,7 +15,7 @@ import (
 	"github.com/multiformats/go-multiaddr"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	tcrypto "github.com/tendermint/tendermint/crypto"
+	tcrypto "github.com/cometbft/cometbft/crypto"
 
 	"gitlab.com/thorchain/thornode/bifrost/tss/go-tss/common"
 	"gitlab.com/thorchain/thornode/bifrost/tss/go-tss/conversion"

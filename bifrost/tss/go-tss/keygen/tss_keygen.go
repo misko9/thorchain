@@ -11,7 +11,7 @@ import (
 	btss "github.com/binance-chain/tss-lib/tss"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	tcrypto "github.com/tendermint/tendermint/crypto"
+	tcrypto "github.com/cometbft/cometbft/crypto"
 
 	"gitlab.com/thorchain/thornode/bifrost/tss/go-tss/blame"
 	"gitlab.com/thorchain/thornode/bifrost/tss/go-tss/common"

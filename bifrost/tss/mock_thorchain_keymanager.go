@@ -5,7 +5,7 @@ import (
 
 	ctypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
-	"github.com/tendermint/tendermint/crypto"
+	"github.com/cometbft/cometbft/crypto"
 )
 
 // MockThorchainKeymanager is to mock the TSS , so as we could test it
