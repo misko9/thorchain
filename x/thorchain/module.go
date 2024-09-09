@@ -1,150 +1,254 @@
-package module
+package thorchain
 
 import (
-	"context"
 	"encoding/json"
-	
-	"github.com/spf13/cobra"
+	"fmt"
+	"os"
 
-	"github.com/gorilla/mux"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-
-	abci "github.com/cometbft/cometbft/abci/types"
-
-	"cosmossdk.io/client/v2/autocli"
-	errorsmod "cosmossdk.io/errors"
-
+	"github.com/blang/semver"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	sdkRest "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	"github.com/gorilla/mux"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/spf13/cobra"
+	abci "github.com/tendermint/tendermint/abci/types"
+
+	"gitlab.com/thorchain/thornode/common/cosmos"
+	"gitlab.com/thorchain/thornode/constants"
 
 	"gitlab.com/thorchain/thornode/x/thorchain/client/cli"
+	"gitlab.com/thorchain/thornode/x/thorchain/client/rest"
 	"gitlab.com/thorchain/thornode/x/thorchain/keeper"
-	"gitlab.com/thorchain/thornode/x/thorchain/types"
-	// this line is used by starport scaffolding # 1
 )
 
-const (
-	// ConsensusVersion defines the current x/thorchain module consensus version.
-	ConsensusVersion = 1
-
-// this line is used by starport scaffolding # simapp/module/const
-)
-
+// type check to ensure the interface is properly implemented
 var (
-	_ module.AppModuleBasic   = AppModuleBasic{}
-	_ module.AppModuleGenesis = AppModule{}
-	_ module.AppModule        = AppModule{}
-
-	_ autocli.HasAutoCLIConfig = AppModule{}
+	_ module.AppModule      = AppModule{}
+	_ module.AppModuleBasic = AppModuleBasic{}
 )
 
-// AppModuleBasic defines the basic application module used by the wasm module.
-type AppModuleBasic struct {
-	cdc codec.Codec
+// AppModuleBasic app module Basics object
+type AppModuleBasic struct{}
+
+// Name return the module's name
+func (AppModuleBasic) Name() string {
+	return ModuleName
 }
 
-type AppModule struct {
-	AppModuleBasic
-
-	keeper keeper.Keeper
+// RegisterLegacyAminoCodec registers the module's types for the given codec.
+func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	RegisterCodec(cdc)
 }
 
-// NewAppModule constructor
-func NewAppModule(
-	cdc codec.Codec,
-	keeper keeper.Keeper,
-) *AppModule {
-	return &AppModule{
-		AppModuleBasic: AppModuleBasic{cdc: cdc},
-		keeper:         keeper,
-	}
+// RegisterInterfaces registers the module's interface types
+func (a AppModuleBasic) RegisterInterfaces(reg cdctypes.InterfaceRegistry) {
+	RegisterInterfaces(reg)
 }
 
-func (a AppModuleBasic) Name() string {
-	return types.ModuleName
+// DefaultGenesis returns default genesis state as raw bytes for the module.
+func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
+	return cdc.MustMarshalJSON(DefaultGenesis())
 }
 
-func (a AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(&types.GenesisState{
-		Params: types.DefaultParams(),
-	})
-}
-
-func (a AppModuleBasic) ValidateGenesis(marshaler codec.JSONCodec, _ client.TxEncodingConfig, message json.RawMessage) error {
-	var data types.GenesisState
-	err := marshaler.UnmarshalJSON(message, &data)
-	if err != nil {
+// ValidateGenesis check of the Genesis
+func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
+	var data GenesisState
+	if err := cdc.UnmarshalJSON(bz, &data); err != nil {
 		return err
 	}
-	if err := data.Params.Validate(); err != nil {
-		return errorsmod.Wrap(err, "params")
-	}
-	return nil
+	// Once json successfully marshalled, passes along to genesis.go
+	return ValidateGenesis(data)
 }
 
-func (a AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {
+// RegisterRESTRoutes register rest routes
+func (AppModuleBasic) RegisterRESTRoutes(ctx client.Context, rtr *mux.Router) {
+	rest.RegisterRoutes(ctx, rtr, StoreKey)
+	sdkRest.RegisterTxRoutes(ctx, rtr)
+	sdkRest.RegisterRoutes(ctx, rtr, StoreKey)
 }
 
-func (a AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	err := types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx))
-	if err != nil {
-		// same behavior as in cosmos-sdk
-		panic(err)
-	}
+// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the mint module.
+// thornode current doesn't have grpc endpoint yet
+func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
+	// types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx))
 }
 
-func (a AppModuleBasic) GetTxCmd() *cobra.Command {
-	return cli.GetTxCmd()
-}
-
-func (a AppModuleBasic) GetQueryCmd() *cobra.Command {
+// GetQueryCmd get the root query command of this module
+func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 	return cli.GetQueryCmd()
 }
 
-
-func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	types.RegisterLegacyAminoCodec(cdc)
+// GetTxCmd get the root tx command of this module
+func (AppModuleBasic) GetTxCmd() *cobra.Command {
+	return cli.GetTxCmd()
 }
 
-func (a AppModuleBasic) RegisterInterfaces(r codectypes.InterfaceRegistry) {
-	types.RegisterInterfaces(r)
+// ____________________________________________________________________________
+
+// AppModule implements an application module for the thorchain module.
+type AppModule struct {
+	AppModuleBasic
+	mgr              *Mgrs
+	keybaseStore     cosmos.KeybaseStore
+	telemetryEnabled bool
 }
 
-func (a AppModule) InitGenesis(ctx sdk.Context, marshaler codec.JSONCodec, message json.RawMessage) []abci.ValidatorUpdate {
-	var genesisState types.GenesisState
-	marshaler.MustUnmarshalJSON(message, &genesisState)
-
-	if err := a.keeper.Params.Set(ctx, genesisState.Params); err != nil {
+// NewAppModule creates a new AppModule Object
+func NewAppModule(k keeper.Keeper, cdc codec.Codec, coinKeeper bankkeeper.Keeper, accountKeeper authkeeper.AccountKeeper, storeKey cosmos.StoreKey, telemetryEnabled bool) AppModule {
+	kb, err := cosmos.GetKeybase(os.Getenv(cosmos.EnvChainHome))
+	if err != nil {
 		panic(err)
 	}
-
-	return nil
+	return AppModule{
+		AppModuleBasic:   AppModuleBasic{},
+		mgr:              NewManagers(k, cdc, coinKeeper, accountKeeper, storeKey),
+		keybaseStore:     kb,
+		telemetryEnabled: telemetryEnabled,
+	}
 }
 
-func (a AppModule) ExportGenesis(ctx sdk.Context, marshaler codec.JSONCodec) json.RawMessage {
-	genState := a.keeper.ExportGenesis(ctx)
-	return marshaler.MustMarshalJSON(genState)
+func (AppModule) Name() string {
+	return ModuleName
 }
 
-func (a AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {
+func (AppModule) ConsensusVersion() uint64 {
+	return 1
 }
 
-func (a AppModule) QuerierRoute() string {
-	return types.QuerierRoute
+func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
+
+func (am AppModule) Route() cosmos.Route {
+	return cosmos.NewRoute(RouterKey, NewExternalHandler(am.mgr))
 }
 
-func (a AppModule) RegisterServices(cfg module.Configurator) {
-	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(a.keeper))
-	types.RegisterQueryServer(cfg.QueryServer(), keeper.NewQuerier(a.keeper))
+func (am AppModule) NewHandler() sdk.Handler {
+	return NewExternalHandler(am.mgr)
 }
 
-// ConsensusVersion is a sequence number for state-breaking change of the
-// module. It should be incremented on each consensus-breaking change
-// introduced by the module. To avoid wrong/empty versions, the initial version
-// should be set to 1.
-func (a AppModule) ConsensusVersion() uint64 {
-	return ConsensusVersion
+func (am AppModule) QuerierRoute() string {
+	return ModuleName
+}
+
+// LegacyQuerierHandler returns the capability module's Querier.
+func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
+	return NewQuerier(am.mgr, am.keybaseStore)
+}
+
+// RegisterServices registers module services.
+func (am AppModule) RegisterServices(cfg module.Configurator) {
+	// types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
+	// types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
+}
+
+func (am AppModule) NewQuerierHandler() sdk.Querier {
+	return func(ctx cosmos.Context, path []string, req abci.RequestQuery) ([]byte, error) {
+		return nil, nil
+	}
+}
+
+// BeginBlock called when a block get proposed
+func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
+	info := req.GetLastCommitInfo()
+	var existingValidators []string
+	for _, v := range info.GetVotes() {
+		addr := sdk.ValAddress(v.Validator.GetAddress())
+		existingValidators = append(existingValidators, addr.String())
+	}
+
+	ctx.Logger().Debug("Begin Block", "height", req.Header.Height)
+	// Check/Update the network version before checking the local version or checking whether to do a new-version store migration
+	if err := am.mgr.BeginBlock(ctx); err != nil {
+		ctx.Logger().Error("fail to get managers", "error", err)
+	}
+
+	version := am.mgr.GetVersion()
+	localVer := semver.MustParse(constants.SWVersion.String())
+	if version.Major > localVer.Major || version.Minor > localVer.Minor {
+		panic(fmt.Sprintf("Unsupported Version: update your binary (your version: %s, network consensus version: %s)", constants.SWVersion.String(), version.String()))
+	}
+
+	// Does a kvstore migration
+	smgr := newStoreMgr(am.mgr)
+	if err := smgr.Iterator(ctx); err != nil {
+		os.Exit(10) // halt the chain if unsuccessful
+	}
+
+	am.mgr.Keeper().ClearObservingAddresses(ctx)
+
+	am.mgr.GasMgr().BeginBlock()
+	if err := am.mgr.NetworkMgr().BeginBlock(ctx, am.mgr); err != nil {
+		ctx.Logger().Error("fail to begin network manager", "error", err)
+	}
+	am.mgr.Slasher().BeginBlock(ctx, req, am.mgr.GetConstants())
+	if err := am.mgr.ValidatorMgr().BeginBlock(ctx, am.mgr, existingValidators); err != nil {
+		ctx.Logger().Error("Fail to begin block on validator", "error", err)
+	}
+}
+
+// EndBlock called when a block get committed
+func (am AppModule) EndBlock(ctx sdk.Context, req abci.RequestEndBlock) []abci.ValidatorUpdate {
+	ctx.Logger().Debug("End Block", "height", req.Height)
+
+	if err := am.mgr.SwapQ().EndBlock(ctx, am.mgr); err != nil {
+		ctx.Logger().Error("fail to process swap queue", "error", err)
+	}
+
+	if err := am.mgr.OrderBookMgr().EndBlock(ctx, am.mgr); err != nil {
+		ctx.Logger().Error("fail to process order books", "error", err)
+	}
+
+	if err := am.mgr.Slasher().LackSigning(ctx, am.mgr); err != nil {
+		ctx.Logger().Error("Unable to slash for lack of signing:", "error", err)
+	}
+
+	if err := am.mgr.PoolMgr().EndBlock(ctx, am.mgr); err != nil {
+		ctx.Logger().Error("fail to process pools", "error", err)
+	}
+
+	am.mgr.ObMgr().EndBlock(ctx, am.mgr.Keeper())
+
+	// update network data to account for block rewards and reward units
+	if err := am.mgr.NetworkMgr().UpdateNetwork(ctx, am.mgr.GetConstants(), am.mgr.GasMgr(), am.mgr.EventMgr()); err != nil {
+		ctx.Logger().Error("fail to update network data", "error", err)
+	}
+
+	if err := am.mgr.NetworkMgr().EndBlock(ctx, am.mgr); err != nil {
+		ctx.Logger().Error("fail to end block for vault manager", "error", err)
+	}
+
+	validators := am.mgr.ValidatorMgr().EndBlock(ctx, am.mgr)
+
+	if err := am.mgr.TxOutStore().EndBlock(ctx, am.mgr); err != nil {
+		ctx.Logger().Error("fail to process txout endblock", "error", err)
+	}
+
+	am.mgr.GasMgr().EndBlock(ctx, am.mgr.Keeper(), am.mgr.EventMgr())
+
+	// telemetry
+	if am.telemetryEnabled {
+		if err := emitEndBlockTelemetry(ctx, am.mgr); err != nil {
+			ctx.Logger().Error("unable to emit end block telemetry", "error", err)
+		}
+	}
+
+	return validators
+}
+
+// InitGenesis initialise genesis
+func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
+	var genState GenesisState
+	ModuleCdc.MustUnmarshalJSON(data, &genState)
+	return InitGenesis(ctx, am.mgr.Keeper(), genState)
+}
+
+// ExportGenesis export genesis
+func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
+	gs := ExportGenesis(ctx, am.mgr.Keeper())
+	return ModuleCdc.MustMarshalJSON(&gs)
 }
