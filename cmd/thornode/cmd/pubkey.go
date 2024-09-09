@@ -1,16 +1,16 @@
 package cmd
 
 import (
-	"bufio"
-	"fmt"
+//	"bufio"
+//	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/input"
+//	"github.com/cosmos/cosmos-sdk/client/input"
 	"github.com/cosmos/cosmos-sdk/client/keys"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
-	"gitlab.com/thorchain/thornode/common/cosmos"
+//	"gitlab.com/thorchain/thornode/common/cosmos"
 )
 
 // GetPubKeyCmd cosmos sdk removed pubkey support recently , as a result of that , all pubkey will be print out in protobuf json format
@@ -37,41 +37,41 @@ func getPubKeyFromString(ctx client.Context, pkstr string) (cryptotypes.PubKey, 
 }
 
 func convertPubKey(cmd *cobra.Command, args []string) error {
-	clientCtx := client.GetClientContextFromCmd(cmd)
-	var pkStr string
-	if len(args) == 1 {
-		pkStr = args[0]
-	} else {
-		// read it from input
-		buf := bufio.NewReader(cmd.InOrStdin())
-		readPubKey, err := input.GetString("Proto3 JSON encoded pubkey", buf)
-		if err != nil {
-			return fmt.Errorf("fail to get Proto3 JSON encoded pubkey,err: %w", err)
-		}
-		pkStr = readPubKey
-	}
+	// clientCtx := client.GetClientContextFromCmd(cmd)
+	// var pkStr string
+	// if len(args) == 1 {
+	// 	pkStr = args[0]
+	// } else {
+	// 	// read it from input
+	// 	buf := bufio.NewReader(cmd.InOrStdin())
+	// 	readPubKey, err := input.GetString("Proto3 JSON encoded pubkey", buf)
+	// 	if err != nil {
+	// 		return fmt.Errorf("fail to get Proto3 JSON encoded pubkey,err: %w", err)
+	// 	}
+	// 	pkStr = readPubKey
+	// }
 
-	pkey, err := getPubKeyFromString(clientCtx, pkStr)
-	if err != nil {
-		return err
-	}
-	prefix, _ := cmd.Flags().GetString(keys.FlagBechPrefix)
-	switch prefix {
-	case sdk.PrefixAccount:
-		var pubKey string
-		pubKey, err = cosmos.Bech32ifyPubKey(cosmos.Bech32PubKeyTypeAccPub, pkey)
-		if err != nil {
-			return err
-		}
-		fmt.Fprintln(cmd.OutOrStdout(), pubKey)
-	case sdk.PrefixConsensus:
-		var pubKey string
-		pubKey, err = cosmos.Bech32ifyPubKey(cosmos.Bech32PubKeyTypeConsPub, pkey)
-		if err != nil {
-			return err
-		}
-		fmt.Fprintln(cmd.OutOrStdout(), pubKey)
-	case sdk.PrefixValidator:
-	}
+	// pkey, err := getPubKeyFromString(clientCtx, pkStr)
+	// if err != nil {
+	// 	return err
+	// }
+	// prefix, _ := cmd.Flags().GetString(keys.FlagBechPrefix)
+	// switch prefix {
+	// case sdk.PrefixAccount:
+	// 	var pubKey string
+	// 	pubKey, err = cosmos.Bech32ifyPubKey(cosmos.Bech32PubKeyTypeAccPub, pkey)
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	fmt.Fprintln(cmd.OutOrStdout(), pubKey)
+	// case sdk.PrefixConsensus:
+	// 	var pubKey string
+	// 	pubKey, err = cosmos.Bech32ifyPubKey(cosmos.Bech32PubKeyTypeConsPub, pkey)
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	fmt.Fprintln(cmd.OutOrStdout(), pubKey)
+	// case sdk.PrefixValidator:
+	// }
 	return nil
 }
