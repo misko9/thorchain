@@ -1,4 +1,4 @@
-module github.com/rollchains/thornode
+module gitlab.com/thorchain/thornode
 
 go 1.22.3
 

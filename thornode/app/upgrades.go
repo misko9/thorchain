@@ -5,8 +5,8 @@ import (
 
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 
-	"github.com/rollchains/thornode/app/upgrades"
-	"github.com/rollchains/thornode/app/upgrades/noop"
+	"gitlab.com/thorchain/thornode/app/upgrades"
+	"gitlab.com/thorchain/thornode/app/upgrades/noop"
 )
 
 // Upgrades list of chain upgrades

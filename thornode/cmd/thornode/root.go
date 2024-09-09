@@ -20,18 +20,24 @@ import (
 	txmodule "github.com/cosmos/cosmos-sdk/x/auth/tx/config"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	"github.com/rollchains/thornode/app"
-	"github.com/rollchains/thornode/app/params"
+	"gitlab.com/thorchain/thornode/app"
+	"gitlab.com/thorchain/thornode/app/params"
+	prefix "gitlab.com/thorchain/thornode/cmd"
 )
 
 // NewRootCmd creates a new root command for chain app. It is called once in the
 // main function.
 func NewRootCmd() *cobra.Command {
 	cfg := sdk.GetConfig()
-	cfg.SetBech32PrefixForAccount(app.Bech32PrefixAccAddr, app.Bech32PrefixAccPub)
-	cfg.SetBech32PrefixForValidator(app.Bech32PrefixValAddr, app.Bech32PrefixValPub)
-	cfg.SetBech32PrefixForConsensusNode(app.Bech32PrefixConsAddr, app.Bech32PrefixConsPub)
+	cfg.SetBech32PrefixForAccount(prefix.Bech32PrefixAccAddr, prefix.Bech32PrefixAccPub)
+	cfg.SetBech32PrefixForValidator(prefix.Bech32PrefixValAddr, prefix.Bech32PrefixValPub)
+	cfg.SetBech32PrefixForConsensusNode(prefix.Bech32PrefixConsAddr, prefix.Bech32PrefixConsPub)
+	cfg.SetCoinType(prefix.THORChainCoinType)
+	cfg.SetPurpose(prefix.THORChainCoinPurpose)
 	cfg.Seal()
+	sdk.SetCoinDenomRegex(func() string {
+		return prefix.DenomRegex
+	})
 	// we "pre"-instantiate the application for getting the injected/configured encoding configuration
 	// note, this is not necessary when using app wiring, as depinject can be directly used (see root_v2.go)
 	tempApp := app.NewChainApp(
