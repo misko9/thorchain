@@ -406,7 +406,7 @@ func (s *Signer) sendKeygenToThorchain(height int64, poolPk common.PubKey, blame
 	var err error
 	if s.cfg.BackupKeyshares && !poolPk.IsEmpty() {
 		keyshares, err = tss.EncryptKeyshares(
-			filepath.Join(app.DefaultNodeHome(), fmt.Sprintf("localstate-%s.json", poolPk)),
+			filepath.Join(app.DefaultNodeHome, fmt.Sprintf("localstate-%s.json", poolPk)),
 			os.Getenv("SIGNER_SEED_PHRASE"),
 		)
 		if err != nil {

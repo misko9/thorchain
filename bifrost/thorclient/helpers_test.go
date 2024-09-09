@@ -3,6 +3,9 @@ package thorclient
 import (
 	"time"
 
+	"github.com/cosmos/cosmos-sdk/codec"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	hd "github.com/cosmos/cosmos-sdk/crypto/hd"
 	cKeys "github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -26,7 +29,10 @@ func SetupThorchainForTest(c *C) (config.BifrostClientConfiguration, cKeys.Info,
 		SignerPasswd:    "password",
 		ChainHomeFolder: "",
 	}
-	kb := cKeys.NewInMemory()
+	registry := codectypes.NewInterfaceRegistry()
+	cryptocodec.RegisterInterfaces(registry)
+	cdc := codec.NewProtoCodec(registry)
+	kb := cKeys.NewInMemory(cdc)
 
 	params := *hd.NewFundraiserParams(0, sdk.CoinType, 0)
 	hdPath := params.String()

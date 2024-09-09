@@ -11,6 +11,9 @@ import (
 	"strings"
 
 	"github.com/cosmos/cosmos-sdk/client/input"
+	"github.com/cosmos/cosmos-sdk/codec"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	ckeys "github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/bech32/legacybech32" // nolint SA1019 deprecated
@@ -171,7 +174,11 @@ func GetKeybase(thorchainHome string) (KeybaseStore, error) {
 		cliDir = filepath.Join(usr.HomeDir, ".thornode")
 	}
 
-	kb, err := ckeys.New(KeyringServiceName(), ckeys.BackendFile, cliDir, buf)
+	// Should we pass in the cdc?
+	registry := codectypes.NewInterfaceRegistry()
+	cryptocodec.RegisterInterfaces(registry)
+	cdc := codec.NewProtoCodec(registry)
+	kb, err := ckeys.New(KeyringServiceName(), ckeys.BackendFile, cliDir, buf, cdc)
 	return KeybaseStore{
 		SignerName:   username,
 		SignerPasswd: password,

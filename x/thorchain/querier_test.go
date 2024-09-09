@@ -9,6 +9,9 @@ import (
 	abci "github.com/cometbft/cometbft/abci/types"
 	. "gopkg.in/check.v1"
 
+	"github.com/cosmos/cosmos-sdk/codec"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	ckeys "github.com/cosmos/cosmos-sdk/crypto/keyring"
 	types2 "github.com/cosmos/cosmos-sdk/types"
@@ -42,7 +45,10 @@ func (k *TestQuerierKeeper) GetTxOut(_ cosmos.Context, _ int64) (*TxOut, error) 
 }
 
 func (s *QuerierSuite) SetUpTest(c *C) {
-	kb := ckeys.NewInMemory()
+	registry := codectypes.NewInterfaceRegistry()
+	cryptocodec.RegisterInterfaces(registry)
+	cdc := codec.NewProtoCodec(registry)
+	kb := ckeys.NewInMemory(cdc)
 	username := "thorchain"
 	password := "password"
 
