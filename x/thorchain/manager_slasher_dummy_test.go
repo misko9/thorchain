@@ -18,7 +18,7 @@ func NewDummySlasher() *DummySlasher {
 	}
 }
 
-func (d DummySlasher) BeginBlock(ctx cosmos.Context, req abci.RequestBeginBlock, constAccessor constants.ConstantValues) {
+func (d DummySlasher) PreBlock(ctx cosmos.Context, req abci.RequestFinalizeBlock, constAccessor constants.ConstantValues) {
 }
 
 func (d DummySlasher) HandleDoubleSign(ctx cosmos.Context, addr crypto.Address, infractionHeight int64, constAccessor constants.ConstantValues) error {

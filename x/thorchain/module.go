@@ -198,7 +198,7 @@ func (am AppModule) PreBlock(ctx sdk.Context, req *abci.RequestFinalizeBlock) er
 	if err := am.mgr.NetworkMgr().BeginBlock(ctx, am.mgr); err != nil {
 		ctx.Logger().Error("fail to begin network manager", "error", err)
 	}
-	am.mgr.Slasher().BeginBlock(ctx, req, am.mgr.GetConstants())
+	am.mgr.Slasher().PreBlock(ctx, req, am.mgr.GetConstants())
 	if err := am.mgr.ValidatorMgr().BeginBlock(ctx, am.mgr, existingValidators); err != nil {
 		ctx.Logger().Error("Fail to begin block on validator", "error", err)
 	}

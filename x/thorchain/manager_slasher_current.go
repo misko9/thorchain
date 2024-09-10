@@ -11,6 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cometbft/cometbft/crypto"
+	cmttypes "github.com/cometbft/cometbft/proto/tendermint/types"
 
 	"gitlab.com/thorchain/thornode/common"
 	"gitlab.com/thorchain/thornode/common/cosmos"
@@ -31,31 +32,32 @@ func newSlasherVCUR(keeper keeper.Keeper, eventMgr EventManager) *SlasherVCUR {
 }
 
 // BeginBlock called when a new block get proposed to detect whether there are duplicate vote
-func (s *SlasherVCUR) BeginBlock(ctx cosmos.Context, req abci.RequestBeginBlock, constAccessor constants.ConstantValues) {
-	var doubleSignEvidence []abci.Evidence
+func (s *SlasherVCUR) PreBlock(ctx cosmos.Context, req abci.RequestFinalizeBlock, constAccessor constants.ConstantValues) {
+	var doubleSignMisbehavior []abci.Misbehavior
 	// Iterate through any newly discovered evidence of infraction
 	// Slash any validators (and since-unbonded liquidity within the unbonding period)
 	// who contributed to valid infractions
-	for _, evidence := range req.ByzantineValidators {
-		switch evidence.Type {
-		case abci.EvidenceType_DUPLICATE_VOTE:
-			doubleSignEvidence = append(doubleSignEvidence, evidence)
+	//for _, evidence := range req.ByzantineValidators {
+	for _, misbehavior := range req.Misbehavior {
+		switch misbehavior.Type {
+		case abci.MisbehaviorType_DUPLICATE_VOTE:
+			doubleSignMisbehavior = append(doubleSignMisbehavior, misbehavior)
 		default:
-			ctx.Logger().Error("ignored unknown evidence type", "type", evidence.Type)
+			ctx.Logger().Error("ignored unknown misbehavior type", "type", misbehavior.Type)
 		}
 	}
 
 	// Identify validators which didn't sign the previous block
 	var missingSignAddresses []crypto.Address
-	for _, voteInfo := range req.LastCommitInfo.Votes {
-		if voteInfo.SignedLastBlock {
+	for _, voteInfo := range req.DecidedLastCommit.Votes {
+		if voteInfo.BlockIdFlag == cmttypes.BlockIDFlagCommit {
 			continue
 		}
 		missingSignAddresses = append(missingSignAddresses, voteInfo.Validator.Address)
 	}
 
 	// Do not continue if there is no action to take.
-	if len(doubleSignEvidence)+len(missingSignAddresses) == 0 {
+	if len(doubleSignMisbehavior)+len(missingSignAddresses) == 0 {
 		return
 	}
 
@@ -79,7 +81,7 @@ func (s *SlasherVCUR) BeginBlock(ctx cosmos.Context, req abci.RequestBeginBlock,
 	}
 
 	// Act on double signs.
-	for _, evidence := range doubleSignEvidence {
+	for _, evidence := range doubleSignMisbehavior {
 		if err := s.HandleDoubleSign(ctx, evidence.Validator.Address, evidence.Height, constAccessor, validatorAddresses); err != nil {
 			ctx.Logger().Error("fail to slash for double signing a block", "error", err)
 		}
