@@ -5,7 +5,7 @@ set -e
 GO_MOD_PACKAGE="gitlab.com/thorchain/thornode"
 
 echo "Generating gogo proto code"
-cd proto
+cd proto/thorchain/v1
 proto_dirs=$(find . -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
 for dir in $proto_dirs; do
   for file in $(find "${dir}" -maxdepth 1 -name '*.proto'); do
@@ -24,12 +24,11 @@ buf generate --template buf.gen.pulsar.yaml
 
 cd ..
 
-cp -r $GO_MOD_PACKAGE/* ./
+cp -r $GO_MOD_PACKAGE/* ../../.
 rm -rf gitlab.com
 
 # Copy files over for dep injection
-rm -rf api && mkdir api
-mv thorchain api/.
-mv types api/.
-mkdir api/common
-mv common/common.pulsar.go api/common/.
+rm -rf ../../api && mkdir ../../api
+mv thorchain ../../api/.
+mv types ../../api/.
+mv common ../../api/.
