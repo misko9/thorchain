@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/armon/go-metrics"
+	"github.com/hashicorp/go-metrics"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cometbft/cometbft/crypto"

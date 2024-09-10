@@ -3,7 +3,7 @@ package thorchain
 import (
 	"fmt"
 
-	"github.com/armon/go-metrics"
+	"github.com/hashicorp/go-metrics"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdkmath "cosmossdk.io/math"
 
