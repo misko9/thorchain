@@ -21,6 +21,7 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	log "github.com/rs/zerolog/log"
 	sdkmath "cosmossdk.io/math"
+	storetypes "cosmossdk.io/store/types"
 )
 
 const (
@@ -33,8 +34,8 @@ const (
 
 var (
 	KeyringServiceName           = sdk.KeyringServiceName
-	NewRoute                     = sdk.NewRoute
-	NewKVStoreKeys               = sdk.NewKVStoreKeys
+	//NewRoute                     = sdk.NewRoute // Legacy routing was removed
+	NewKVStoreKeys               = storetypes.NewKVStoreKeys
 	NewUint                      = sdkmath.NewUint
 	ParseUint                    = sdkmath.ParseUint
 	NewInt                       = sdkmath.NewInt
@@ -61,12 +62,12 @@ var (
 	NewEventManager              = sdk.NewEventManager
 	EventTypeMessage             = sdk.EventTypeMessage
 	AttributeKeyModule           = sdk.AttributeKeyModule
-	KVStorePrefixIterator        = sdk.KVStorePrefixIterator
-	KVStoreReversePrefixIterator = sdk.KVStoreReversePrefixIterator
-	NewKVStoreKey                = sdk.NewKVStoreKey
-	NewTransientStoreKey         = sdk.NewTransientStoreKey
-	StoreTypeTransient           = sdk.StoreTypeTransient
-	StoreTypeIAVL                = sdk.StoreTypeIAVL
+	KVStorePrefixIterator        = storetypes.KVStorePrefixIterator
+	KVStoreReversePrefixIterator = storetypes.KVStoreReversePrefixIterator
+	NewKVStoreKey                = storetypes.NewKVStoreKey
+	NewTransientStoreKey         = storetypes.NewTransientStoreKey
+	StoreTypeTransient           = storetypes.StoreTypeTransient
+	StoreTypeIAVL                = storetypes.StoreTypeIAVL
 	NewContext                   = sdk.NewContext
 	NewUintFromString            = sdkmath.NewUintFromString
 
@@ -74,7 +75,6 @@ var (
 	Bech32ifyPubKey         = legacybech32.MarshalPubKey   // nolint SA1019 deprecated
 	Bech32PubKeyTypeConsPub = legacybech32.ConsPK
 	Bech32PubKeyTypeAccPub  = legacybech32.AccPK
-	Wrapf                   = se.Wrapf
 	MustSortJSON            = sdk.MustSortJSON
 	CodeUnauthorized        = uint32(4)
 	CodeInsufficientFunds   = uint32(5)
@@ -82,7 +82,7 @@ var (
 
 type (
 	Context    = sdk.Context
-	Route      = sdk.Route
+//	Route      = sdk.Route // Legacy routing was removed
 	Uint       = sdkmath.Uint
 	Int        = sdkmath.Int
 	Coin       = sdk.Coin
@@ -92,11 +92,11 @@ type (
 	Result     = sdk.Result
 	Event      = sdk.Event
 	Events     = sdk.Events
-	Dec        = sdkmath.Dec
+	Dec        = sdkmath.LegacyDec
 	Msg        = sdk.Msg
-	Iterator   = sdk.Iterator
-	Handler    = sdk.Handler
-	StoreKey   = sdk.StoreKey
+	Iterator   = storetypes.Iterator
+//	Handler    = sdk.Handler // Legacy routing removed
+	StoreKey   = storetypes.StoreKey
 	Querier    = sdk.Querier
 	TxResponse = sdk.TxResponse
 	Account    = authtypes.AccountI
@@ -105,19 +105,19 @@ type (
 var _ sdk.Address = AccAddress{}
 
 func ErrUnknownRequest(msg string) error {
-	return se.Wrap(se.ErrUnknownRequest, msg)
+	return se.ErrUnknownRequest.Wrap(msg)
 }
 
 func ErrInvalidAddress(addr string) error {
-	return se.Wrap(se.ErrInvalidAddress, addr)
+	return se.ErrInvalidAddress.Wrap(addr)
 }
 
 func ErrInvalidCoins(msg string) error {
-	return se.Wrap(se.ErrInvalidCoins, msg)
+	return se.ErrInvalidCoins.Wrap(msg)
 }
 
 func ErrUnauthorized(msg string) error {
-	return se.Wrap(se.ErrUnauthorized, msg)
+	return se.ErrUnauthorized.Wrap(msg)
 }
 
 // RoundToDecimal round the given amt to the desire decimals

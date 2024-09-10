@@ -824,7 +824,7 @@ func (vm *NetworkMgrVCUR) paySaverYield(ctx cosmos.Context, asset common.Asset, 
 	tx := common.NewTx(common.BlankTxID, modAddress, asgardAddress, common.NewCoins(coin), nil, "THOR-SAVERS-YIELD")
 	donateEvt := NewEventDonate(saver.Asset, tx)
 	if err := vm.eventMgr.EmitEvent(ctx, donateEvt); err != nil {
-		return cosmos.Wrapf(errFailSaveEvent, "fail to save donate events: %w", err)
+		return errFailSaveEvent.Wrapf("fail to save donate events: %w", err)
 	}
 	return nil
 }

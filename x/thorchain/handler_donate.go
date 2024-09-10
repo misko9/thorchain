@@ -88,7 +88,7 @@ func (h DonateHandler) handleV1(ctx cosmos.Context, msg MsgDonate) error {
 	// emit event
 	donateEvt := NewEventDonate(pool.Asset, msg.Tx)
 	if err := h.mgr.EventMgr().EmitEvent(ctx, donateEvt); err != nil {
-		return cosmos.Wrapf(errFailSaveEvent, "fail to save donate events: %w", err)
+		return errFailSaveEvent.Wrapf("fail to save donate events: %w", err)
 	}
 	return nil
 }
