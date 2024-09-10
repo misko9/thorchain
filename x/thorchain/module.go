@@ -1,6 +1,7 @@
 package thorchain
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -10,6 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"cosmossdk.io/core/appmodule"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	//sdkRest "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
@@ -31,6 +33,12 @@ import (
 var (
 	_ module.AppModule      = AppModule{}
 	_ module.AppModuleBasic = AppModuleBasic{}
+	_ module.AppModuleGenesis = AppModule{}
+	_ module.HasABCIGenesis = AppModule{}
+	_ module.HasServices = AppModule{}
+	_ module.HasABCIEndBlock = AppModule{}
+	_ appmodule.HasBeginBlocker = AppModule{}
+//	_ appmodule.HasPreBlocker = AppModule{} // We do not have an expected PreBlocker
 )
 
 // AppModuleBasic app module Basics object
@@ -114,6 +122,10 @@ func NewAppModule(k keeper.Keeper, cdc codec.Codec, coinKeeper bankkeeper.Keeper
 	}
 }
 
+func (AppModule) IsAppModule() {}
+
+func (AppModule) IsOnePerModuleType() {}
+
 func (AppModule) Name() string {
 	return ModuleName
 }
@@ -153,16 +165,16 @@ func (am AppModule) NewQuerierHandler() sdk.Querier {
 	}
 }
 
-// BeginBlock called when a block get proposed
-func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
-	info := req.GetLastCommitInfo()
+// TODO: rename BeginBlock functions to PreBlock functions
+func (am AppModule) PreBlock(ctx sdk.Context, req *abci.RequestFinalizeBlock) error {
+	info := req.GetDecidedLastCommit()
 	var existingValidators []string
 	for _, v := range info.GetVotes() {
 		addr := sdk.ValAddress(v.Validator.GetAddress())
 		existingValidators = append(existingValidators, addr.String())
 	}
 
-	ctx.Logger().Debug("Begin Block", "height", req.Header.Height)
+	ctx.Logger().Debug("PreBlock", "height", ctx.BlockHeight())
 	// Check/Update the network version before checking the local version or checking whether to do a new-version store migration
 	if err := am.mgr.BeginBlock(ctx); err != nil {
 		ctx.Logger().Error("fail to get managers", "error", err)
@@ -190,11 +202,21 @@ func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
 	if err := am.mgr.ValidatorMgr().BeginBlock(ctx, am.mgr, existingValidators); err != nil {
 		ctx.Logger().Error("Fail to begin block on validator", "error", err)
 	}
+
+	return nil
+}
+
+// BeginBlock called when a block get proposed
+func (am AppModule) BeginBlock(goCtx context.Context) error {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	ctx.Logger().Debug("Begin Block", "height", ctx.BlockHeight())
+	return nil
 }
 
 // EndBlock called when a block get committed
-func (am AppModule) EndBlock(ctx sdk.Context, req abci.RequestEndBlock) []abci.ValidatorUpdate {
-	ctx.Logger().Debug("End Block", "height", req.Height)
+func (am AppModule) EndBlock(goCtx context.Context) ([]abci.ValidatorUpdate, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	ctx.Logger().Debug("End Block", "height", ctx.BlockHeight())
 
 	if err := am.mgr.SwapQ().EndBlock(ctx, am.mgr); err != nil {
 		ctx.Logger().Error("fail to process swap queue", "error", err)
@@ -238,7 +260,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, req abci.RequestEndBlock) []abci.V
 		}
 	}
 
-	return validators
+	return validators, nil
 }
 
 // InitGenesis initialise genesis
