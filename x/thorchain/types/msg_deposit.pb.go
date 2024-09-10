@@ -9,7 +9,6 @@ import (
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	common "gitlab.com/thorchain/thornode/common"
-	gitlab_com_thorchain_thornode_common "gitlab.com/thorchain/thornode/common"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -27,7 +26,7 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type MsgDeposit struct {
-	Coins  gitlab_com_thorchain_thornode_common.Coins    `protobuf:"bytes,1,rep,name=coins,proto3,castrepeated=gitlab.com/thorchain/thornode/common.Coins" json:"coins"`
+	Coins  []common.Coin                                 `protobuf:"bytes,1,rep,name=coins,proto3" json:"coins"`
 	Memo   string                                        `protobuf:"bytes,2,opt,name=memo,proto3" json:"memo,omitempty"`
 	Signer github_com_cosmos_cosmos_sdk_types.AccAddress `protobuf:"bytes,3,opt,name=signer,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"signer,omitempty"`
 }
@@ -65,7 +64,7 @@ func (m *MsgDeposit) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgDeposit proto.InternalMessageInfo
 
-func (m *MsgDeposit) GetCoins() gitlab_com_thorchain_thornode_common.Coins {
+func (m *MsgDeposit) GetCoins() []common.Coin {
 	if m != nil {
 		return m.Coins
 	}
@@ -342,10 +341,7 @@ func (m *MsgDeposit) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthMsgDeposit
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthMsgDeposit
 			}
 			if (iNdEx + skippy) > l {

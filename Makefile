@@ -221,6 +221,14 @@ proto-check-breaking:
 	test-sim-import-export build-windows-client \
 	test-system
 
+## --- Old proto-gen ---
+protob:
+	@./scripts/oldprotocgen.sh
+
+protob-docker:
+	@docker run --rm -v $(shell pwd):/app -w /app golang:1.22.3 \
+		make protob
+
 ## --- Testnet Utilities ---
 get-localic:
 	@echo "Installing local-interchain"

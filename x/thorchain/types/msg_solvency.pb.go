@@ -30,7 +30,7 @@ type MsgSolvency struct {
 	Id     gitlab_com_thorchain_thornode_common.TxID     `protobuf:"bytes,1,opt,name=id,proto3,casttype=gitlab.com/thorchain/thornode/common.TxID" json:"id,omitempty"`
 	Chain  gitlab_com_thorchain_thornode_common.Chain    `protobuf:"bytes,2,opt,name=chain,proto3,casttype=gitlab.com/thorchain/thornode/common.Chain" json:"chain,omitempty"`
 	PubKey gitlab_com_thorchain_thornode_common.PubKey   `protobuf:"bytes,3,opt,name=pub_key,json=pubKey,proto3,casttype=gitlab.com/thorchain/thornode/common.PubKey" json:"pub_key,omitempty"`
-	Coins  gitlab_com_thorchain_thornode_common.Coins    `protobuf:"bytes,4,rep,name=coins,proto3,castrepeated=gitlab.com/thorchain/thornode/common.Coins" json:"coins"`
+	Coins  []common.Coin                                 `protobuf:"bytes,4,rep,name=coins,proto3" json:"coins"`
 	Height int64                                         `protobuf:"varint,5,opt,name=height,proto3" json:"height,omitempty"`
 	Signer github_com_cosmos_cosmos_sdk_types.AccAddress `protobuf:"bytes,6,opt,name=signer,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"signer,omitempty"`
 }
@@ -89,7 +89,7 @@ func (m *MsgSolvency) GetPubKey() gitlab_com_thorchain_thornode_common.PubKey {
 	return ""
 }
 
-func (m *MsgSolvency) GetCoins() gitlab_com_thorchain_thornode_common.Coins {
+func (m *MsgSolvency) GetCoins() []common.Coin {
 	if m != nil {
 		return m.Coins
 	}
@@ -484,10 +484,7 @@ func (m *MsgSolvency) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthMsgSolvency
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthMsgSolvency
 			}
 			if (iNdEx + skippy) > l {

@@ -2,7 +2,7 @@
 
 set -e
 
-GO_MOD_PACKAGE="github.com/rollchains/thornode"
+GO_MOD_PACKAGE="gitlab.com/thorchain/thornode"
 
 echo "Generating gogo proto code"
 cd proto
@@ -13,6 +13,7 @@ for dir in $proto_dirs; do
     # gogo proto files SHOULD ONLY be generated if this is false
     # we don't want gogo proto to run for proto files which are natively built for google.golang.org/protobuf
     if grep -q "option go_package" "$file" && grep -H -o -c "option go_package.*$GO_MOD_PACKAGE/api" "$file" | grep -q ':0$'; then
+      echo $file
       buf generate --template buf.gen.gogo.yaml $file
     fi
   done

@@ -8,8 +8,6 @@ import (
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	common "gitlab.com/thorchain/thornode/common"
-	gitlab_com_thorchain_thornode_common "gitlab.com/thorchain/thornode/common"
-	gitlab_com_thorchain_thornode_x_thorchain_types "gitlab.com/thorchain/thornode/x/thorchain/types"
 	types "gitlab.com/thorchain/thornode/x/thorchain/types"
 	io "io"
 	math "math"
@@ -132,37 +130,37 @@ func (m *Mimir) GetValue() int64 {
 }
 
 type GenesisState struct {
-	Pools                   []types.Pool                                                        `protobuf:"bytes,1,rep,name=pools,proto3" json:"pools"`
-	LiquidityProviders      gitlab_com_thorchain_thornode_x_thorchain_types.LiquidityProviders  `protobuf:"bytes,2,rep,name=liquidity_providers,json=liquidityProviders,proto3,castrepeated=gitlab.com/thorchain/thornode/x/thorchain/types.LiquidityProviders" json:"liquidity_providers"`
-	ObservedTxInVoters      gitlab_com_thorchain_thornode_x_thorchain_types.ObservedTxVoters    `protobuf:"bytes,3,rep,name=observed_tx_in_voters,json=observedTxInVoters,proto3,castrepeated=gitlab.com/thorchain/thornode/x/thorchain/types.ObservedTxVoters" json:"observed_tx_in_voters"`
-	ObservedTxOutVoters     gitlab_com_thorchain_thornode_x_thorchain_types.ObservedTxVoters    `protobuf:"bytes,4,rep,name=observed_tx_out_voters,json=observedTxOutVoters,proto3,castrepeated=gitlab.com/thorchain/thornode/x/thorchain/types.ObservedTxVoters" json:"observed_tx_out_voters"`
-	TxOuts                  []types.TxOut                                                       `protobuf:"bytes,5,rep,name=tx_outs,json=txOuts,proto3" json:"tx_outs"`
-	NodeAccounts            gitlab_com_thorchain_thornode_x_thorchain_types.NodeAccounts        `protobuf:"bytes,6,rep,name=node_accounts,json=nodeAccounts,proto3,castrepeated=gitlab.com/thorchain/thornode/x/thorchain/types.NodeAccounts" json:"node_accounts"`
-	Vaults                  gitlab_com_thorchain_thornode_x_thorchain_types.Vaults              `protobuf:"bytes,7,rep,name=vaults,proto3,castrepeated=gitlab.com/thorchain/thornode/x/thorchain/types.Vaults" json:"vaults"`
-	Reserve                 uint64                                                              `protobuf:"varint,8,opt,name=reserve,proto3" json:"reserve,omitempty"`
-	LastSignedHeight        int64                                                               `protobuf:"varint,10,opt,name=last_signed_height,json=lastSignedHeight,proto3" json:"last_signed_height,omitempty"`
-	LastChainHeights        []LastChainHeight                                                   `protobuf:"bytes,11,rep,name=last_chain_heights,json=lastChainHeights,proto3" json:"last_chain_heights"`
-	ReserveContributors     gitlab_com_thorchain_thornode_x_thorchain_types.ReserveContributors `protobuf:"bytes,12,rep,name=reserve_contributors,json=reserveContributors,proto3,castrepeated=gitlab.com/thorchain/thornode/x/thorchain/types.ReserveContributors" json:"reserve_contributors"`
-	Network                 types.Network                                                       `protobuf:"bytes,13,opt,name=network,proto3" json:"network"`
-	OrderbookItems          []types.MsgSwap                                                     `protobuf:"bytes,19,rep,name=orderbook_items,json=orderbookItems,proto3" json:"orderbook_items"`
-	NetworkFees             []types.NetworkFee                                                  `protobuf:"bytes,20,rep,name=network_fees,json=networkFees,proto3" json:"network_fees"`
-	ChainContracts          []types.ChainContract                                               `protobuf:"bytes,22,rep,name=chain_contracts,json=chainContracts,proto3" json:"chain_contracts"`
-	THORNames               []types.THORName                                                    `protobuf:"bytes,23,rep,name=THORNames,proto3" json:"THORNames"`
-	Mimirs                  []Mimir                                                             `protobuf:"bytes,24,rep,name=mimirs,proto3" json:"mimirs"`
-	StoreVersion            int64                                                               `protobuf:"varint,25,opt,name=store_version,json=storeVersion,proto3" json:"store_version,omitempty"`
-	BondProviders           []types.BondProviders                                               `protobuf:"bytes,26,rep,name=bond_providers,json=bondProviders,proto3" json:"bond_providers"`
-	POL                     types.ProtocolOwnedLiquidity                                        `protobuf:"bytes,27,opt,name=POL,proto3" json:"POL"`
-	Loans                   []types.Loan                                                        `protobuf:"bytes,28,rep,name=loans,proto3" json:"loans"`
-	StreamingSwaps          []types.StreamingSwap                                               `protobuf:"bytes,29,rep,name=streaming_swaps,json=streamingSwaps,proto3" json:"streaming_swaps"`
-	SwapQueueItems          []types.MsgSwap                                                     `protobuf:"bytes,30,rep,name=swap_queue_items,json=swapQueueItems,proto3" json:"swap_queue_items"`
-	SwapperClout            []types.SwapperClout                                                `protobuf:"bytes,31,rep,name=swapper_clout,json=swapperClout,proto3" json:"swapper_clout"`
-	TradeAccounts           []types.TradeAccount                                                `protobuf:"bytes,32,rep,name=trade_accounts,json=tradeAccounts,proto3" json:"trade_accounts"`
-	TradeUnits              []types.TradeUnit                                                   `protobuf:"bytes,33,rep,name=trade_units,json=tradeUnits,proto3" json:"trade_units"`
-	OutboundFeeWithheldRune gitlab_com_thorchain_thornode_common.Coins                          `protobuf:"bytes,34,rep,name=outbound_fee_withheld_rune,json=outboundFeeWithheldRune,proto3,castrepeated=gitlab.com/thorchain/thornode/common.Coins" json:"outbound_fee_withheld_rune"`
-	OutboundFeeSpentRune    gitlab_com_thorchain_thornode_common.Coins                          `protobuf:"bytes,35,rep,name=outbound_fee_spent_rune,json=outboundFeeSpentRune,proto3,castrepeated=gitlab.com/thorchain/thornode/common.Coins" json:"outbound_fee_spent_rune"`
-	RuneProviders           []types.RUNEProvider                                                `protobuf:"bytes,36,rep,name=rune_providers,json=runeProviders,proto3" json:"rune_providers"`
-	RunePool                types.RUNEPool                                                      `protobuf:"bytes,37,opt,name=rune_pool,json=runePool,proto3" json:"rune_pool"`
-	NodeMimirs              []types.NodeMimir                                                   `protobuf:"bytes,38,rep,name=nodeMimirs,proto3" json:"nodeMimirs"`
+	Pools                   []types.Pool                 `protobuf:"bytes,1,rep,name=pools,proto3" json:"pools"`
+	LiquidityProviders      []types.LiquidityProvider    `protobuf:"bytes,2,rep,name=liquidity_providers,json=liquidityProviders,proto3" json:"liquidity_providers"`
+	ObservedTxInVoters      []types.ObservedTxVoter      `protobuf:"bytes,3,rep,name=observed_tx_in_voters,json=observedTxInVoters,proto3" json:"observed_tx_in_voters"`
+	ObservedTxOutVoters     []types.ObservedTxVoter      `protobuf:"bytes,4,rep,name=observed_tx_out_voters,json=observedTxOutVoters,proto3" json:"observed_tx_out_voters"`
+	TxOuts                  []types.TxOut                `protobuf:"bytes,5,rep,name=tx_outs,json=txOuts,proto3" json:"tx_outs"`
+	NodeAccounts            []types.NodeAccount          `protobuf:"bytes,6,rep,name=node_accounts,json=nodeAccounts,proto3" json:"node_accounts"`
+	Vaults                  []types.Vault                `protobuf:"bytes,7,rep,name=vaults,proto3" json:"vaults"`
+	Reserve                 uint64                       `protobuf:"varint,8,opt,name=reserve,proto3" json:"reserve,omitempty"`
+	LastSignedHeight        int64                        `protobuf:"varint,10,opt,name=last_signed_height,json=lastSignedHeight,proto3" json:"last_signed_height,omitempty"`
+	LastChainHeights        []LastChainHeight            `protobuf:"bytes,11,rep,name=last_chain_heights,json=lastChainHeights,proto3" json:"last_chain_heights"`
+	ReserveContributors     []types.ReserveContributor   `protobuf:"bytes,12,rep,name=reserve_contributors,json=reserveContributors,proto3" json:"reserve_contributors"`
+	Network                 types.Network                `protobuf:"bytes,13,opt,name=network,proto3" json:"network"`
+	OrderbookItems          []types.MsgSwap              `protobuf:"bytes,19,rep,name=orderbook_items,json=orderbookItems,proto3" json:"orderbook_items"`
+	NetworkFees             []types.NetworkFee           `protobuf:"bytes,20,rep,name=network_fees,json=networkFees,proto3" json:"network_fees"`
+	ChainContracts          []types.ChainContract        `protobuf:"bytes,22,rep,name=chain_contracts,json=chainContracts,proto3" json:"chain_contracts"`
+	THORNames               []types.THORName             `protobuf:"bytes,23,rep,name=THORNames,proto3" json:"THORNames"`
+	Mimirs                  []Mimir                      `protobuf:"bytes,24,rep,name=mimirs,proto3" json:"mimirs"`
+	StoreVersion            int64                        `protobuf:"varint,25,opt,name=store_version,json=storeVersion,proto3" json:"store_version,omitempty"`
+	BondProviders           []types.BondProviders        `protobuf:"bytes,26,rep,name=bond_providers,json=bondProviders,proto3" json:"bond_providers"`
+	POL                     types.ProtocolOwnedLiquidity `protobuf:"bytes,27,opt,name=POL,proto3" json:"POL"`
+	Loans                   []types.Loan                 `protobuf:"bytes,28,rep,name=loans,proto3" json:"loans"`
+	StreamingSwaps          []types.StreamingSwap        `protobuf:"bytes,29,rep,name=streaming_swaps,json=streamingSwaps,proto3" json:"streaming_swaps"`
+	SwapQueueItems          []types.MsgSwap              `protobuf:"bytes,30,rep,name=swap_queue_items,json=swapQueueItems,proto3" json:"swap_queue_items"`
+	SwapperClout            []types.SwapperClout         `protobuf:"bytes,31,rep,name=swapper_clout,json=swapperClout,proto3" json:"swapper_clout"`
+	TradeAccounts           []types.TradeAccount         `protobuf:"bytes,32,rep,name=trade_accounts,json=tradeAccounts,proto3" json:"trade_accounts"`
+	TradeUnits              []types.TradeUnit            `protobuf:"bytes,33,rep,name=trade_units,json=tradeUnits,proto3" json:"trade_units"`
+	OutboundFeeWithheldRune []common.Coin                `protobuf:"bytes,34,rep,name=outbound_fee_withheld_rune,json=outboundFeeWithheldRune,proto3" json:"outbound_fee_withheld_rune"`
+	OutboundFeeSpentRune    []common.Coin                `protobuf:"bytes,35,rep,name=outbound_fee_spent_rune,json=outboundFeeSpentRune,proto3" json:"outbound_fee_spent_rune"`
+	RuneProviders           []types.RUNEProvider         `protobuf:"bytes,36,rep,name=rune_providers,json=runeProviders,proto3" json:"rune_providers"`
+	RunePool                types.RUNEPool               `protobuf:"bytes,37,opt,name=rune_pool,json=runePool,proto3" json:"rune_pool"`
+	NodeMimirs              []types.NodeMimir            `protobuf:"bytes,38,rep,name=nodeMimirs,proto3" json:"nodeMimirs"`
 }
 
 func (m *GenesisState) Reset()         { *m = GenesisState{} }
@@ -205,21 +203,21 @@ func (m *GenesisState) GetPools() []types.Pool {
 	return nil
 }
 
-func (m *GenesisState) GetLiquidityProviders() gitlab_com_thorchain_thornode_x_thorchain_types.LiquidityProviders {
+func (m *GenesisState) GetLiquidityProviders() []types.LiquidityProvider {
 	if m != nil {
 		return m.LiquidityProviders
 	}
 	return nil
 }
 
-func (m *GenesisState) GetObservedTxInVoters() gitlab_com_thorchain_thornode_x_thorchain_types.ObservedTxVoters {
+func (m *GenesisState) GetObservedTxInVoters() []types.ObservedTxVoter {
 	if m != nil {
 		return m.ObservedTxInVoters
 	}
 	return nil
 }
 
-func (m *GenesisState) GetObservedTxOutVoters() gitlab_com_thorchain_thornode_x_thorchain_types.ObservedTxVoters {
+func (m *GenesisState) GetObservedTxOutVoters() []types.ObservedTxVoter {
 	if m != nil {
 		return m.ObservedTxOutVoters
 	}
@@ -233,14 +231,14 @@ func (m *GenesisState) GetTxOuts() []types.TxOut {
 	return nil
 }
 
-func (m *GenesisState) GetNodeAccounts() gitlab_com_thorchain_thornode_x_thorchain_types.NodeAccounts {
+func (m *GenesisState) GetNodeAccounts() []types.NodeAccount {
 	if m != nil {
 		return m.NodeAccounts
 	}
 	return nil
 }
 
-func (m *GenesisState) GetVaults() gitlab_com_thorchain_thornode_x_thorchain_types.Vaults {
+func (m *GenesisState) GetVaults() []types.Vault {
 	if m != nil {
 		return m.Vaults
 	}
@@ -268,7 +266,7 @@ func (m *GenesisState) GetLastChainHeights() []LastChainHeight {
 	return nil
 }
 
-func (m *GenesisState) GetReserveContributors() gitlab_com_thorchain_thornode_x_thorchain_types.ReserveContributors {
+func (m *GenesisState) GetReserveContributors() []types.ReserveContributor {
 	if m != nil {
 		return m.ReserveContributors
 	}
@@ -380,14 +378,14 @@ func (m *GenesisState) GetTradeUnits() []types.TradeUnit {
 	return nil
 }
 
-func (m *GenesisState) GetOutboundFeeWithheldRune() gitlab_com_thorchain_thornode_common.Coins {
+func (m *GenesisState) GetOutboundFeeWithheldRune() []common.Coin {
 	if m != nil {
 		return m.OutboundFeeWithheldRune
 	}
 	return nil
 }
 
-func (m *GenesisState) GetOutboundFeeSpentRune() gitlab_com_thorchain_thornode_common.Coins {
+func (m *GenesisState) GetOutboundFeeSpentRune() []common.Coin {
 	if m != nil {
 		return m.OutboundFeeSpentRune
 	}
@@ -1344,10 +1342,7 @@ func (m *LastChainHeight) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthGenesis
 			}
 			if (iNdEx + skippy) > l {
@@ -1448,10 +1443,7 @@ func (m *Mimir) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthGenesis
 			}
 			if (iNdEx + skippy) > l {
@@ -2507,10 +2499,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthGenesis
 			}
 			if (iNdEx + skippy) > l {

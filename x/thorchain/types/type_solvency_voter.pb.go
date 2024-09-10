@@ -29,7 +29,7 @@ type SolvencyVoter struct {
 	Id                   gitlab_com_thorchain_thornode_common.TxID   `protobuf:"bytes,1,opt,name=id,proto3,casttype=gitlab.com/thorchain/thornode/common.TxID" json:"id,omitempty"`
 	Chain                gitlab_com_thorchain_thornode_common.Chain  `protobuf:"bytes,2,opt,name=chain,proto3,casttype=gitlab.com/thorchain/thornode/common.Chain" json:"chain,omitempty"`
 	PubKey               gitlab_com_thorchain_thornode_common.PubKey `protobuf:"bytes,3,opt,name=pub_key,json=pubKey,proto3,casttype=gitlab.com/thorchain/thornode/common.PubKey" json:"pub_key,omitempty"`
-	Coins                gitlab_com_thorchain_thornode_common.Coins  `protobuf:"bytes,4,rep,name=coins,proto3,castrepeated=gitlab.com/thorchain/thornode/common.Coins" json:"coins"`
+	Coins                []common.Coin                               `protobuf:"bytes,4,rep,name=coins,proto3" json:"coins"`
 	Height               int64                                       `protobuf:"varint,5,opt,name=height,proto3" json:"height,omitempty"`
 	ConsensusBlockHeight int64                                       `protobuf:"varint,6,opt,name=consensus_block_height,json=consensusBlockHeight,proto3" json:"consensus_block_height,omitempty"`
 	Signers              []string                                    `protobuf:"bytes,7,rep,name=signers,proto3" json:"signers,omitempty"`
@@ -471,10 +471,7 @@ func (m *SolvencyVoter) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypeSolvencyVoter
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTypeSolvencyVoter
 			}
 			if (iNdEx + skippy) > l {

@@ -410,10 +410,7 @@ func (m *NodeMimir) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypeMimir
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTypeMimir
 			}
 			if (iNdEx + skippy) > l {
@@ -497,10 +494,7 @@ func (m *NodeMimirs) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypeMimir
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTypeMimir
 			}
 			if (iNdEx + skippy) > l {

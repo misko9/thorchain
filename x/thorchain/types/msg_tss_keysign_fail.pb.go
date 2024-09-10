@@ -31,7 +31,7 @@ type MsgTssKeysignFail struct {
 	Height int64                                         `protobuf:"varint,2,opt,name=height,proto3" json:"height,omitempty"`
 	Blame  Blame                                         `protobuf:"bytes,3,opt,name=blame,proto3" json:"blame"`
 	Memo   string                                        `protobuf:"bytes,4,opt,name=memo,proto3" json:"memo,omitempty"`
-	Coins  gitlab_com_thorchain_thornode_common.Coins    `protobuf:"bytes,5,rep,name=coins,proto3,castrepeated=gitlab.com/thorchain/thornode/common.Coins" json:"coins"`
+	Coins  []common.Coin                                 `protobuf:"bytes,5,rep,name=coins,proto3" json:"coins"`
 	PubKey gitlab_com_thorchain_thornode_common.PubKey   `protobuf:"bytes,6,opt,name=pub_key,json=pubKey,proto3,casttype=gitlab.com/thorchain/thornode/common.PubKey" json:"pub_key,omitempty"`
 	Signer github_com_cosmos_cosmos_sdk_types.AccAddress `protobuf:"bytes,7,opt,name=signer,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"signer,omitempty"`
 }
@@ -490,10 +490,7 @@ func (m *MsgTssKeysignFail) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthMsgTssKeysignFail
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthMsgTssKeysignFail
 			}
 			if (iNdEx + skippy) > l {

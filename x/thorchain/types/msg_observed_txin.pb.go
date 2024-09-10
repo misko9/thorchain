@@ -25,7 +25,7 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type MsgObservedTxIn struct {
-	Txs    ObservedTxs                                   `protobuf:"bytes,1,rep,name=txs,proto3,castrepeated=ObservedTxs" json:"txs"`
+	Txs    []ObservedTx                                  `protobuf:"bytes,1,rep,name=txs,proto3" json:"txs"`
 	Signer github_com_cosmos_cosmos_sdk_types.AccAddress `protobuf:"bytes,2,opt,name=signer,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"signer,omitempty"`
 }
 
@@ -62,7 +62,7 @@ func (m *MsgObservedTxIn) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgObservedTxIn proto.InternalMessageInfo
 
-func (m *MsgObservedTxIn) GetTxs() ObservedTxs {
+func (m *MsgObservedTxIn) GetTxs() []ObservedTx {
 	if m != nil {
 		return m.Txs
 	}
@@ -288,10 +288,7 @@ func (m *MsgObservedTxIn) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthMsgObservedTxin
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthMsgObservedTxin
 			}
 			if (iNdEx + skippy) > l {
