@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/blang/semver"
-	se "github.com/cosmos/cosmos-sdk/types/errors"
+	errorsmod "cosmossdk.io/errors"
 
 	"gitlab.com/thorchain/thornode/common"
 	"gitlab.com/thorchain/thornode/common/cosmos"
@@ -90,7 +90,7 @@ func (h BanHandler) handleV1(ctx cosmos.Context, msg MsgBan) (*cosmos.Result, er
 	case NodeActive, NodeStandby:
 		// we can ban an active or standby node
 	default:
-		return nil, se.Wrap(errInternal, "cannot ban a node account that is not currently active or standby")
+		return nil, errorsmod.Wrap(errInternal, "cannot ban a node account that is not currently active or standby")
 	}
 
 	banner, err := h.mgr.Keeper().GetNodeAccount(ctx, msg.Signer)

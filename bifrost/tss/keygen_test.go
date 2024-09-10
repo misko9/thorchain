@@ -55,7 +55,7 @@ func (*KeyGenTestSuite) setupKeysForTest(c *C) string {
 	c.Assert(err, IsNil)
 	info, _, err := kb.NewMnemonic(signerNameForTest, cKeys.English, cmd.THORChainHDPath, signerPasswordForTest, hd.Secp256k1)
 	c.Assert(err, IsNil)
-	c.Logf("name:%s", info.GetName())
+	c.Logf("name:%s", info.Name)
 	return thorcliDir
 }
 

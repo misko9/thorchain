@@ -6,6 +6,7 @@ import (
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	errorsmod "cosmossdk.io/errors"
 	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	sdkmath "cosmossdk.io/math"
@@ -82,13 +83,13 @@ func (tx StdTx) ValidateBasic() error {
 	stdSigs := tx.GetSignatures()
 
 	if tx.Fee.Gas > txtypes.MaxGasWanted {
-		return sdkerrors.Wrapf(
+		return errorsmod.Wrapf(
 			sdkerrors.ErrInvalidRequest,
 			"invalid gas supplied; %d > %d", tx.Fee.Gas, txtypes.MaxGasWanted,
 		)
 	}
 	if tx.Fee.Amount.IsAnyNegative() {
-		return sdkerrors.Wrapf(
+		return errorsmod.Wrapf(
 			sdkerrors.ErrInsufficientFee,
 			"invalid fee provided: %s", tx.Fee.Amount,
 		)
@@ -97,7 +98,7 @@ func (tx StdTx) ValidateBasic() error {
 		return sdkerrors.ErrNoSignatures
 	}
 	if len(stdSigs) != len(tx.GetSigners()) {
-		return sdkerrors.Wrapf(
+		return errorsmod.Wrapf(
 			sdkerrors.ErrUnauthorized,
 			"wrong number of signers; expected %d, got %d", len(tx.GetSigners()), len(stdSigs),
 		)
@@ -165,7 +166,7 @@ func (tx StdTx) GetSignaturesV2() ([]signing.SignatureV2, error) {
 		var err error
 		res[i], err = StdSignatureToSignatureV2(legacy.Cdc, sig)
 		if err != nil {
-			return nil, sdkerrors.Wrapf(err, "Unable to convert signature %v to V2", sig)
+			return nil, errorsmod.Wrapf(err, "Unable to convert signature %v to V2", sig)
 		}
 	}
 

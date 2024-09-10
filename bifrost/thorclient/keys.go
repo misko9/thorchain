@@ -39,7 +39,7 @@ func NewKeysWithKeybase(kb ckeys.Keyring, name, password string) *Keys {
 }
 
 // GetKeyringKeybase return keyring and key info
-func GetKeyringKeybase(chainHomeFolder, signerName, password string) (ckeys.Keyring, ckeys.Info, error) {
+func GetKeyringKeybase(chainHomeFolder, signerName, password string) (ckeys.Keyring, *ckeys.Record, error) {
 	if len(signerName) == 0 {
 		return nil, nil, fmt.Errorf("signer name is empty")
 	}
@@ -86,12 +86,12 @@ func getKeybase(thorchainHome string, reader io.Reader) (ckeys.Keyring, error) {
 }
 
 // GetSignerInfo return signer info
-func (k *Keys) GetSignerInfo() ckeys.Info {
-	info, err := k.kb.Key(k.signerName)
+func (k *Keys) GetSignerInfo() *ckeys.Record {
+	record, err := k.kb.Key(k.signerName)
 	if err != nil {
 		panic(err)
 	}
-	return info
+	return record
 }
 
 // GetPrivateKey return the private key

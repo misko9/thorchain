@@ -19,7 +19,7 @@ import (
 
 var m *metrics.Metrics
 
-func SetupThorchainForTest(c *C) (config.BifrostClientConfiguration, cKeys.Info, cKeys.Keyring) {
+func SetupThorchainForTest(c *C) (config.BifrostClientConfiguration, *cKeys.Record, cKeys.Keyring) {
 	thorchain.SetupConfigForTest()
 	cfg := config.BifrostClientConfiguration{
 		ChainID:         "thorchain",
@@ -38,10 +38,10 @@ func SetupThorchainForTest(c *C) (config.BifrostClientConfiguration, cKeys.Info,
 	hdPath := params.String()
 
 	// create a consistent user
-	info, err := kb.NewAccount(cfg.SignerName, "industry segment educate height inject hover bargain offer employ select speak outer video tornado story slow chief object junk vapor venue large shove behave", cfg.SignerPasswd, hdPath, hd.Secp256k1)
+	record, err := kb.NewAccount(cfg.SignerName, "industry segment educate height inject hover bargain offer employ select speak outer video tornado story slow chief object junk vapor venue large shove behave", cfg.SignerPasswd, hdPath, hd.Secp256k1)
 	c.Assert(err, IsNil)
 
-	return cfg, info, kb
+	return cfg, record, kb
 }
 
 func GetMetricForTest(c *C) *metrics.Metrics {

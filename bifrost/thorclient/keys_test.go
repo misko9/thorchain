@@ -70,7 +70,7 @@ func (ks *KeysSuite) TestNewKeys(c *C) {
 	ki := NewKeysWithKeybase(k, signerNameForTest, signerPasswordForTest)
 	info = ki.GetSignerInfo()
 	c.Assert(info, NotNil)
-	c.Assert(info.GetName(), Equals, signerNameForTest)
+	c.Assert(info.Name, Equals, signerNameForTest)
 	priKey, err := ki.GetPrivateKey()
 	c.Assert(err, IsNil)
 	c.Assert(priKey, NotNil)

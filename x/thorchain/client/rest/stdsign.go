@@ -7,7 +7,7 @@ import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	"github.com/cosmos/cosmos-sdk/crypto/types/multisig"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	"gopkg.in/yaml.v2"
 )
@@ -96,7 +96,7 @@ func pubKeySigToSigData(cdc *codec.LegacyAmino, key cryptotypes.PubKey, sig []by
 			var data signing.SignatureData
 			data, err = pubKeySigToSigData(cdc, pubKeys[i], multiSig.Sigs[sigIdx])
 			if err != nil {
-				return nil, sdkerrors.Wrapf(err, "Unable to convert Signature to SigData %d", sigIdx)
+				return nil, errorsmod.Wrapf(err, "Unable to convert Signature to SigData %d", sigIdx)
 			}
 
 			sigDatas[sigIdx] = data
