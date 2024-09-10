@@ -11,9 +11,9 @@ import "gogoproto/gogo.proto";
 
 message PoolMod {
   common.Asset asset = 1 [(gogoproto.nullable) = false];
-  string rune_amt = 2 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string rune_amt = 2 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   bool rune_add = 3;
-  string asset_amt = 4 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string asset_amt = 4 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   bool asset_add = 5;
 }
 
@@ -29,7 +29,7 @@ message EventStreamingSwap {
   uint64 quantity = 3;
   uint64 count = 4;
   int64 last_height = 5;
-  string trade_target = 6 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string trade_target = 6 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   common.Coin deposit = 7 [(gogoproto.nullable) = false];
   common.Coin in = 8 [(gogoproto.nullable) = false];
   common.Coin out = 9 [(gogoproto.nullable) = false];
@@ -39,25 +39,25 @@ message EventStreamingSwap {
 
 message EventSwap {
   common.Asset pool = 1 [(gogoproto.nullable) = false];
-  string swap_target = 2 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
-  string swap_slip = 3 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
-  string liquidity_fee = 4 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
-  string liquidity_fee_in_rune = 5 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string swap_target = 2 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
+  string swap_slip = 3 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
+  string liquidity_fee = 4 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
+  string liquidity_fee_in_rune = 5 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   common.Tx in_tx = 6 [(gogoproto.nullable) = false];
   common.Tx out_txs = 7 [(gogoproto.nullable) = false];
   common.Coin emit_asset = 8 [(gogoproto.nullable) = false];
-  string synth_units = 9 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string synth_units = 9 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   uint64 streaming_swap_quantity = 10;
   uint64 streaming_swap_count = 11;
-  string pool_slip = 12 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string pool_slip = 12 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
 }
 
 message EventAddLiquidity {
   common.Asset pool = 1 [(gogoproto.nullable) = false];
-  string provider_units = 2 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string provider_units = 2 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   string rune_address = 3 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
-  string rune_amount = 4 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
-  string asset_amount = 5 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string rune_amount = 4 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
+  string asset_amount = 5 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   string rune_tx_id = 6 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.TxID", (gogoproto.customname) = "RuneTxID"];
   string asset_tx_id = 7 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.TxID", (gogoproto.customname) = "AssetTxID"];
   string asset_address = 8 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
@@ -65,12 +65,12 @@ message EventAddLiquidity {
 
 message EventWithdraw {
   common.Asset pool = 1 [(gogoproto.nullable) = false];
-  string provider_units = 2 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string provider_units = 2 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   int64 basis_points = 3;
-  bytes asymmetry = 4 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+  bytes asymmetry = 4 [(gogoproto.customtype) = "cosmossdk.io/math.LegacyDec", (gogoproto.nullable) = false];
   common.Tx in_tx = 5 [(gogoproto.nullable) = false];
-  string emit_asset = 6 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
-  string emit_rune = 7 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string emit_asset = 6 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
+  string emit_rune = 7 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
 }
 
 enum PendingLiquidityType {
@@ -82,9 +82,9 @@ message EventPendingLiquidity {
   common.Asset pool = 1 [(gogoproto.nullable) = false];
   PendingLiquidityType pending_type = 2;
   string rune_address = 3 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
-  string rune_amount = 4 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string rune_amount = 4 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   string asset_address = 5 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
-  string asset_amount = 6 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string asset_amount = 6 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   string rune_tx_id = 7 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.TxID", (gogoproto.customname) = "RuneTxID"];
   string asset_tx_id = 8 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.TxID", (gogoproto.customname) = "AssetTxID"];
 }
@@ -105,7 +105,7 @@ message PoolAmt {
 }
 
 message EventRewards {
-  string bond_reward = 1 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string bond_reward = 1 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   repeated PoolAmt pool_rewards = 2 [(gogoproto.nullable) = false];
 }
 
@@ -124,15 +124,15 @@ enum BondType {
 }
 
 message EventBond {
-  string amount = 1 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string amount = 1 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   BondType bond_type = 2;
   common.Tx tx_in = 3 [(gogoproto.nullable) = false];
 }
 
 message GasPool {
   common.Asset asset = 1 [(gogoproto.nullable) = false];
-  string rune_amt = 2 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
-  string asset_amt = 3 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string rune_amt = 2 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
+  string asset_amt = 3 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   int64 count = 4;
 }
 
@@ -167,7 +167,7 @@ message EventErrata {
 message EventFee {
   string tx_id = 1 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.TxID", (gogoproto.customname) = "TxID"];
   common.Fee fee = 2 [(gogoproto.nullable) = false];
-  string synth_units = 3 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string synth_units = 3 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
 }
 
 message EventOutbound {
@@ -218,12 +218,12 @@ enum MintBurnSupplyType {
 message EventMintBurn {
   MintBurnSupplyType supply = 1;
   string denom = 2;
-  string amount = 3 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string amount = 3 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   string reason = 4;
 }
 
 message EventTradeAccountDeposit {
-  string amount = 1 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string amount = 1 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   common.Asset asset = 2 [(gogoproto.nullable) = false];
   string asset_address = 3 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
   string rune_address = 4 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
@@ -232,7 +232,7 @@ message EventTradeAccountDeposit {
 }
 
 message EventTradeAccountWithdraw {
-  string amount = 1 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string amount = 1 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   common.Asset asset = 2 [(gogoproto.nullable) = false];
   string asset_address = 3 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
   string rune_address = 4 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
@@ -241,36 +241,36 @@ message EventTradeAccountWithdraw {
 
 message EventRUNEPoolDeposit {
   bytes rune_address = 1 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
-  string rune_amount = 2 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
-  string units = 3 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string rune_amount = 2 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
+  string units = 3 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   string tx_id = 4 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.TxID"];
 }
 
 message EventRUNEPoolWithdraw {
   bytes rune_address = 1 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
   int64 basis_points = 2;
-  string rune_amount = 3 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
-  string units = 4 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string rune_amount = 3 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
+  string units = 4 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   string tx_id = 5 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.TxID"];
   int64 affiliate_basis_pts = 6;
-  string affiliate_amount = 7 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string affiliate_amount = 7 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   string affiliate_address = 8 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
 }
 
 message EventLoanOpen {
-  string collateral_deposited = 1 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string collateral_deposited = 1 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   common.Asset collateral_asset = 2 [(gogoproto.nullable) = false];
-  string collateralization_ratio = 3 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
-  string debt_issued = 4 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string collateralization_ratio = 3 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
+  string debt_issued = 4 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   string owner = 5 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
   common.Asset target_asset = 6 [(gogoproto.nullable) = false];
   string tx_id = 7 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.TxID", (gogoproto.customname) = "TxID"];
 }
 
 message EventLoanRepayment {
-  string collateral_withdrawn = 1 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string collateral_withdrawn = 1 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   common.Asset collateral_asset = 2 [(gogoproto.nullable) = false];
-  string debt_repaid = 3 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string debt_repaid = 3 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   string owner = 4 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
   string tx_id = 7 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.TxID", (gogoproto.customname) = "TxID"];
 }
@@ -279,8 +279,8 @@ message EventTHORName {
   string name = 1;
   string chain = 2 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Chain"];
   string address = 3 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
-  string registration_fee = 4 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
-  string fund_amt = 5 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string registration_fee = 4 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
+  string fund_amt = 5 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = false];
   int64 expire = 6;
   bytes owner = 7 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
 }

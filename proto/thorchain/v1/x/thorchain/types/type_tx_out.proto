@@ -22,8 +22,8 @@ message TxOutItem {
   string module_name = 10 [json_name="-", (gogoproto.jsontag) = "-"];
   string aggregator = 11;
   string aggregator_target_asset = 12;
-  string aggregator_target_limit = 13 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = true];
-  string clout_spent = 14 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = true];
+  string aggregator_target_limit = 13 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = true];
+  string clout_spent = 14 [(gogoproto.customtype) = "cosmossdk.io/math.Uint", (gogoproto.nullable) = true];
 }
 
 message TxOut {
