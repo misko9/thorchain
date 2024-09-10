@@ -195,6 +195,8 @@ protoImage=$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(pro
 proto-all: proto-format proto-lint proto-gen format
 
 proto-gen:
+	@echo "Generating bifrost protobuf files"
+	@docker run --rm -v $(shell pwd):/app -w /app golang:1.22.2 make bifrost-protosh
 	@go install cosmossdk.io/orm/cmd/protoc-gen-go-cosmos-orm@v1.0.0-beta.3
 	@echo "Generating Protobuf files"
 	@$(protoImage) sh ./scripts/protocgen.sh
@@ -221,13 +223,8 @@ proto-check-breaking:
 	test-sim-import-export build-windows-client \
 	test-system
 
-## --- Old proto-gen ---
-protob:
-	@./scripts/oldprotocgen.sh
-
-protob-docker:
-	@docker run --rm -v $(shell pwd):/app -w /app golang:1.22.3 \
-		make protob
+bifrost-protosh:
+	@./scripts/bifrostprotocgen.sh
 
 ## --- Testnet Utilities ---
 get-localic:

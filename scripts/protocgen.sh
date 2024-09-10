@@ -25,27 +25,11 @@ buf generate --template buf.gen.pulsar.yaml
 cd ..
 
 cp -r $GO_MOD_PACKAGE/* ./
-rm -rf github.com
+rm -rf gitlab.com
 
 # Copy files over for dep injection
 rm -rf api && mkdir api
-custom_modules=$(find . -name 'module' -type d -not -path "./proto/*")
-
-# get the 1 up directory (so ./cosmos/mint/module becomes ./cosmos/mint)
-# remove the relative path starter from base namespaces. so ./cosmos/mint becomes cosmos/mint
-base_namespace=$(echo $custom_modules | sed -e 's|/module||g' | sed -e 's|\./||g')
-
-# echo "Base namespace: $base_namespace"
-for module in $base_namespace; do
-  echo " [+] Moving: ./$module to ./api/$module"
-
-  mkdir -p api/$module
-
-  mv $module/* ./api/$module/
-
-  # # incorrect reference to the module for coins
-  find api/$module -type f -name '*.go' -exec sed -i -e 's|types "github.com/cosmos/cosmos-sdk/types"|types "cosmossdk.io/api/cosmos/base/v1beta1"|g' {} \;
-  find api/$module -type f -name '*.go' -exec sed -i -e 's|types1 "github.com/cosmos/cosmos-sdk/x/bank/types"|types1 "cosmossdk.io/api/cosmos/bank/v1beta1"|g' {} \;
-
-  rm -rf $module
-done
+mv thorchain api/.
+mv types api/.
+mkdir api/common
+mv common/common.pulsar.go api/common/.
