@@ -1,6 +1,7 @@
 package app
 
 import (
+	"os"
 	"testing"
 
 	dbm "github.com/cosmos/cosmos-db"
@@ -13,7 +14,7 @@ import (
 )
 
 // MakeEncodingConfig creates a new EncodingConfig with all modules registered. For testing only
-func MakeEncodingConfig(t testing.TB) params.EncodingConfig {
+func MakeTestEncodingConfig(t testing.TB) params.EncodingConfig {
 	t.Helper()
 	// we "pre"-instantiate the application for getting the injected/configured encoding configuration
 	// note, this is not necessary when using app wiring, as depinject can be directly used (see root_v2.go)
@@ -23,6 +24,25 @@ func MakeEncodingConfig(t testing.TB) params.EncodingConfig {
 		nil,
 		true,
 		simtestutil.NewAppOptionsWithFlagHome(t.TempDir()),
+	)
+	return makeEncodingConfig(tempApp)
+}
+
+// MakeEncodingConfig creates a new EncodingConfig with all modules registered. For testing only
+func MakeBifrostEncodingConfig() params.EncodingConfig {
+	dir, err := os.MkdirTemp("", "temp_bifrost")
+	if err != nil {
+		panic("failed to create temp_bifrost dir: " + err.Error())
+	}
+	defer os.RemoveAll(dir)
+	// we "pre"-instantiate the application for getting the injected/configured encoding configuration
+	// note, this is not necessary when using app wiring, as depinject can be directly used (see root_v2.go)
+	tempApp := NewChainApp(
+		log.NewNopLogger(),
+		dbm.NewMemDB(),
+		nil,
+		false,
+		simtestutil.NewAppOptionsWithFlagHome(dir),
 	)
 	return makeEncodingConfig(tempApp)
 }
