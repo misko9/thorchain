@@ -8,9 +8,9 @@ import (
 	"github.com/blang/semver"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"cosmossdk.io/log"
-	"cosmossdk.io/simapp"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	"github.com/cosmos/cosmos-sdk/types/module/testutil"
 
 	"gitlab.com/thorchain/thornode/common"
 	"gitlab.com/thorchain/thornode/common/cosmos"
@@ -23,7 +23,7 @@ var kaboom = errors.New("Kaboom!!!")
 
 type KVStoreDummy struct{}
 
-func (k KVStoreDummy) Cdc() codec.BinaryCodec                  { return simapp.MakeTestEncodingConfig().Marshaler }
+func (k KVStoreDummy) Cdc() codec.BinaryCodec                  { return testutil.MakeTestEncodingConfig().Codec }
 func (k KVStoreDummy) DeleteKey(_ cosmos.Context, _ string)    {}
 func (k KVStoreDummy) CoinKeeper() bankkeeper.Keeper           { return bankkeeper.BaseKeeper{} }
 func (k KVStoreDummy) AccountKeeper() authkeeper.AccountKeeper { return authkeeper.AccountKeeper{} }
