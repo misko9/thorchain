@@ -3,21 +3,19 @@ package thorchain
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"math/big"
 	"net/url"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/rs/zerolog"
 	abci "github.com/cometbft/cometbft/abci/types"
 	sdkmath "cosmossdk.io/math"
+	"cosmossdk.io/log"
 
 	"gitlab.com/thorchain/thornode/common"
 	"gitlab.com/thorchain/thornode/common/cosmos"
 	"gitlab.com/thorchain/thornode/constants"
-	"gitlab.com/thorchain/thornode/log"
 	openapi "gitlab.com/thorchain/thornode/openapi/gen"
 	mem "gitlab.com/thorchain/thornode/x/thorchain/memo"
 	"gitlab.com/thorchain/thornode/x/thorchain/types"
@@ -51,7 +49,7 @@ const (
 	ethBlockRewardAndFee = 3 * 1e18
 )
 
-var nullLogger = &log.TendermintLogWrapper{Logger: zerolog.New(io.Discard)}
+var nullLogger = log.NewNopLogger()
 
 // -------------------------------------------------------------------------------------
 // Helpers
