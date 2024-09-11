@@ -10,6 +10,8 @@ import (
 	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	sdkmath "cosmossdk.io/math"
+
+	protov2 "google.golang.org/protobuf/proto"
 )
 
 // Interface implementation checks
@@ -76,6 +78,11 @@ type StdTx struct {
 
 // GetMsgs returns the all the transaction's messages.
 func (tx StdTx) GetMsgs() []sdk.Msg { return tx.Msgs }
+
+// TODO: SAM127 need to support new Tx type
+func (tx StdTx) GetMsgsV2() ([]protov2.Message, error) {
+	panic("StdTx GetMsgsV2() not implemented")
+}
 
 // ValidateBasic does a simple and lightweight validation check that doesn't
 // require access to any other information.
@@ -194,15 +201,15 @@ func (tx StdTx) GetFee() sdk.Coins { return tx.Fee.Amount }
 // FeePayer returns the address that is responsible for paying fee
 // StdTx returns the first signer as the fee payer
 // If no signers for tx, return empty address
-func (tx StdTx) FeePayer() sdk.AccAddress {
+func (tx StdTx) FeePayer() []byte {
 	if tx.GetSigners() != nil {
 		return tx.GetSigners()[0]
 	}
-	return sdk.AccAddress{}
+	return nil
 }
 
 // FeeGranter always returns nil for StdTx
-func (tx StdTx) FeeGranter() sdk.AccAddress {
+func (tx StdTx) FeeGranter() []byte {
 	return nil
 }
 
