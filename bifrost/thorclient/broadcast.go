@@ -56,7 +56,7 @@ func (b *thorchainBridge) Broadcast(msgs ...stypes.Msg) (common.TxID, error) {
 	factory = factory.WithSequence(b.seqNumber)
 	factory = factory.WithSignMode(signing.SignMode_SIGN_MODE_DIRECT)
 
-	builder, err := clienttx.BuildUnsignedTx(factory, msgs...)
+	builder, err := factory.BuildUnsignedTx(msgs...)
 	if err != nil {
 		return noTxID, err
 	}

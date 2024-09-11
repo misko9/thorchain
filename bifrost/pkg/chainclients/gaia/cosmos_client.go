@@ -20,8 +20,8 @@ import (
 	grpctypes "github.com/cosmos/cosmos-sdk/types/grpc"
 	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
 	signingtypes "github.com/cosmos/cosmos-sdk/types/tx/signing"
-	"github.com/cosmos/cosmos-sdk/x/auth/signing"
-	"github.com/cosmos/cosmos-sdk/x/auth/tx"
+	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
+	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	atypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	btypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/rs/zerolog"
@@ -121,7 +121,7 @@ func NewCosmosClient(
 	interfaceRegistry := codectypes.NewInterfaceRegistry()
 	interfaceRegistry.RegisterImplementations((*ctypes.Msg)(nil), &btypes.MsgSend{})
 	marshaler := codec.NewProtoCodec(interfaceRegistry)
-	txConfig := tx.NewTxConfig(marshaler, []signingtypes.SignMode{signingtypes.SignMode_SIGN_MODE_DIRECT})
+	txConfig := authtx.NewTxConfig(marshaler, []signingtypes.SignMode{signingtypes.SignMode_SIGN_MODE_DIRECT})
 
 	// CHANGEME: each THORNode network (e.g. mainnet, mocknet, etc.) may connect to a Cosmos chain with a different chain ID
 	// Implement the logic here for determinine which chain ID to use.
@@ -462,16 +462,17 @@ func (c *CosmosClient) signMsg(
 	}
 
 	modeHandler := c.txConfig.SignModeHandler()
-	signingData := signing.SignerData{
+	signingData := authsigning.SignerData{
 		ChainID:       c.chainID,
 		AccountNumber: account,
 		Sequence:      sequence,
 	}
 
-	// TODO: SAM127 is creating context correct or should one be passed in?
-	signBytes, err := modeHandler.GetSignBytes(context.Background(), signingtypes.SignMode_SIGN_MODE_DIRECT, signingData, txBuilder.GetTx())
+	signBytes, err := authsigning.GetSignBytesAdapter(
+		context.Background(), modeHandler, signingtypes.SignMode_SIGN_MODE_DIRECT, signingData, txBuilder.GetTx(),
+	)
 	if err != nil {
-		return nil, fmt.Errorf("unable to GetSignBytes on modeHandler: %w", err)
+		return nil, fmt.Errorf("fail GetSignBytesAdapter(): %w", err)
 	}
 
 	sigData := &signingtypes.SingleSignatureData{
