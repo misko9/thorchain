@@ -1,6 +1,7 @@
 package p2p
 
 import (
+	"context"
 	"math/rand"
 	"sort"
 	"sync"
@@ -20,7 +21,7 @@ func init() {
 }
 
 func setupHosts(t *testing.T, n int) []host.Host {
-	mn := mocknet.New()
+	mn := mocknet.New(context.Background())
 	var hosts []host.Host
 	for i := 0; i < n; i++ {
 
@@ -216,7 +217,7 @@ func TestNewPartyCoordinatorTimeOut(t *testing.T) {
 
 func TestGetPeerIDs(t *testing.T) {
 	id1 := tnet.RandIdentityOrFatal(t)
-	mn := mocknet.New()
+	mn := mocknet.New(context.Background())
 	// add peers to mock net
 
 	a1 := tnet.RandLocalTCPAddress()

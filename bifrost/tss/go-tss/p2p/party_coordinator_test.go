@@ -1,6 +1,7 @@
 package p2p
 
 import (
+	"context"
 	"math/rand"
 	"sort"
 	"sync"
@@ -16,7 +17,7 @@ import (
 )
 
 func setupHostsLocally(t *testing.T, n int) []host.Host {
-	mn := mocknet.New()
+	mn := mocknet.New(context.Background())
 	var hosts []host.Host
 	for i := 0; i < n; i++ {
 

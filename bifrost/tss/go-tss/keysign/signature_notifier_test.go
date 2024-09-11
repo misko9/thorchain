@@ -1,6 +1,7 @@
 package keysign
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"io/ioutil"
@@ -30,7 +31,7 @@ func TestSignatureNotifierHappyPath(t *testing.T) {
 	id1 := tnet.RandIdentityOrFatal(t)
 	id2 := tnet.RandIdentityOrFatal(t)
 	id3 := tnet.RandIdentityOrFatal(t)
-	mn := mocknet.New()
+	mn := mocknet.New(context.Background())
 	// add peers to mock net
 
 	a1 := tnet.RandLocalTCPAddress()
