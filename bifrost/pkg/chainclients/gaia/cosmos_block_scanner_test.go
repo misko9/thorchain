@@ -12,6 +12,8 @@ import (
 	btypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	sdkmath "cosmossdk.io/math"
 
+	protov2 "google.golang.org/protobuf/proto"
+
 	"github.com/rs/zerolog/log"
 	"gitlab.com/thorchain/thornode/bifrost/metrics"
 	"gitlab.com/thorchain/thornode/bifrost/thorclient"
@@ -26,6 +28,8 @@ import (
 // Mock FeeTx
 // -------------------------------------------------------------------------------------
 
+var _ ctypes.FeeTx = &MockFeeTx{}
+
 type MockFeeTx struct {
 	fee ctypes.Coins
 	gas uint64
@@ -33,6 +37,10 @@ type MockFeeTx struct {
 
 func (m *MockFeeTx) GetMsgs() []ctypes.Msg {
 	return nil
+}
+
+func (m *MockFeeTx) GetMsgsV2() ([]protov2.Message, error) {
+	return nil, nil
 }
 
 func (m *MockFeeTx) ValidateBasic() error {
@@ -47,11 +55,11 @@ func (m *MockFeeTx) GetFee() ctypes.Coins {
 	return m.fee
 }
 
-func (m *MockFeeTx) FeePayer() ctypes.AccAddress {
+func (m *MockFeeTx) FeePayer() []byte {
 	return nil
 }
 
-func (m *MockFeeTx) FeeGranter() ctypes.AccAddress {
+func (m *MockFeeTx) FeeGranter() []byte {
 	return nil
 }
 

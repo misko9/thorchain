@@ -259,7 +259,7 @@ func (s *CosmosTestSuite) TestSign(c *C) {
 	)
 	c.Assert(err, IsNil)
 
-	c.Check(txb.GetTx().GetFee().IsEqual(gas), Equals, true)
+	c.Check(txb.GetTx().GetFee().Equal(gas), Equals, true)
 	c.Check(txb.GetTx().GetMemo(), Equals, "memo")
 	pks, err := txb.GetTx().GetPubKeys()
 	c.Assert(err, IsNil)

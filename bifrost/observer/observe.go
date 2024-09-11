@@ -403,7 +403,8 @@ func (o *Observer) sendSolvencyToThorchain(height int64, chain common.Chain, pub
 		return nil
 	}
 
-	msg := o.thorchainBridge.GetSolvencyMsg(height, chain, pubKey, coins)
+	// TODO: SAM127 should this return MsgSolvency?
+	msg := o.thorchainBridge.GetSolvencyMsg(height, chain, pubKey, coins).(*stypes.MsgSolvency)
 	if msg == nil {
 		return fmt.Errorf("fail to create solvency message")
 	}

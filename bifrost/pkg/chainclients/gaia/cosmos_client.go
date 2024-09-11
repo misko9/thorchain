@@ -16,6 +16,7 @@ import (
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	ctypes "github.com/cosmos/cosmos-sdk/types"
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
+	errorsmod "cosmossdk.io/errors"
 	grpctypes "github.com/cosmos/cosmos-sdk/types/grpc"
 	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
 	signingtypes "github.com/cosmos/cosmos-sdk/types/tx/signing"
@@ -47,7 +48,7 @@ import (
 // CosmosSuccessCodes a transaction is considered successful if it returns 0
 // or if tx is unauthorized or already in the mempool (another Bifrost already sent it)
 var CosmosSuccessCodes = map[uint32]bool{
-	errortypes.SuccessABCICode:                true,
+	errorsmod.SuccessABCICode:                true,
 	errortypes.ErrTxInMempoolCache.ABCICode(): true,
 	errortypes.ErrWrongSequence.ABCICode():    true,
 }
@@ -537,7 +538,7 @@ func (c *CosmosClient) BroadcastTx(tx stypes.TxOutItem, txBytes []byte) (string,
 	c.accts.SeqInc(tx.VaultPubKey)
 	// Only add the transaction to signer cache when it is sure the transaction has been broadcast successfully.
 	// So for other scenario , like transaction already in mempool , invalid account sequence # , the transaction can be rescheduled , and retried
-	if broadcastRes.TxResponse.Code == errortypes.SuccessABCICode {
+	if broadcastRes.TxResponse.Code == errorsmod.SuccessABCICode {
 		if err = c.signerCacheManager.SetSigned(tx.CacheHash(), tx.CacheVault(c.GetChain()), broadcastRes.TxResponse.TxHash); err != nil {
 			c.logger.Err(err).Msg("fail to set signer cache")
 		}
