@@ -16,6 +16,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
+	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	sdkmath "cosmossdk.io/math"
 	"github.com/rs/zerolog/log"
 	abci "github.com/cometbft/cometbft/abci/types"
@@ -2307,7 +2308,11 @@ func queryKeygen(ctx cosmos.Context, kbs cosmos.KeybaseStore, path []string, req
 		ctx.Logger().Error("fail to marshal keygen block to json", "error", err)
 		return nil, fmt.Errorf("fail to marshal keygen block to json: %w", err)
 	}
-	sig, _, err := kbs.Keybase.Sign("thorchain", buf)
+	// TODO: confirm this signing mode which is only for ledger devices.
+	// Not applicable if ledger devices will never be used.
+	// SIGN_MODE_LEGACY_AMINO_JSON will be removed in the future for SIGN_MODE_TEXTUAL
+	signingMode := signing.SignMode_SIGN_MODE_LEGACY_AMINO_JSON
+	sig, _, err := kbs.Keybase.Sign("thorchain", buf, signingMode)
 	if err != nil {
 		ctx.Logger().Error("fail to sign keygen", "error", err)
 		return nil, fmt.Errorf("fail to sign keygen: %w", err)
@@ -2379,7 +2384,11 @@ func queryKeysign(ctx cosmos.Context, kbs cosmos.KeybaseStore, path []string, re
 		ctx.Logger().Error("fail to marshal keysign block to json", "error", err)
 		return nil, fmt.Errorf("fail to marshal keysign block to json: %w", err)
 	}
-	sig, _, err := kbs.Keybase.Sign("thorchain", buf)
+	// TODO: confirm this signing mode which is only for ledger devices.
+	// Not applicable if ledger devices will never be used.
+	// SIGN_MODE_LEGACY_AMINO_JSON will be removed in the future for SIGN_MODE_TEXTUAL
+	signingMode := signing.SignMode_SIGN_MODE_LEGACY_AMINO_JSON
+	sig, _, err := kbs.Keybase.Sign("thorchain", buf, signingMode)
 	if err != nil {
 		ctx.Logger().Error("fail to sign keysign", "error", err)
 		return nil, fmt.Errorf("fail to sign keysign: %w", err)
