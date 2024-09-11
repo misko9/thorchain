@@ -18,8 +18,8 @@ import (
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	dbm "github.com/cosmos/cosmos-db"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	dbm "github.com/cometbft/cometbft-db"
 
 	"gitlab.com/thorchain/thornode/common"
 	"gitlab.com/thorchain/thornode/common/cosmos"

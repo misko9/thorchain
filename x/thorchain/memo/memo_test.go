@@ -14,8 +14,8 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	dbm "github.com/cosmos/cosmos-db"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	dbm "github.com/cometbft/cometbft-db"
 	. "gopkg.in/check.v1"
 
 	"gitlab.com/thorchain/thornode/common"
