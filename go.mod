@@ -61,9 +61,9 @@ require (
 	github.com/eager7/doglog v0.0.0-20200427040431-a0db59f0a792
 	github.com/eager7/dogutil v0.0.0-20200427040807-200e961ba4b5
 	github.com/ethereum/go-ethereum v1.14.8
-	github.com/gcash/bchd v0.19.0
+	github.com/gcash/bchd v0.17.1
 	github.com/gcash/bchlog v0.0.0-20180913005452-b4f036f92fa6
-	github.com/gcash/bchutil v0.0.0-20210113190856-6ea28dff4000
+	github.com/gcash/bchutil v0.0.0-20200506001747-c2894cd54b33
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.4
 	github.com/google/uuid v1.6.0
@@ -138,6 +138,11 @@ require (
 	github.com/bgentry/speakeasy v0.1.1-0.20220910012023-760eaf8b6816 // indirect
 	github.com/bits-and-blooms/bitset v1.10.0 // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.3.4 // indirect
+	github.com/btcsuite/go-socks v0.0.0-20170105172521-4720035b7bfd // indirect
+	github.com/btcsuite/goleveldb v1.0.0 // indirect
+	github.com/btcsuite/snappy-go v1.0.0 // indirect
+	github.com/btcsuite/websocket v0.0.0-20150119174127-31079b680792 // indirect
+	github.com/btcsuite/winsvc v1.0.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/chzyer/readline v1.5.1 // indirect
@@ -233,8 +238,10 @@ require (
 	github.com/jackpal/go-nat-pmp v1.0.2 // indirect
 	github.com/jbenet/go-temp-err-catcher v0.1.0 // indirect
 	github.com/jbenet/goprocess v0.1.4 // indirect
+	github.com/jessevdk/go-flags v1.4.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/jmhodges/levigo v1.0.0 // indirect
+	github.com/jrick/logrotate v1.0.0 // indirect
 	github.com/kkdai/bstream v1.0.0 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
@@ -339,6 +346,7 @@ require (
 	github.com/whyrusleeping/multiaddr-filter v0.0.0-20160516205228-e903e4adabd7 // indirect
 	github.com/zondax/hid v0.9.2 // indirect
 	github.com/zondax/ledger-go v0.14.3 // indirect
+	github.com/zquestz/grab v0.0.0-20190224022517-abcee96e61b1 // indirect
 	go.etcd.io/bbolt v1.4.0-alpha.0.0.20240404170359-43604f3112c5 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.49.0 // indirect
