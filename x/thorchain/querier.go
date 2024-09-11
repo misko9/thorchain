@@ -2989,13 +2989,19 @@ func queryBlock(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 	}
 
 	// parse the events
-	for _, event := range results.BeginBlockEvents {
-		res.BeginBlockEvents = append(res.BeginBlockEvents, eventMap(sdk.Event(event)))
+	for _, event := range results.FinalizeBlockEvents{
+		for _, attr := range event.Attributes {
+			if attr.Key == "block" {
+				if attr.Value == "begin_block" {
+					res.BeginBlockEvents = append(res.BeginBlockEvents, eventMap(sdk.Event(event)))
+				}
+				if attr.Value == "end_block" {
+					res.EndBlockEvents = append(res.EndBlockEvents, eventMap(sdk.Event(event)))
+				}
+				continue
+			}
+		}
 	}
-	for _, event := range results.EndBlockEvents {
-		res.EndBlockEvents = append(res.EndBlockEvents, eventMap(sdk.Event(event)))
-	}
-
 	for i, tx := range block.Block.Txs {
 		res.Txs[i].Hash = strings.ToUpper(hex.EncodeToString(tx.Hash()))
 
