@@ -468,7 +468,8 @@ func (c *CosmosClient) signMsg(
 		Sequence:      sequence,
 	}
 
-	signBytes, err := modeHandler.GetSignBytes(signingtypes.SignMode_SIGN_MODE_DIRECT, signingData, txBuilder.GetTx())
+	// TODO: SAM127 is creating context correct or should one be passed in?
+	signBytes, err := modeHandler.GetSignBytes(context.Background(), signingtypes.SignMode_SIGN_MODE_DIRECT, signingData, txBuilder.GetTx())
 	if err != nil {
 		return nil, fmt.Errorf("unable to GetSignBytes on modeHandler: %w", err)
 	}

@@ -48,7 +48,10 @@ func (b *thorchainBridge) Broadcast(msgs ...stypes.Msg) (common.TxID, error) {
 	flags := flag.NewFlagSet("thorchain", 0)
 
 	ctx := b.GetContext()
-	factory := clienttx.NewFactoryCLI(ctx, flags)
+	factory, err := clienttx.NewFactoryCLI(ctx, flags)
+	if err != nil {
+		return noTxID, fmt.Errorf("failed to get factory, %w", err)
+	}
 	factory = factory.WithAccountNumber(b.accountNumber)
 	factory = factory.WithSequence(b.seqNumber)
 	factory = factory.WithSignMode(signing.SignMode_SIGN_MODE_DIRECT)
@@ -58,7 +61,7 @@ func (b *thorchainBridge) Broadcast(msgs ...stypes.Msg) (common.TxID, error) {
 		return noTxID, err
 	}
 	builder.SetGasLimit(4000000000)
-	err = clienttx.Sign(factory, ctx.GetFromName(), builder, true)
+	err = clienttx.Sign(ctx.CmdContext, factory, ctx.GetFromName(), builder, true)
 	if err != nil {
 		return noTxID, err
 	}
