@@ -9,6 +9,8 @@ import (
 //	sdkerrs "github.com/cosmos/cosmos-sdk/types/errors"
 //	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"gitlab.com/thorchain/thornode/common"
 	"gitlab.com/thorchain/thornode/common/cosmos"
 	"gitlab.com/thorchain/thornode/common/tokenlist"
@@ -317,7 +319,7 @@ func processOneTxIn(ctx cosmos.Context, keeper keeper.Keeper, tx ObservedTx, sig
 	if err != nil {
 		return newMsg, err
 	}
-	return newMsg, newMsg.ValidateBasic()
+	return newMsg, newMsg.(sdk.HasValidateBasic).ValidateBasic()
 }
 
 func fuzzyAssetMatch(ctx cosmos.Context, keeper keeper.Keeper, origAsset common.Asset) common.Asset {

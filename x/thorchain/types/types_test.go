@@ -5,6 +5,8 @@ import (
 
 	. "gopkg.in/check.v1"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"gitlab.com/thorchain/thornode/common"
 	"gitlab.com/thorchain/thornode/common/cosmos"
 )
@@ -67,8 +69,8 @@ func (TypesSuite) TestHasMinority(c *C) {
 }
 
 func EnsureMsgBasicCorrect(m cosmos.Msg, c *C) {
-	signers := m.GetSigners()
+	signers := m.(sdk.LegacyMsg).GetSigners()
 	c.Check(signers, NotNil)
 	c.Check(len(signers), Equals, 1)
-	c.Check(m.ValidateBasic(), IsNil)
+	c.Check(m.(sdk.HasValidateBasic).ValidateBasic(), IsNil)
 }

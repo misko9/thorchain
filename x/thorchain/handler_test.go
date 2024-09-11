@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/cosmos/cosmos-sdk/codec"
+	"cosmossdk.io/log"
 	"cosmossdk.io/simapp"
 	"cosmossdk.io/store"
 	se "github.com/cosmos/cosmos-sdk/types/errors"
@@ -15,7 +16,8 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	"github.com/cometbft/cometbft/libs/log"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	dbm "github.com/cometbft/cometbft-db"
 	. "gopkg.in/check.v1"
@@ -560,7 +562,7 @@ func (HandlerSuite) TestMsgLeaveFromMemo(c *C) {
 
 	msg, err := processOneTxIn(w.ctx, w.keeper, txin, addr)
 	c.Assert(err, IsNil)
-	c.Check(msg.ValidateBasic(), IsNil)
+	c.Check(msg.(sdk.HasValidateBasic).ValidateBasic(), IsNil)
 }
 
 func (s *HandlerSuite) TestReserveContributor(c *C) {
@@ -584,7 +586,7 @@ func (s *HandlerSuite) TestReserveContributor(c *C) {
 
 	msg, err := processOneTxIn(w.ctx, w.keeper, txin, addr)
 	c.Assert(err, IsNil)
-	c.Check(msg.ValidateBasic(), IsNil)
+	c.Check(msg.(sdk.HasValidateBasic).ValidateBasic(), IsNil)
 	_, isReserve := msg.(*MsgReserveContributor)
 	c.Assert(isReserve, Equals, true)
 }

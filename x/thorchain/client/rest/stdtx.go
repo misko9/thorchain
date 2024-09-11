@@ -124,7 +124,7 @@ func (tx StdTx) GetSigners() []sdk.AccAddress {
 	seen := map[string]bool{}
 
 	for _, msg := range tx.GetMsgs() {
-		for _, addr := range msg.GetSigners() {
+		for _, addr := range msg.(sdk.LegacyMsg).GetSigners() {
 			if !seen[addr.String()] {
 				signers = append(signers, addr)
 				seen[addr.String()] = true

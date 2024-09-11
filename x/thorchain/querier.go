@@ -3174,7 +3174,7 @@ func castVaultRouters(chainContracts []ChainContract) []openapi.VaultRouter {
 // TODO: Migrate callers to use simulate instead.
 func simulateInternal(ctx cosmos.Context, mgr *Mgrs, msg sdk.Msg) (sdk.Events, error) {
 	// validate
-	err := msg.ValidateBasic()
+	err := msg.(sdk.HasValidateBasic).ValidateBasic()
 	if err != nil {
 		return nil, fmt.Errorf("failed validate: %w", err)
 	}
@@ -3221,7 +3221,7 @@ func simulate(ctx cosmos.Context, mgr Manager, msg sdk.Msg) (sdk.Events, error) 
 	ctx = ctx.WithValue(constants.CtxLoanTxID, txid)
 
 	// validate
-	err = msg.ValidateBasic()
+	err = msg.(sdk.HasValidateBasic).ValidateBasic()
 	if err != nil {
 		return nil, fmt.Errorf("failed to validate message: %w", err)
 	}

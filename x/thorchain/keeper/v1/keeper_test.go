@@ -6,6 +6,7 @@ import (
 	. "gopkg.in/check.v1"
 
 	"github.com/cosmos/cosmos-sdk/codec"
+	"cosmossdk.io/log"
 	"cosmossdk.io/simapp"
 	"cosmossdk.io/store"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
@@ -17,7 +18,6 @@ import (
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"github.com/cometbft/cometbft/libs/log"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	dbm "github.com/cometbft/cometbft-db"
 

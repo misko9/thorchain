@@ -3,10 +3,10 @@ package types
 import (
 	. "gopkg.in/check.v1"
 
+	"cosmossdk.io/log"
 	"cosmossdk.io/store"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	"github.com/cometbft/cometbft/libs/log"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	dbm "github.com/cometbft/cometbft-db"
 	cosmos "gitlab.com/thorchain/thornode/common/cosmos"
