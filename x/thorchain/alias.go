@@ -163,7 +163,7 @@ var (
 	NewMsgMigrate                  = types.NewMsgMigrate
 	NewMsgRagnarok                 = types.NewMsgRagnarok
 	ModuleCdc                      = types.ModuleCdc
-	RegisterCodec                  = types.RegisterCodec
+	RegisterLegacyAminoCodec       = types.RegisterLegacyAminoCodec
 	RegisterInterfaces             = types.RegisterInterfaces
 	NewBondProviders               = types.NewBondProviders
 	NewBondProvider                = types.NewBondProvider

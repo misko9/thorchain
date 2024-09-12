@@ -82,7 +82,6 @@ var (
 
 type (
 	Context    = sdk.Context
-//	Route      = sdk.Route // Legacy routing was removed
 	Uint       = sdkmath.Uint
 	Int        = sdkmath.Int
 	Coin       = sdk.Coin
@@ -95,9 +94,7 @@ type (
 	Dec        = sdkmath.LegacyDec
 	Msg        = sdk.Msg
 	Iterator   = storetypes.Iterator
-//	Handler    = sdk.Handler // Legacy routing removed
 	StoreKey   = storetypes.StoreKey
-	Querier    = sdk.Querier
 	TxResponse = sdk.TxResponse
 	Account    = authtypes.AccountI
 )

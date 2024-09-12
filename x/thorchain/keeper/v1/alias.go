@@ -58,7 +58,7 @@ var (
 	NewKeygenBlock             = types.NewKeygenBlock
 	NewTxOut                   = types.NewTxOut
 	HasSuperMajority           = types.HasSuperMajority
-	RegisterCodec              = types.RegisterCodec
+	RegisterLegacyAminoCodec   = types.RegisterLegacyAminoCodec
 	NewTradeAccount            = types.NewTradeAccount
 	NewTradeUnit               = types.NewTradeUnit
 	NewRUNEProvider            = types.NewRUNEProvider

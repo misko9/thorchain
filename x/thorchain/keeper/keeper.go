@@ -1,6 +1,7 @@
 package keeper
 
 import (
+//	"context"
 	"github.com/blang/semver"
 	"github.com/cosmos/cosmos-sdk/codec"
 
@@ -89,6 +90,7 @@ type Keeper interface {
 	KeeperSwapperClout
 	KeeperTradeAccount
 	KeeperRUNEPool
+//	MsgServer
 }
 
 type KeeperConfig interface {
@@ -428,3 +430,42 @@ type KeeperAnchors interface {
 	DollarsPerRune(ctx cosmos.Context) cosmos.Uint
 	RunePerDollar(ctx cosmos.Context) cosmos.Uint
 }
+
+// type MsgServer interface {
+// 	AddLiquidity(ctx context.Context, msg *types.MsgAddLiquidity) (*types.MsgEmpty, error)
+//     Ban(ctx context.Context, msg *types.MsgBan) (*types.MsgEmpty, error)
+//     Bond(ctx context.Context, msg *types.MsgBond) (*types.MsgEmpty, error)
+//     Consolidate(ctx context.Context, msg *types.MsgConsolidate) (*types.MsgEmpty, error)
+//     Deposit(ctx context.Context, msg *types.MsgDeposit) (*types.MsgEmpty, error)
+//     Donate(ctx context.Context, msg *types.MsgDonate) (*types.MsgEmpty, error)
+//     ErrataTx(ctx context.Context, msg *types.MsgErrataTx) (*types.MsgEmpty, error)
+//     Leave(ctx context.Context, msg *types.MsgLeave) (*types.MsgEmpty, error)
+//     LoanOpen(ctx context.Context, msg *types.MsgLoanOpen) (*types.MsgEmpty, error)
+//     LoanRepayment(ctx context.Context, msg *types.MsgLoanRepayment) (*types.MsgEmpty, error)
+//     ManageThorname(ctx context.Context, msg *types.MsgManageTHORName) (*types.MsgEmpty, error)
+//     Migrate(ctx context.Context, msg *types.MsgMigrate) (*types.MsgEmpty, error)
+//     Mimir(ctx context.Context, msg *types.MsgMimir) (*types.MsgEmpty, error)
+//     NetworkFee(ctx context.Context, msg *types.MsgNetworkFee) (*types.MsgEmpty, error)
+//     NodePauseChain(ctx context.Context, msg *types.MsgNodePauseChain) (*types.MsgEmpty, error)
+//     Noop(ctx context.Context, msg *types.MsgNoOp) (*types.MsgEmpty, error)
+//     ObservedTxIn(ctx context.Context, msg *types.MsgObservedTxIn) (*types.MsgEmpty, error)
+//     ObservedTxOut(ctx context.Context, msg *types.MsgObservedTxOut) (*types.MsgEmpty, error)
+//     Ragnarok(ctx context.Context, msg *types.MsgRagnarok) (*types.MsgEmpty, error)
+//     RefundTx(ctx context.Context, msg *types.MsgRefundTx) (*types.MsgEmpty, error)
+//     ReserveContributor(ctx context.Context, msg *types.MsgReserveContributor) (*types.MsgEmpty, error)
+//     RunePoolDeposit(ctx context.Context, msg *types.MsgRunePoolDeposit) (*types.MsgEmpty, error)
+//     RunePoolWithdraw(ctx context.Context, msg *types.MsgRunePoolWithdraw) (*types.MsgEmpty, error)
+//     ThorSend(ctx context.Context, msg *types.MsgSend) (*types.MsgEmpty, error)
+//     SetIPAddress(ctx context.Context, msg *types.MsgSetIPAddress) (*types.MsgEmpty, error)
+//     SetNodeKeys(ctx context.Context, msg *types.MsgSetNodeKeys) (*types.MsgEmpty, error)
+//     Solvency(ctx context.Context, msg *types.MsgSolvency) (*types.MsgEmpty, error)
+//     Swap(ctx context.Context, msg *types.MsgSwap) (*types.MsgEmpty, error)
+//     TradeAccountDeposit(ctx context.Context, msg *types.MsgTradeAccountDeposit) (*types.MsgEmpty, error)
+//     TradeAccountWithdrawal(ctx context.Context, msg *types.MsgTradeAccountWithdrawal) (*types.MsgEmpty, error)
+//     TssKeysignFail(ctx context.Context, msg *types.MsgTssKeysignFail) (*types.MsgEmpty, error)
+//     TssPool(ctx context.Context, msg *types.MsgTssPool) (*types.MsgEmpty, error)
+//     OutboundTx(ctx context.Context, msg *types.MsgOutboundTx) (*types.MsgEmpty, error)
+//     UnBond(ctx context.Context, msg *types.MsgUnBond) (*types.MsgEmpty, error)
+//     SetVersion(ctx context.Context, msg *types.MsgSetVersion) (*types.MsgEmpty, error)
+//     WithdrawLiquidity(ctx context.Context, msg *types.MsgWithdrawLiquidity) (*types.MsgEmpty, error)
+// }

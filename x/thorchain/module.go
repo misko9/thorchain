@@ -27,6 +27,7 @@ import (
 	"gitlab.com/thorchain/thornode/x/thorchain/client/cli"
 	"gitlab.com/thorchain/thornode/x/thorchain/client/rest"
 	"gitlab.com/thorchain/thornode/x/thorchain/keeper"
+	"gitlab.com/thorchain/thornode/x/thorchain/types"
 )
 
 // type check to ensure the interface is properly implemented
@@ -42,7 +43,9 @@ var (
 )
 
 // AppModuleBasic app module Basics object
-type AppModuleBasic struct{}
+type AppModuleBasic struct{
+	cdc codec.Codec
+}
 
 // Name return the module's name
 func (AppModuleBasic) Name() string {
@@ -51,7 +54,7 @@ func (AppModuleBasic) Name() string {
 
 // RegisterLegacyAminoCodec registers the module's types for the given codec.
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	RegisterCodec(cdc)
+	RegisterLegacyAminoCodec(cdc)
 }
 
 // RegisterInterfaces registers the module's interface types
@@ -126,44 +129,44 @@ func (AppModule) IsAppModule() {}
 
 func (AppModule) IsOnePerModuleType() {}
 
-func (AppModule) Name() string {
-	return ModuleName
-}
+// func (AppModule) Name() string {
+// 	return ModuleName
+// }
 
-func (AppModule) ConsensusVersion() uint64 {
-	return 1
-}
+// func (AppModule) ConsensusVersion() uint64 {
+// 	return 1
+// }
 
-func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
+func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
-func (am AppModule) Route() cosmos.Route {
-	return cosmos.NewRoute(RouterKey, NewExternalHandler(am.mgr))
-}
+// func (am AppModule) Route() cosmos.Route {
+// 	return cosmos.NewRoute(RouterKey, NewExternalHandler(am.mgr))
+// }
 
-func (am AppModule) NewHandler() sdk.Handler {
-	return NewExternalHandler(am.mgr)
-}
+// func (am AppModule) NewHandler() sdk.Handler {
+// 	return NewExternalHandler(am.mgr)
+// }
 
 func (am AppModule) QuerierRoute() string {
-	return ModuleName
+	return types.QuerierRoute
 }
 
-// LegacyQuerierHandler returns the capability module's Querier.
-func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return NewQuerier(am.mgr, am.keybaseStore)
-}
+// // LegacyQuerierHandler returns the capability module's Querier.
+// func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
+// 	return NewQuerier(am.mgr, am.keybaseStore)
+// }
 
 // RegisterServices registers module services.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
-	// types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
-	// types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
+	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
+//	types.RegisterQueryServer(cfg.QueryServer(), keeper.NewQuerier(am.keeper))
 }
 
-func (am AppModule) NewQuerierHandler() sdk.Querier {
-	return func(ctx cosmos.Context, path []string, req abci.RequestQuery) ([]byte, error) {
-		return nil, nil
-	}
-}
+// func (am AppModule) NewQuerierHandler() sdk.Querier {
+// 	return func(ctx cosmos.Context, path []string, req abci.RequestQuery) ([]byte, error) {
+// 		return nil, nil
+// 	}
+// }
 
 // TODO: rename BeginBlock functions to PreBlock functions
 func (am AppModule) PreBlock(ctx sdk.Context, req *abci.RequestFinalizeBlock) error {
