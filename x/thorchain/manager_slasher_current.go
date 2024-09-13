@@ -32,7 +32,7 @@ func newSlasherVCUR(keeper keeper.Keeper, eventMgr EventManager) *SlasherVCUR {
 }
 
 // BeginBlock called when a new block get proposed to detect whether there are duplicate vote
-func (s *SlasherVCUR) PreBlock(ctx cosmos.Context, req abci.RequestFinalizeBlock, constAccessor constants.ConstantValues) {
+func (s *SlasherVCUR) PreBlock(ctx cosmos.Context, req *abci.RequestFinalizeBlock, constAccessor constants.ConstantValues) {
 	var doubleSignMisbehavior []abci.Misbehavior
 	// Iterate through any newly discovered evidence of infraction
 	// Slash any validators (and since-unbonded liquidity within the unbonding period)

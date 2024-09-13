@@ -6,7 +6,6 @@ import (
 	"runtime"
 	
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrs "github.com/cosmos/cosmos-sdk/types/errors"
 	errorsmod "cosmossdk.io/errors"
 
 	"gitlab.com/thorchain/thornode/x/thorchain/types"
