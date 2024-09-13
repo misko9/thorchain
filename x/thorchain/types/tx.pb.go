@@ -71,68 +71,42 @@ func init() {
 func init() { proto.RegisterFile("types/tx.proto", fileDescriptor_991dda0e66fd389c) }
 
 var fileDescriptor_991dda0e66fd389c = []byte{
-	// 962 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x56, 0xdd, 0x6e, 0x1c, 0x35,
-	0x14, 0x4e, 0x54, 0x52, 0x22, 0xd3, 0x26, 0xad, 0xdb, 0x24, 0xed, 0x96, 0x2e, 0x55, 0x11, 0x42,
-	0x80, 0xc8, 0x0a, 0x2a, 0x54, 0x21, 0x84, 0x50, 0x92, 0xa6, 0x22, 0x4a, 0x76, 0x37, 0xda, 0x5d,
-	0x40, 0xe2, 0x66, 0xe4, 0xdd, 0x71, 0x26, 0xa3, 0xcc, 0xf8, 0x0c, 0x63, 0xcf, 0xfe, 0xdc, 0xf1,
-	0x04, 0x88, 0x47, 0xe1, 0x31, 0xb8, 0xec, 0x25, 0x97, 0x28, 0xb9, 0xe0, 0x35, 0x90, 0x3d, 0x9e,
-	0xf5, 0xd9, 0xd8, 0x57, 0xbb, 0xf3, 0x7d, 0xdf, 0x39, 0x1e, 0x9f, 0x73, 0xfc, 0x79, 0xc8, 0x96,
-	0x5a, 0x14, 0x5c, 0x76, 0xd4, 0x7c, 0xbf, 0x28, 0x41, 0x01, 0xdd, 0x30, 0xcf, 0xad, 0xbd, 0x09,
-	0xc8, 0x1c, 0x64, 0x27, 0x97, 0x49, 0x67, 0xfa, 0x95, 0xfe, 0xa9, 0xf9, 0xd6, 0xf3, 0x5a, 0x9f,
-	0xcb, 0x24, 0x62, 0x71, 0x1c, 0x65, 0xe9, 0x6f, 0x55, 0x1a, 0xa7, 0x6a, 0x61, 0xe9, 0x47, 0x8e,
-	0x1e, 0x33, 0x61, 0xc1, 0xc7, 0x08, 0x04, 0x11, 0x5b, 0xf4, 0x99, 0x43, 0x27, 0x20, 0x24, 0x64,
-	0x69, 0xcc, 0x14, 0xb7, 0xe4, 0x9e, 0x23, 0x63, 0x5e, 0x80, 0x4c, 0x95, 0x25, 0x76, 0x11, 0x01,
-	0xc2, 0x05, 0x20, 0x9c, 0x97, 0x25, 0x53, 0xcc, 0xe2, 0x3b, 0x0e, 0xcf, 0x38, 0x9b, 0x72, 0xff,
-	0x95, 0x32, 0x58, 0xbe, 0xe8, 0x47, 0x0e, 0xcd, 0x99, 0x60, 0x09, 0x8f, 0xd4, 0x25, 0x94, 0x82,
-	0xe5, 0x81, 0xd7, 0xca, 0xd3, 0xa4, 0x74, 0xcb, 0xef, 0x60, 0x22, 0x4f, 0x4b, 0x7f, 0x8f, 0x82,
-	0xab, 0x19, 0x94, 0x57, 0xd1, 0x05, 0x6f, 0x62, 0x5e, 0x20, 0x12, 0x62, 0x1e, 0x15, 0xac, 0x92,
-	0x3c, 0x9a, 0x5c, 0xb2, 0x34, 0x50, 0x38, 0x01, 0x50, 0xf8, 0x2d, 0x80, 0xb1, 0xe4, 0xe5, 0x94,
-	0xc7, 0x91, 0x9a, 0x2f, 0x83, 0xda, 0x41, 0x1a, 0xaa, 0xa6, 0x82, 0x4f, 0x1c, 0x5f, 0xb2, 0x44,
-	0xb0, 0x12, 0xae, 0xfc, 0x1a, 0x96, 0xfc, 0xa2, 0x5a, 0x76, 0xea, 0x63, 0x8c, 0x9b, 0x8c, 0xba,
-	0x63, 0xaa, 0x4c, 0xc7, 0x95, 0x82, 0x66, 0xab, 0x4f, 0x91, 0xa8, 0x12, 0x3c, 0x2a, 0x00, 0x32,
-	0x7f, 0x1b, 0x92, 0x2f, 0xb3, 0xb6, 0x31, 0xaa, 0xa2, 0xb4, 0xd0, 0x03, 0x55, 0x72, 0x29, 0xfd,
-	0x6d, 0x6a, 0xde, 0x94, 0xe8, 0x8a, 0x2f, 0xa4, 0xbf, 0x0d, 0x09, 0xd9, 0x94, 0x8b, 0xc9, 0x22,
-	0xb0, 0xdc, 0x8c, 0x05, 0xaa, 0xa6, 0x4a, 0x16, 0xf3, 0x88, 0x4d, 0x26, 0x50, 0x09, 0xe5, 0x37,
-	0x43, 0x49, 0x69, 0x16, 0x4a, 0x13, 0x11, 0x5d, 0xb0, 0x34, 0xf3, 0x17, 0xd4, 0x0a, 0xb4, 0x3f,
-	0xd4, 0x65, 0x35, 0x8f, 0xa0, 0x52, 0x63, 0x70, 0xc5, 0x43, 0x45, 0xad, 0x04, 0x1a, 0x7f, 0x34,
-	0x4a, 0x53, 0x5e, 0xca, 0x14, 0x9a, 0xfe, 0xbd, 0x74, 0xc4, 0x2c, 0x55, 0x97, 0x71, 0xc9, 0x66,
-	0xb7, 0x8f, 0xd9, 0x4b, 0x42, 0x36, 0xbb, 0x32, 0x39, 0xce, 0x0b, 0xb5, 0xf8, 0xfa, 0x8f, 0x6d,
-	0x72, 0xa7, 0x2b, 0x13, 0xfa, 0x9a, 0xdc, 0x3b, 0x88, 0xe3, 0xb3, 0x46, 0x49, 0x77, 0xf7, 0x4d,
-	0xa2, 0xfd, 0xae, 0x4c, 0x30, 0xde, 0xda, 0x76, 0xb8, 0x49, 0x40, 0x3f, 0x21, 0x77, 0x0e, 0x99,
-	0xa0, 0xf7, 0x1d, 0x7e, 0xc8, 0x84, 0x2f, 0xfb, 0x94, 0xbc, 0x77, 0x08, 0x22, 0xa6, 0x5b, 0x48,
-	0x07, 0x22, 0xf6, 0x85, 0xdf, 0x90, 0x0f, 0x8e, 0xdc, 0x81, 0xa6, 0x3b, 0x8e, 0x47, 0xb0, 0x1f,
-	0xf6, 0x25, 0x79, 0xff, 0x4d, 0x7d, 0xd4, 0xe9, 0x43, 0xc7, 0x59, 0xc8, 0x97, 0x7f, 0x41, 0xee,
-	0xbe, 0x31, 0x06, 0x40, 0x1f, 0x20, 0xb5, 0x41, 0x7c, 0x71, 0x87, 0x6c, 0x1e, 0x1b, 0x57, 0x18,
-	0xcd, 0x29, 0x45, 0xa4, 0xc5, 0xfc, 0x80, 0xcf, 0xc8, 0xc6, 0x99, 0xb6, 0x0b, 0x8a, 0x18, 0x03,
-	0x04, 0x73, 0x9f, 0x01, 0x13, 0xfd, 0x82, 0x0b, 0x9c, 0xbb, 0xc1, 0xfc, 0x80, 0x6f, 0xc9, 0x7d,
-	0x4d, 0x0e, 0x78, 0xc1, 0x16, 0x39, 0x17, 0x8a, 0xee, 0xad, 0x46, 0x2d, 0x09, 0x3f, 0xf4, 0x3b,
-	0xb2, 0xd5, 0x35, 0xc6, 0x34, 0xb2, 0xbe, 0x44, 0x9f, 0x38, 0x89, 0x65, 0x7e, 0xec, 0x0f, 0x7a,
-	0x2c, 0x0f, 0x17, 0xb8, 0x5b, 0x9b, 0x16, 0x2e, 0xb0, 0x85, 0x82, 0x25, 0xe8, 0x6a, 0x2b, 0xc3,
-	0x25, 0x30, 0x80, 0x2f, 0x7d, 0x45, 0x48, 0xaf, 0xb6, 0xb7, 0xb7, 0x9c, 0xd3, 0xc7, 0x8e, 0x76,
-	0x68, 0x70, 0x2f, 0x3d, 0x88, 0xf9, 0xb9, 0x76, 0xbd, 0x23, 0x6d, 0x7a, 0x78, 0x2f, 0xab, 0x4c,
-	0x70, 0x18, 0x7b, 0x00, 0x05, 0x1e, 0xc6, 0x1e, 0xf4, 0x0b, 0x5f, 0xf8, 0x9a, 0xdc, 0xeb, 0x5b,
-	0x17, 0x1c, 0xcd, 0x4f, 0x04, 0x3e, 0x15, 0x18, 0x0f, 0x76, 0xc9, 0x09, 0xfa, 0xd5, 0x4a, 0x97,
-	0x56, 0x88, 0xe0, 0x44, 0x0c, 0xac, 0xb3, 0xe2, 0x89, 0x68, 0xb0, 0x70, 0x80, 0x31, 0xdc, 0xd5,
-	0xf1, 0x6c, 0x30, 0x3f, 0xe0, 0x88, 0xd0, 0x41, 0xed, 0xc4, 0x47, 0xce, 0x88, 0xe9, 0x87, 0x38,
-	0xf4, 0x36, 0xeb, 0x27, 0xf9, 0x9e, 0x6c, 0x0f, 0x2a, 0xc1, 0xcf, 0x01, 0xb2, 0xe6, 0xe0, 0x3d,
-	0x45, 0x19, 0x56, 0x29, 0x3f, 0xfc, 0x07, 0xf2, 0xa0, 0xd1, 0xfc, 0x62, 0x7d, 0x8a, 0xb6, 0xfc,
-	0xf8, 0x86, 0x0b, 0x9d, 0xe0, 0x4d, 0x3d, 0xc6, 0x43, 0xbe, 0x6a, 0x2a, 0xfa, 0x39, 0xd8, 0xc7,
-	0x21, 0x57, 0x27, 0xe7, 0x07, 0xf5, 0x1d, 0x81, 0xfb, 0x88, 0xf1, 0xa0, 0x1b, 0x0d, 0xb9, 0xd2,
-	0xf3, 0x74, 0xca, 0x17, 0x12, 0xbb, 0x11, 0x82, 0x83, 0x2d, 0x19, 0xda, 0x6b, 0x05, 0xb7, 0xa4,
-	0xc1, 0x82, 0x13, 0x39, 0x9c, 0xb1, 0x95, 0x89, 0xd4, 0xcf, 0xbe, 0xf0, 0x98, 0x3c, 0x1a, 0xe9,
-	0x0b, 0xe8, 0xa0, 0xbe, 0x7f, 0x9a, 0xd2, 0x3f, 0x77, 0xba, 0x00, 0xed, 0xa7, 0x39, 0x25, 0xbb,
-	0x58, 0xd7, 0x94, 0x99, 0x65, 0xf4, 0x45, 0x38, 0x93, 0x53, 0x04, 0xcf, 0xe2, 0x48, 0xca, 0xd3,
-	0xfa, 0xd2, 0x7b, 0xcb, 0xd2, 0x0c, 0x9f, 0xc5, 0x55, 0x26, 0xe8, 0x2b, 0x23, 0x29, 0x75, 0xaf,
-	0xb1, 0xaf, 0x58, 0x28, 0x68, 0x16, 0x7d, 0x7b, 0x45, 0x8e, 0xe6, 0xd8, 0x2c, 0x1c, 0x1a, 0x74,
-	0xfb, 0x9f, 0x84, 0xb9, 0x7e, 0x90, 0xdb, 0xd7, 0x48, 0x70, 0x85, 0x21, 0x57, 0x3f, 0xd7, 0xb7,
-	0x2a, 0x5e, 0xc1, 0xa1, 0x7e, 0xd0, 0x01, 0x79, 0xd8, 0x54, 0xc8, 0xdd, 0xa1, 0xcf, 0x9c, 0xca,
-	0x23, 0xbd, 0x14, 0xad, 0x8d, 0xdf, 0xff, 0xfb, 0xeb, 0xf3, 0xf5, 0xc3, 0x93, 0xbf, 0xaf, 0xdb,
-	0xeb, 0xef, 0xae, 0xdb, 0xeb, 0xff, 0x5e, 0xb7, 0xd7, 0xff, 0xbc, 0x69, 0xaf, 0xbd, 0xbb, 0x69,
-	0xaf, 0xfd, 0x73, 0xd3, 0x5e, 0xfb, 0xb5, 0x93, 0xa4, 0x2a, 0x63, 0xe3, 0xfd, 0x09, 0xe4, 0x1d,
-	0xfd, 0x65, 0x69, 0xbe, 0xf5, 0xcc, 0x3f, 0xfd, 0x75, 0xd3, 0x99, 0x63, 0x50, 0xa7, 0x1e, 0xdf,
-	0x35, 0xd7, 0xfd, 0xab, 0xff, 0x03, 0x00, 0x00, 0xff, 0xff, 0x99, 0xe9, 0xf8, 0xf8, 0xa6, 0x0b,
-	0x00, 0x00,
+	// 549 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x94, 0x41, 0x8b, 0xd3, 0x40,
+	0x14, 0xc7, 0x5b, 0x96, 0xae, 0x65, 0x74, 0x2b, 0x8e, 0xbb, 0xdb, 0xa5, 0x62, 0x10, 0xc1, 0x83,
+	0x8a, 0x0d, 0xba, 0x88, 0x88, 0x27, 0xab, 0xbb, 0x50, 0x96, 0x6e, 0x0b, 0x2d, 0x1e, 0xbc, 0x84,
+	0x69, 0xf3, 0x36, 0x0d, 0x9b, 0x64, 0x42, 0xde, 0xb4, 0xb6, 0x37, 0x3f, 0x82, 0xe0, 0x17, 0xf1,
+	0x63, 0x78, 0xdc, 0xa3, 0x47, 0x69, 0x0f, 0x7e, 0x0d, 0xc9, 0x64, 0xb2, 0x33, 0x65, 0x72, 0x6a,
+	0xe7, 0xff, 0x7b, 0xff, 0xf6, 0xcd, 0x7b, 0xff, 0x84, 0xb4, 0xc4, 0x3a, 0x05, 0x74, 0xc5, 0xaa,
+	0x9b, 0x66, 0x5c, 0x70, 0xda, 0x90, 0xe7, 0x4e, 0x7b, 0xc6, 0x31, 0xe6, 0xe8, 0xc6, 0x18, 0xb8,
+	0xcb, 0xd7, 0xf9, 0x47, 0xc1, 0x3b, 0x0f, 0x8b, 0xfa, 0x18, 0x03, 0x6f, 0xca, 0x12, 0x25, 0xb6,
+	0xb5, 0xe8, 0x43, 0xca, 0x31, 0x14, 0x0a, 0x1c, 0x6b, 0x00, 0x59, 0xc6, 0x04, 0x53, 0xfa, 0x91,
+	0xd6, 0xe3, 0x30, 0x0e, 0x33, 0x25, 0x3f, 0xd2, 0x72, 0x02, 0xe2, 0x1b, 0xcf, 0xae, 0xbd, 0x2b,
+	0x00, 0x05, 0x9f, 0x18, 0x90, 0xfb, 0xe0, 0xa5, 0x6c, 0x81, 0xe0, 0xcd, 0xe6, 0x2c, 0x2c, 0xdb,
+	0x78, 0xac, 0x2b, 0xf8, 0x14, 0x21, 0x5b, 0x82, 0xef, 0x89, 0xd5, 0x2d, 0x76, 0x2a, 0x31, 0x5f,
+	0x94, 0xcd, 0x1e, 0x6a, 0x8e, 0x90, 0xf8, 0xb6, 0x0b, 0x41, 0x78, 0x61, 0xea, 0x31, 0xdf, 0xcf,
+	0x00, 0xd1, 0xfe, 0xd3, 0x9c, 0xcb, 0xd6, 0xae, 0x61, 0x5d, 0xe2, 0x13, 0x03, 0xf3, 0x68, 0x09,
+	0xc9, 0x6c, 0x6d, 0xdf, 0x47, 0x20, 0x4a, 0x4f, 0x18, 0x24, 0xde, 0x15, 0x0b, 0x23, 0xdb, 0x9b,
+	0x57, 0xa4, 0x9c, 0x47, 0xf6, 0xc0, 0x97, 0x90, 0x61, 0xc8, 0xd5, 0x1d, 0x9f, 0x12, 0xd2, 0x1c,
+	0x60, 0x70, 0x16, 0xa7, 0x62, 0xfd, 0xe6, 0xe7, 0x3e, 0xd9, 0x1b, 0x60, 0x40, 0x9f, 0x91, 0xbd,
+	0x1e, 0x4b, 0xe8, 0x41, 0x57, 0x9a, 0xba, 0x03, 0x0c, 0x7a, 0x2c, 0xe9, 0xdc, 0xd7, 0x47, 0x59,
+	0x4e, 0x5f, 0x91, 0x3b, 0x9f, 0x8b, 0xe5, 0xd1, 0x07, 0x9a, 0x29, 0xc9, 0x2e, 0x77, 0x49, 0xf3,
+	0x4c, 0xae, 0x74, 0xb2, 0xa2, 0xd4, 0x80, 0x4a, 0xb3, 0x0d, 0xcf, 0x49, 0x63, 0x90, 0xef, 0x9a,
+	0x1a, 0x44, 0x0a, 0x76, 0xe9, 0x29, 0x21, 0x97, 0xc5, 0xfe, 0xcf, 0x01, 0xe8, 0xa1, 0xc6, 0x5a,
+	0xb5, 0x4d, 0x1f, 0x48, 0xeb, 0x92, 0xfb, 0x30, 0xca, 0x63, 0xf1, 0x29, 0x4f, 0x05, 0x3d, 0x31,
+	0x8c, 0x3b, 0xc4, 0x36, 0xbf, 0x23, 0xf7, 0x86, 0x2a, 0x13, 0x93, 0x55, 0x3f, 0xa1, 0xc7, 0xba,
+	0xc0, 0xd4, 0x6d, 0xe3, 0x7b, 0x72, 0xa0, 0x0b, 0x86, 0x0b, 0x41, 0xdb, 0x55, 0xce, 0xe1, 0xa2,
+	0x62, 0x82, 0x2f, 0x49, 0x73, 0x32, 0xe7, 0xd9, 0x18, 0x12, 0x9f, 0xb6, 0x34, 0xcc, 0xcf, 0x95,
+	0x0d, 0x8e, 0x41, 0xf4, 0x47, 0x1f, 0x8b, 0xf0, 0x99, 0x0d, 0x9a, 0xba, 0x6d, 0x7c, 0x4b, 0xee,
+	0x8e, 0x41, 0xe4, 0xf7, 0xbf, 0x80, 0x35, 0xd2, 0xa3, 0x1d, 0x5f, 0x29, 0x57, 0xae, 0x77, 0xac,
+	0xf2, 0x6a, 0xae, 0xb7, 0xd4, 0x2a, 0xc7, 0x3f, 0x41, 0xbc, 0x28, 0x52, 0x7c, 0xce, 0xc2, 0xc8,
+	0x1c, 0xff, 0x2e, 0xa9, 0xcc, 0xde, 0x04, 0x71, 0xc4, 0x79, 0x64, 0x66, 0x4f, 0x49, 0x95, 0xf9,
+	0x18, 0x83, 0xf8, 0x52, 0x24, 0xdf, 0xcc, 0x87, 0x56, 0x2d, 0x53, 0xa7, 0xf1, 0xfd, 0xdf, 0xaf,
+	0x17, 0xf5, 0x5e, 0xff, 0xf7, 0xc6, 0xa9, 0xdf, 0x6c, 0x9c, 0xfa, 0xdf, 0x8d, 0x53, 0xff, 0xb1,
+	0x75, 0x6a, 0x37, 0x5b, 0xa7, 0xf6, 0x67, 0xeb, 0xd4, 0xbe, 0xba, 0x41, 0x28, 0x22, 0x36, 0xed,
+	0xce, 0x78, 0xec, 0x8a, 0x39, 0xcf, 0xe4, 0xab, 0x45, 0x7e, 0xcb, 0x1f, 0x6a, 0x77, 0x65, 0x8a,
+	0xf9, 0x4f, 0x4f, 0xf7, 0xe5, 0x33, 0x77, 0xfa, 0x3f, 0x00, 0x00, 0xff, 0xff, 0x1b, 0xf2, 0x7a,
+	0xea, 0x44, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -147,42 +121,21 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
-	AddLiquidity(ctx context.Context, in *MsgAddLiquidity, opts ...grpc.CallOption) (*MsgEmpty, error)
 	Ban(ctx context.Context, in *MsgBan, opts ...grpc.CallOption) (*MsgEmpty, error)
-	Bond(ctx context.Context, in *MsgBond, opts ...grpc.CallOption) (*MsgEmpty, error)
-	Consolidate(ctx context.Context, in *MsgConsolidate, opts ...grpc.CallOption) (*MsgEmpty, error)
 	Deposit(ctx context.Context, in *MsgDeposit, opts ...grpc.CallOption) (*MsgEmpty, error)
-	Donate(ctx context.Context, in *MsgDonate, opts ...grpc.CallOption) (*MsgEmpty, error)
 	ErrataTx(ctx context.Context, in *MsgErrataTx, opts ...grpc.CallOption) (*MsgEmpty, error)
-	Leave(ctx context.Context, in *MsgLeave, opts ...grpc.CallOption) (*MsgEmpty, error)
-	LoanOpen(ctx context.Context, in *MsgLoanOpen, opts ...grpc.CallOption) (*MsgEmpty, error)
-	LoanRepayment(ctx context.Context, in *MsgLoanRepayment, opts ...grpc.CallOption) (*MsgEmpty, error)
-	ManageThorname(ctx context.Context, in *MsgManageTHORName, opts ...grpc.CallOption) (*MsgEmpty, error)
-	Migrate(ctx context.Context, in *MsgMigrate, opts ...grpc.CallOption) (*MsgEmpty, error)
 	Mimir(ctx context.Context, in *MsgMimir, opts ...grpc.CallOption) (*MsgEmpty, error)
 	NetworkFee(ctx context.Context, in *MsgNetworkFee, opts ...grpc.CallOption) (*MsgEmpty, error)
 	NodePauseChain(ctx context.Context, in *MsgNodePauseChain, opts ...grpc.CallOption) (*MsgEmpty, error)
-	Noop(ctx context.Context, in *MsgNoOp, opts ...grpc.CallOption) (*MsgEmpty, error)
 	ObservedTxIn(ctx context.Context, in *MsgObservedTxIn, opts ...grpc.CallOption) (*MsgEmpty, error)
 	ObservedTxOut(ctx context.Context, in *MsgObservedTxOut, opts ...grpc.CallOption) (*MsgEmpty, error)
-	Ragnarok(ctx context.Context, in *MsgRagnarok, opts ...grpc.CallOption) (*MsgEmpty, error)
-	RefundTx(ctx context.Context, in *MsgRefundTx, opts ...grpc.CallOption) (*MsgEmpty, error)
-	ReserveContributor(ctx context.Context, in *MsgReserveContributor, opts ...grpc.CallOption) (*MsgEmpty, error)
-	RunePoolDeposit(ctx context.Context, in *MsgRunePoolDeposit, opts ...grpc.CallOption) (*MsgEmpty, error)
-	RunePoolWithdraw(ctx context.Context, in *MsgRunePoolWithdraw, opts ...grpc.CallOption) (*MsgEmpty, error)
 	ThorSend(ctx context.Context, in *MsgSend, opts ...grpc.CallOption) (*MsgEmpty, error)
 	SetIPAddress(ctx context.Context, in *MsgSetIPAddress, opts ...grpc.CallOption) (*MsgEmpty, error)
 	SetNodeKeys(ctx context.Context, in *MsgSetNodeKeys, opts ...grpc.CallOption) (*MsgEmpty, error)
 	Solvency(ctx context.Context, in *MsgSolvency, opts ...grpc.CallOption) (*MsgEmpty, error)
-	Swap(ctx context.Context, in *MsgSwap, opts ...grpc.CallOption) (*MsgEmpty, error)
-	TradeAccountDeposit(ctx context.Context, in *MsgTradeAccountDeposit, opts ...grpc.CallOption) (*MsgEmpty, error)
-	TradeAccountWithdrawal(ctx context.Context, in *MsgTradeAccountWithdrawal, opts ...grpc.CallOption) (*MsgEmpty, error)
 	TssKeysignFail(ctx context.Context, in *MsgTssKeysignFail, opts ...grpc.CallOption) (*MsgEmpty, error)
 	TssPool(ctx context.Context, in *MsgTssPool, opts ...grpc.CallOption) (*MsgEmpty, error)
-	OutboundTx(ctx context.Context, in *MsgOutboundTx, opts ...grpc.CallOption) (*MsgEmpty, error)
-	UnBond(ctx context.Context, in *MsgUnBond, opts ...grpc.CallOption) (*MsgEmpty, error)
 	SetVersion(ctx context.Context, in *MsgSetVersion, opts ...grpc.CallOption) (*MsgEmpty, error)
-	WithdrawLiquidity(ctx context.Context, in *MsgWithdrawLiquidity, opts ...grpc.CallOption) (*MsgEmpty, error)
 }
 
 type msgClient struct {
@@ -193,36 +146,9 @@ func NewMsgClient(cc grpc1.ClientConn) MsgClient {
 	return &msgClient{cc}
 }
 
-func (c *msgClient) AddLiquidity(ctx context.Context, in *MsgAddLiquidity, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/AddLiquidity", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *msgClient) Ban(ctx context.Context, in *MsgBan, opts ...grpc.CallOption) (*MsgEmpty, error) {
 	out := new(MsgEmpty)
 	err := c.cc.Invoke(ctx, "/types.Msg/Ban", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) Bond(ctx context.Context, in *MsgBond, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/Bond", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) Consolidate(ctx context.Context, in *MsgConsolidate, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/Consolidate", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -238,63 +164,9 @@ func (c *msgClient) Deposit(ctx context.Context, in *MsgDeposit, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *msgClient) Donate(ctx context.Context, in *MsgDonate, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/Donate", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *msgClient) ErrataTx(ctx context.Context, in *MsgErrataTx, opts ...grpc.CallOption) (*MsgEmpty, error) {
 	out := new(MsgEmpty)
 	err := c.cc.Invoke(ctx, "/types.Msg/ErrataTx", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) Leave(ctx context.Context, in *MsgLeave, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/Leave", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) LoanOpen(ctx context.Context, in *MsgLoanOpen, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/LoanOpen", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) LoanRepayment(ctx context.Context, in *MsgLoanRepayment, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/LoanRepayment", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) ManageThorname(ctx context.Context, in *MsgManageTHORName, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/ManageThorname", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) Migrate(ctx context.Context, in *MsgMigrate, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/Migrate", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -328,15 +200,6 @@ func (c *msgClient) NodePauseChain(ctx context.Context, in *MsgNodePauseChain, o
 	return out, nil
 }
 
-func (c *msgClient) Noop(ctx context.Context, in *MsgNoOp, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/Noop", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *msgClient) ObservedTxIn(ctx context.Context, in *MsgObservedTxIn, opts ...grpc.CallOption) (*MsgEmpty, error) {
 	out := new(MsgEmpty)
 	err := c.cc.Invoke(ctx, "/types.Msg/ObservedTxIn", in, out, opts...)
@@ -349,51 +212,6 @@ func (c *msgClient) ObservedTxIn(ctx context.Context, in *MsgObservedTxIn, opts 
 func (c *msgClient) ObservedTxOut(ctx context.Context, in *MsgObservedTxOut, opts ...grpc.CallOption) (*MsgEmpty, error) {
 	out := new(MsgEmpty)
 	err := c.cc.Invoke(ctx, "/types.Msg/ObservedTxOut", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) Ragnarok(ctx context.Context, in *MsgRagnarok, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/Ragnarok", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) RefundTx(ctx context.Context, in *MsgRefundTx, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/RefundTx", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) ReserveContributor(ctx context.Context, in *MsgReserveContributor, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/ReserveContributor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) RunePoolDeposit(ctx context.Context, in *MsgRunePoolDeposit, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/RunePoolDeposit", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) RunePoolWithdraw(ctx context.Context, in *MsgRunePoolWithdraw, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/RunePoolWithdraw", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -436,33 +254,6 @@ func (c *msgClient) Solvency(ctx context.Context, in *MsgSolvency, opts ...grpc.
 	return out, nil
 }
 
-func (c *msgClient) Swap(ctx context.Context, in *MsgSwap, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/Swap", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) TradeAccountDeposit(ctx context.Context, in *MsgTradeAccountDeposit, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/TradeAccountDeposit", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) TradeAccountWithdrawal(ctx context.Context, in *MsgTradeAccountWithdrawal, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/TradeAccountWithdrawal", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *msgClient) TssKeysignFail(ctx context.Context, in *MsgTssKeysignFail, opts ...grpc.CallOption) (*MsgEmpty, error) {
 	out := new(MsgEmpty)
 	err := c.cc.Invoke(ctx, "/types.Msg/TssKeysignFail", in, out, opts...)
@@ -481,24 +272,6 @@ func (c *msgClient) TssPool(ctx context.Context, in *MsgTssPool, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *msgClient) OutboundTx(ctx context.Context, in *MsgOutboundTx, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/OutboundTx", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) UnBond(ctx context.Context, in *MsgUnBond, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/UnBond", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *msgClient) SetVersion(ctx context.Context, in *MsgSetVersion, opts ...grpc.CallOption) (*MsgEmpty, error) {
 	out := new(MsgEmpty)
 	err := c.cc.Invoke(ctx, "/types.Msg/SetVersion", in, out, opts...)
@@ -508,94 +281,37 @@ func (c *msgClient) SetVersion(ctx context.Context, in *MsgSetVersion, opts ...g
 	return out, nil
 }
 
-func (c *msgClient) WithdrawLiquidity(ctx context.Context, in *MsgWithdrawLiquidity, opts ...grpc.CallOption) (*MsgEmpty, error) {
-	out := new(MsgEmpty)
-	err := c.cc.Invoke(ctx, "/types.Msg/WithdrawLiquidity", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
-	AddLiquidity(context.Context, *MsgAddLiquidity) (*MsgEmpty, error)
 	Ban(context.Context, *MsgBan) (*MsgEmpty, error)
-	Bond(context.Context, *MsgBond) (*MsgEmpty, error)
-	Consolidate(context.Context, *MsgConsolidate) (*MsgEmpty, error)
 	Deposit(context.Context, *MsgDeposit) (*MsgEmpty, error)
-	Donate(context.Context, *MsgDonate) (*MsgEmpty, error)
 	ErrataTx(context.Context, *MsgErrataTx) (*MsgEmpty, error)
-	Leave(context.Context, *MsgLeave) (*MsgEmpty, error)
-	LoanOpen(context.Context, *MsgLoanOpen) (*MsgEmpty, error)
-	LoanRepayment(context.Context, *MsgLoanRepayment) (*MsgEmpty, error)
-	ManageThorname(context.Context, *MsgManageTHORName) (*MsgEmpty, error)
-	Migrate(context.Context, *MsgMigrate) (*MsgEmpty, error)
 	Mimir(context.Context, *MsgMimir) (*MsgEmpty, error)
 	NetworkFee(context.Context, *MsgNetworkFee) (*MsgEmpty, error)
 	NodePauseChain(context.Context, *MsgNodePauseChain) (*MsgEmpty, error)
-	Noop(context.Context, *MsgNoOp) (*MsgEmpty, error)
 	ObservedTxIn(context.Context, *MsgObservedTxIn) (*MsgEmpty, error)
 	ObservedTxOut(context.Context, *MsgObservedTxOut) (*MsgEmpty, error)
-	Ragnarok(context.Context, *MsgRagnarok) (*MsgEmpty, error)
-	RefundTx(context.Context, *MsgRefundTx) (*MsgEmpty, error)
-	ReserveContributor(context.Context, *MsgReserveContributor) (*MsgEmpty, error)
-	RunePoolDeposit(context.Context, *MsgRunePoolDeposit) (*MsgEmpty, error)
-	RunePoolWithdraw(context.Context, *MsgRunePoolWithdraw) (*MsgEmpty, error)
 	ThorSend(context.Context, *MsgSend) (*MsgEmpty, error)
 	SetIPAddress(context.Context, *MsgSetIPAddress) (*MsgEmpty, error)
 	SetNodeKeys(context.Context, *MsgSetNodeKeys) (*MsgEmpty, error)
 	Solvency(context.Context, *MsgSolvency) (*MsgEmpty, error)
-	Swap(context.Context, *MsgSwap) (*MsgEmpty, error)
-	TradeAccountDeposit(context.Context, *MsgTradeAccountDeposit) (*MsgEmpty, error)
-	TradeAccountWithdrawal(context.Context, *MsgTradeAccountWithdrawal) (*MsgEmpty, error)
 	TssKeysignFail(context.Context, *MsgTssKeysignFail) (*MsgEmpty, error)
 	TssPool(context.Context, *MsgTssPool) (*MsgEmpty, error)
-	OutboundTx(context.Context, *MsgOutboundTx) (*MsgEmpty, error)
-	UnBond(context.Context, *MsgUnBond) (*MsgEmpty, error)
 	SetVersion(context.Context, *MsgSetVersion) (*MsgEmpty, error)
-	WithdrawLiquidity(context.Context, *MsgWithdrawLiquidity) (*MsgEmpty, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
 type UnimplementedMsgServer struct {
 }
 
-func (*UnimplementedMsgServer) AddLiquidity(ctx context.Context, req *MsgAddLiquidity) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddLiquidity not implemented")
-}
 func (*UnimplementedMsgServer) Ban(ctx context.Context, req *MsgBan) (*MsgEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ban not implemented")
-}
-func (*UnimplementedMsgServer) Bond(ctx context.Context, req *MsgBond) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Bond not implemented")
-}
-func (*UnimplementedMsgServer) Consolidate(ctx context.Context, req *MsgConsolidate) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Consolidate not implemented")
 }
 func (*UnimplementedMsgServer) Deposit(ctx context.Context, req *MsgDeposit) (*MsgEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Deposit not implemented")
 }
-func (*UnimplementedMsgServer) Donate(ctx context.Context, req *MsgDonate) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Donate not implemented")
-}
 func (*UnimplementedMsgServer) ErrataTx(ctx context.Context, req *MsgErrataTx) (*MsgEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ErrataTx not implemented")
-}
-func (*UnimplementedMsgServer) Leave(ctx context.Context, req *MsgLeave) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Leave not implemented")
-}
-func (*UnimplementedMsgServer) LoanOpen(ctx context.Context, req *MsgLoanOpen) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LoanOpen not implemented")
-}
-func (*UnimplementedMsgServer) LoanRepayment(ctx context.Context, req *MsgLoanRepayment) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LoanRepayment not implemented")
-}
-func (*UnimplementedMsgServer) ManageThorname(ctx context.Context, req *MsgManageTHORName) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ManageThorname not implemented")
-}
-func (*UnimplementedMsgServer) Migrate(ctx context.Context, req *MsgMigrate) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Migrate not implemented")
 }
 func (*UnimplementedMsgServer) Mimir(ctx context.Context, req *MsgMimir) (*MsgEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Mimir not implemented")
@@ -606,29 +322,11 @@ func (*UnimplementedMsgServer) NetworkFee(ctx context.Context, req *MsgNetworkFe
 func (*UnimplementedMsgServer) NodePauseChain(ctx context.Context, req *MsgNodePauseChain) (*MsgEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NodePauseChain not implemented")
 }
-func (*UnimplementedMsgServer) Noop(ctx context.Context, req *MsgNoOp) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Noop not implemented")
-}
 func (*UnimplementedMsgServer) ObservedTxIn(ctx context.Context, req *MsgObservedTxIn) (*MsgEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ObservedTxIn not implemented")
 }
 func (*UnimplementedMsgServer) ObservedTxOut(ctx context.Context, req *MsgObservedTxOut) (*MsgEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ObservedTxOut not implemented")
-}
-func (*UnimplementedMsgServer) Ragnarok(ctx context.Context, req *MsgRagnarok) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ragnarok not implemented")
-}
-func (*UnimplementedMsgServer) RefundTx(ctx context.Context, req *MsgRefundTx) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RefundTx not implemented")
-}
-func (*UnimplementedMsgServer) ReserveContributor(ctx context.Context, req *MsgReserveContributor) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReserveContributor not implemented")
-}
-func (*UnimplementedMsgServer) RunePoolDeposit(ctx context.Context, req *MsgRunePoolDeposit) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RunePoolDeposit not implemented")
-}
-func (*UnimplementedMsgServer) RunePoolWithdraw(ctx context.Context, req *MsgRunePoolWithdraw) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RunePoolWithdraw not implemented")
 }
 func (*UnimplementedMsgServer) ThorSend(ctx context.Context, req *MsgSend) (*MsgEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ThorSend not implemented")
@@ -642,54 +340,18 @@ func (*UnimplementedMsgServer) SetNodeKeys(ctx context.Context, req *MsgSetNodeK
 func (*UnimplementedMsgServer) Solvency(ctx context.Context, req *MsgSolvency) (*MsgEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Solvency not implemented")
 }
-func (*UnimplementedMsgServer) Swap(ctx context.Context, req *MsgSwap) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Swap not implemented")
-}
-func (*UnimplementedMsgServer) TradeAccountDeposit(ctx context.Context, req *MsgTradeAccountDeposit) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method TradeAccountDeposit not implemented")
-}
-func (*UnimplementedMsgServer) TradeAccountWithdrawal(ctx context.Context, req *MsgTradeAccountWithdrawal) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method TradeAccountWithdrawal not implemented")
-}
 func (*UnimplementedMsgServer) TssKeysignFail(ctx context.Context, req *MsgTssKeysignFail) (*MsgEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TssKeysignFail not implemented")
 }
 func (*UnimplementedMsgServer) TssPool(ctx context.Context, req *MsgTssPool) (*MsgEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TssPool not implemented")
 }
-func (*UnimplementedMsgServer) OutboundTx(ctx context.Context, req *MsgOutboundTx) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method OutboundTx not implemented")
-}
-func (*UnimplementedMsgServer) UnBond(ctx context.Context, req *MsgUnBond) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UnBond not implemented")
-}
 func (*UnimplementedMsgServer) SetVersion(ctx context.Context, req *MsgSetVersion) (*MsgEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetVersion not implemented")
-}
-func (*UnimplementedMsgServer) WithdrawLiquidity(ctx context.Context, req *MsgWithdrawLiquidity) (*MsgEmpty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method WithdrawLiquidity not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
 	s.RegisterService(&_Msg_serviceDesc, srv)
-}
-
-func _Msg_AddLiquidity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgAddLiquidity)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).AddLiquidity(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/AddLiquidity",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).AddLiquidity(ctx, req.(*MsgAddLiquidity))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _Msg_Ban_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -706,42 +368,6 @@ func _Msg_Ban_Handler(srv interface{}, ctx context.Context, dec func(interface{}
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).Ban(ctx, req.(*MsgBan))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_Bond_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgBond)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).Bond(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/Bond",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Bond(ctx, req.(*MsgBond))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_Consolidate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgConsolidate)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).Consolidate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/Consolidate",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Consolidate(ctx, req.(*MsgConsolidate))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -764,24 +390,6 @@ func _Msg_Deposit_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_Donate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgDonate)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).Donate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/Donate",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Donate(ctx, req.(*MsgDonate))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Msg_ErrataTx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgErrataTx)
 	if err := dec(in); err != nil {
@@ -796,96 +404,6 @@ func _Msg_ErrataTx_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).ErrataTx(ctx, req.(*MsgErrataTx))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_Leave_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgLeave)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).Leave(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/Leave",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Leave(ctx, req.(*MsgLeave))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_LoanOpen_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgLoanOpen)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).LoanOpen(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/LoanOpen",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).LoanOpen(ctx, req.(*MsgLoanOpen))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_LoanRepayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgLoanRepayment)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).LoanRepayment(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/LoanRepayment",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).LoanRepayment(ctx, req.(*MsgLoanRepayment))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_ManageThorname_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgManageTHORName)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).ManageThorname(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/ManageThorname",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ManageThorname(ctx, req.(*MsgManageTHORName))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_Migrate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgMigrate)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).Migrate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/Migrate",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Migrate(ctx, req.(*MsgMigrate))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -944,24 +462,6 @@ func _Msg_NodePauseChain_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_Noop_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgNoOp)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).Noop(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/Noop",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Noop(ctx, req.(*MsgNoOp))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Msg_ObservedTxIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgObservedTxIn)
 	if err := dec(in); err != nil {
@@ -994,96 +494,6 @@ func _Msg_ObservedTxOut_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).ObservedTxOut(ctx, req.(*MsgObservedTxOut))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_Ragnarok_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRagnarok)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).Ragnarok(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/Ragnarok",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Ragnarok(ctx, req.(*MsgRagnarok))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_RefundTx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRefundTx)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).RefundTx(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/RefundTx",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RefundTx(ctx, req.(*MsgRefundTx))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_ReserveContributor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgReserveContributor)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).ReserveContributor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/ReserveContributor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ReserveContributor(ctx, req.(*MsgReserveContributor))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_RunePoolDeposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRunePoolDeposit)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).RunePoolDeposit(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/RunePoolDeposit",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RunePoolDeposit(ctx, req.(*MsgRunePoolDeposit))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_RunePoolWithdraw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRunePoolWithdraw)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).RunePoolWithdraw(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/RunePoolWithdraw",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RunePoolWithdraw(ctx, req.(*MsgRunePoolWithdraw))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1160,60 +570,6 @@ func _Msg_Solvency_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_Swap_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSwap)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).Swap(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/Swap",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Swap(ctx, req.(*MsgSwap))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_TradeAccountDeposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgTradeAccountDeposit)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).TradeAccountDeposit(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/TradeAccountDeposit",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).TradeAccountDeposit(ctx, req.(*MsgTradeAccountDeposit))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_TradeAccountWithdrawal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgTradeAccountWithdrawal)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).TradeAccountWithdrawal(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/TradeAccountWithdrawal",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).TradeAccountWithdrawal(ctx, req.(*MsgTradeAccountWithdrawal))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Msg_TssKeysignFail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgTssKeysignFail)
 	if err := dec(in); err != nil {
@@ -1250,42 +606,6 @@ func _Msg_TssPool_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_OutboundTx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgOutboundTx)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).OutboundTx(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/OutboundTx",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).OutboundTx(ctx, req.(*MsgOutboundTx))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_UnBond_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUnBond)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).UnBond(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/UnBond",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).UnBond(ctx, req.(*MsgUnBond))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Msg_SetVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgSetVersion)
 	if err := dec(in); err != nil {
@@ -1304,75 +624,21 @@ func _Msg_SetVersion_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_WithdrawLiquidity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgWithdrawLiquidity)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).WithdrawLiquidity(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/WithdrawLiquidity",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).WithdrawLiquidity(ctx, req.(*MsgWithdrawLiquidity))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "types.Msg",
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddLiquidity",
-			Handler:    _Msg_AddLiquidity_Handler,
-		},
-		{
 			MethodName: "Ban",
 			Handler:    _Msg_Ban_Handler,
-		},
-		{
-			MethodName: "Bond",
-			Handler:    _Msg_Bond_Handler,
-		},
-		{
-			MethodName: "Consolidate",
-			Handler:    _Msg_Consolidate_Handler,
 		},
 		{
 			MethodName: "Deposit",
 			Handler:    _Msg_Deposit_Handler,
 		},
 		{
-			MethodName: "Donate",
-			Handler:    _Msg_Donate_Handler,
-		},
-		{
 			MethodName: "ErrataTx",
 			Handler:    _Msg_ErrataTx_Handler,
-		},
-		{
-			MethodName: "Leave",
-			Handler:    _Msg_Leave_Handler,
-		},
-		{
-			MethodName: "LoanOpen",
-			Handler:    _Msg_LoanOpen_Handler,
-		},
-		{
-			MethodName: "LoanRepayment",
-			Handler:    _Msg_LoanRepayment_Handler,
-		},
-		{
-			MethodName: "ManageThorname",
-			Handler:    _Msg_ManageThorname_Handler,
-		},
-		{
-			MethodName: "Migrate",
-			Handler:    _Msg_Migrate_Handler,
 		},
 		{
 			MethodName: "Mimir",
@@ -1387,36 +653,12 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_NodePauseChain_Handler,
 		},
 		{
-			MethodName: "Noop",
-			Handler:    _Msg_Noop_Handler,
-		},
-		{
 			MethodName: "ObservedTxIn",
 			Handler:    _Msg_ObservedTxIn_Handler,
 		},
 		{
 			MethodName: "ObservedTxOut",
 			Handler:    _Msg_ObservedTxOut_Handler,
-		},
-		{
-			MethodName: "Ragnarok",
-			Handler:    _Msg_Ragnarok_Handler,
-		},
-		{
-			MethodName: "RefundTx",
-			Handler:    _Msg_RefundTx_Handler,
-		},
-		{
-			MethodName: "ReserveContributor",
-			Handler:    _Msg_ReserveContributor_Handler,
-		},
-		{
-			MethodName: "RunePoolDeposit",
-			Handler:    _Msg_RunePoolDeposit_Handler,
-		},
-		{
-			MethodName: "RunePoolWithdraw",
-			Handler:    _Msg_RunePoolWithdraw_Handler,
 		},
 		{
 			MethodName: "ThorSend",
@@ -1435,18 +677,6 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_Solvency_Handler,
 		},
 		{
-			MethodName: "Swap",
-			Handler:    _Msg_Swap_Handler,
-		},
-		{
-			MethodName: "TradeAccountDeposit",
-			Handler:    _Msg_TradeAccountDeposit_Handler,
-		},
-		{
-			MethodName: "TradeAccountWithdrawal",
-			Handler:    _Msg_TradeAccountWithdrawal_Handler,
-		},
-		{
 			MethodName: "TssKeysignFail",
 			Handler:    _Msg_TssKeysignFail_Handler,
 		},
@@ -1455,20 +685,8 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_TssPool_Handler,
 		},
 		{
-			MethodName: "OutboundTx",
-			Handler:    _Msg_OutboundTx_Handler,
-		},
-		{
-			MethodName: "UnBond",
-			Handler:    _Msg_UnBond_Handler,
-		},
-		{
 			MethodName: "SetVersion",
 			Handler:    _Msg_SetVersion_Handler,
-		},
-		{
-			MethodName: "WithdrawLiquidity",
-			Handler:    _Msg_WithdrawLiquidity_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

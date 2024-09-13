@@ -124,7 +124,6 @@ func (h DepositHandler) handleV131(ctx cosmos.Context, msg MsgDeposit) (*cosmos.
 		return nil, fmt.Errorf("fail to get from address: %w", err)
 	}
 
-	// TODO (SAM127): fix this
 	handler := NewInternalHandler(h.mgr)
 
 	memo, err := ParseMemoWithTHORNames(ctx, h.mgr.Keeper(), msg.Memo)
@@ -204,7 +203,6 @@ func (h DepositHandler) handleV131(ctx cosmos.Context, msg MsgDeposit) (*cosmos.
 		mCtx = mCtx.WithValue(constants.CtxLoanToAddress, txIn.Tx.ToAddress)
 	}
 
-	// TODO (SAM127): fix this
 	result, err := handler(mCtx, m)
 	if err != nil {
 		return nil, err

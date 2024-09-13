@@ -221,7 +221,7 @@ func MakeTestCodec() *codec.LegacyAmino {
 	banktypes.RegisterLegacyAminoCodec(cdc)
 	authtypes.RegisterLegacyAminoCodec(cdc)
 	RegisterLegacyAminoCodec(cdc)
-	cosmos.RegisterCodec(cdc)
+	cosmos.RegisterLegacyAminoCodec(cdc)
 	// codec.RegisterCrypto(cdc)
 	return cdc
 }

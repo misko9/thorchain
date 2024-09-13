@@ -34,7 +34,6 @@ const (
 
 var (
 	KeyringServiceName           = sdk.KeyringServiceName
-	//NewRoute                     = sdk.NewRoute // Legacy routing was removed
 	NewKVStoreKeys               = storetypes.NewKVStoreKeys
 	NewUint                      = sdkmath.NewUint
 	ParseUint                    = sdkmath.ParseUint
@@ -58,7 +57,7 @@ var (
 	NewDecFromStr                = sdkmath.LegacyNewDecFromStr
 	GetConfig                    = sdk.GetConfig
 	NewEvent                     = sdk.NewEvent
-	RegisterCodec                = sdk.RegisterLegacyAminoCodec
+	RegisterLegacyAminoCodec     = sdk.RegisterLegacyAminoCodec
 	NewEventManager              = sdk.NewEventManager
 	EventTypeMessage             = sdk.EventTypeMessage
 	AttributeKeyModule           = sdk.AttributeKeyModule
@@ -98,6 +97,9 @@ type (
 	TxResponse = sdk.TxResponse
 	Account    = authtypes.AccountI
 )
+
+// Handler defines the core of the state transition function of an application.
+type Handler func(ctx Context, msg Msg) (*Result, error)
 
 var _ sdk.Address = AccAddress{}
 
