@@ -616,19 +616,19 @@ func (s *HandlerSuite) TestReserveContributor(c *C) {
 	c.Assert(isReserve, Equals, true)
 }
 
-func (s *HandlerSuite) TestExternalHandler(c *C) {
+func (s *HandlerSuite) TestMsgServer(c *C) {
 	ctx, mgr := setupManagerForTest(c)
-	handler := NewExternalHandler(mgr)
+	newMsgServer := NewMsgServerImpl(mgr)
 	ctx = ctx.WithBlockHeight(1024)
 	msg := NewMsgNetworkFee(1024, common.ETHChain, 1, 10000, GetRandomBech32Addr())
-	result, err := handler(ctx, msg)
+	result, err := newMsgServer.NetworkFee(ctx, msg)
 	c.Check(err, NotNil)
 	c.Check(errors.Is(err, se.ErrUnauthorized), Equals, true)
-	c.Check(result, IsNil)
+	c.Check(result, NotNil)
 	na := GetRandomValidatorNode(NodeActive)
 	c.Assert(mgr.Keeper().SetNodeAccount(ctx, na), IsNil)
 	FundModule(c, ctx, mgr.Keeper(), BondName, 10*common.One)
-	result, err = handler(ctx, NewMsgSetVersion("0.1.0", na.NodeAddress))
+	result, err = newMsgServer.SetVersion(ctx, NewMsgSetVersion("0.1.0", na.NodeAddress))
 	c.Assert(err, IsNil)
 	c.Assert(result, NotNil)
 }
