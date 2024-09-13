@@ -7,18 +7,18 @@ import (
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 )
 
-func (app *ChainApp) GetBaseApp() *baseapp.BaseApp {
+func (app *THORChainApp) GetBaseApp() *baseapp.BaseApp {
 	return app.BaseApp
 }
 
-func (app *ChainApp) GetBankKeeper() bankkeeper.Keeper {
+func (app *THORChainApp) GetBankKeeper() bankkeeper.Keeper {
 	return app.BankKeeper
 }
 
-func (app *ChainApp) GetStakingKeeper() *stakingkeeper.Keeper {
+func (app *THORChainApp) GetStakingKeeper() *stakingkeeper.Keeper {
 	return app.StakingKeeper
 }
 
-func (app *ChainApp) GetAccountKeeper() authkeeper.AccountKeeper {
+func (app *THORChainApp) GetAccountKeeper() authkeeper.AccountKeeper {
 	return app.AccountKeeper
 }

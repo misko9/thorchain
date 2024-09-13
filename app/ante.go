@@ -7,6 +7,9 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
+
+	"gitlab.com/thorchain/thornode/x/thorchain"
+	"gitlab.com/thorchain/thornode/x/thorchain/keeper"
 )
 
 // HandlerOptions extend the SDK's AnteHandler options by requiring the IBC
@@ -17,6 +20,8 @@ type HandlerOptions struct {
 	TXCounterStoreService corestoretypes.KVStoreService
 
 	BypassMinFeeMsgTypes []string
+
+	THORChainKeeper keeper.Keeper
 }
 
 // NewAnteHandler constructor
@@ -30,18 +35,29 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 	if options.SignModeHandler == nil {
 		return nil, errors.New("sign mode handler is required for ante builder")
 	}
-	if options.TXCounterStoreService == nil {
-		return nil, errors.New("wasm store service is required for ante builder")
+	if options.THORChainKeeper == nil {
+		return nil, errors.New("thorchain keeper is required for ante builder")
 	}
+	// if options.TXCounterStoreService == nil {
+	// 	return nil, errors.New("wasm store service is required for ante builder")
+	// }
 
 	anteDecorators := []sdk.AnteDecorator{
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
+
+		// replace gas meter immediately after setting up ctx
+		thorchain.NewInfiniteGasDecorator(options.THORChainKeeper),
+
 		ante.NewExtensionOptionsDecorator(options.ExtensionOptionChecker),
 		ante.NewValidateBasicDecorator(),
 		ante.NewTxTimeoutHeightDecorator(),
 		ante.NewValidateMemoDecorator(options.AccountKeeper),
 		ante.NewConsumeGasForTxSizeDecorator(options.AccountKeeper),
 		ante.NewDeductFeeDecorator(options.AccountKeeper, options.BankKeeper, options.FeegrantKeeper, options.TxFeeChecker),
+
+		// run thorchain-specific msg antes
+		thorchain.NewAnteDecorator(options.THORChainKeeper),
+
 		ante.NewSetPubKeyDecorator(options.AccountKeeper), // SetPubKeyDecorator must be called before all signature verification decorators
 		ante.NewValidateSigCountDecorator(options.AccountKeeper),
 		ante.NewSigGasConsumeDecorator(options.AccountKeeper, options.SigGasConsumer),

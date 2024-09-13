@@ -7,11 +7,7 @@ import (
 	"os"
 	"sort"
 	"sync"
-	abci "github.com/cometbft/cometbft/abci/types"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	dbm "github.com/cosmos/cosmos-db"
-	"github.com/cosmos/gogoproto/proto"
-	"github.com/spf13/cast"
+
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 	reflectionv1 "cosmossdk.io/api/cosmos/reflection/v1"
 	"cosmossdk.io/client/v2/autocli"
@@ -22,6 +18,9 @@ import (
 	"cosmossdk.io/x/upgrade"
 	upgradekeeper "cosmossdk.io/x/upgrade/keeper"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
+	abci "github.com/cometbft/cometbft/abci/types"
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -69,12 +68,18 @@ import (
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/cosmos/gogoproto/proto"
+	"github.com/spf13/cast"
+
+	"gitlab.com/thorchain/thornode/x/thorchain"
+	thorchainkeeper "gitlab.com/thorchain/thornode/x/thorchain/keeper"
+	thorchainkeeperv1 "gitlab.com/thorchain/thornode/x/thorchain/keeper/v1"
+	thorchaintypes "gitlab.com/thorchain/thornode/x/thorchain/types"
 )
 
 const (
 	appName      = "thornode"
 	NodeDir      = ".thornode"
-	Bech32Prefix = "thor"
 )
 
 // These constants are derived from the above variables.
@@ -83,36 +88,31 @@ const (
 var (
 	// DefaultNodeHome default home directories for appd
 	DefaultNodeHome = os.ExpandEnv("$HOME/") + NodeDir
-
-	// // Bech32PrefixAccAddr defines the Bech32 prefix of an account's address
-	// Bech32PrefixAccAddr = Bech32Prefix
-	// // Bech32PrefixAccPub defines the Bech32 prefix of an account's public key
-	// Bech32PrefixAccPub = Bech32Prefix + sdk.PrefixPublic
-	// // Bech32PrefixValAddr defines the Bech32 prefix of a validator's operator address
-	// Bech32PrefixValAddr = Bech32Prefix + sdk.PrefixValidator + sdk.PrefixOperator
-	// // Bech32PrefixValPub defines the Bech32 prefix of a validator's operator public key
-	// Bech32PrefixValPub = Bech32Prefix + sdk.PrefixValidator + sdk.PrefixOperator + sdk.PrefixPublic
-	// // Bech32PrefixConsAddr defines the Bech32 prefix of a consensus node address
-	// Bech32PrefixConsAddr = Bech32Prefix + sdk.PrefixValidator + sdk.PrefixConsensus
-	// // Bech32PrefixConsPub defines the Bech32 prefix of a consensus node public key
-	// Bech32PrefixConsPub = Bech32Prefix + sdk.PrefixValidator + sdk.PrefixConsensus + sdk.PrefixPublic
 )
 
 // module account permissions
 var maccPerms = map[string][]string{
-	authtypes.FeeCollectorName:     nil,
-	minttypes.ModuleName:           {authtypes.Minter},
-	stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
-	stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
+	authtypes.FeeCollectorName:      nil,
+	minttypes.ModuleName:             {authtypes.Minter},
+	stakingtypes.BondedPoolName:      {authtypes.Burner, authtypes.Staking},
+	stakingtypes.NotBondedPoolName:   {authtypes.Burner, authtypes.Staking},
+	thorchain.ModuleName:             {authtypes.Minter, authtypes.Burner},
+	thorchain.AsgardName:             {},
+	thorchain.BondName:               {},
+	thorchain.ReserveName:            {},
+	thorchain.LendingName:            {},
+	thorchain.AffiliateCollectorName: {},
+	thorchain.TreasuryName:           {},
+	thorchain.RUNEPoolName:           {},
 }
 
 var (
-	_ runtime.AppI            = (*ChainApp)(nil)
-	_ servertypes.Application = (*ChainApp)(nil)
+	_ runtime.AppI            = (*THORChainApp)(nil)
+	_ servertypes.Application = (*THORChainApp)(nil)
 )
 
 // ChainApp extended ABCI application
-type ChainApp struct {
+type THORChainApp struct {
 	*baseapp.BaseApp
 	legacyAmino       *codec.LegacyAmino
 	appCodec          codec.Codec
@@ -131,6 +131,9 @@ type ChainApp struct {
 	UpgradeKeeper         *upgradekeeper.Keeper
 	ParamsKeeper          paramskeeper.Keeper
 	ConsensusParamsKeeper consensusparamkeeper.Keeper
+
+	ThorchainKeeper thorchainkeeper.Keeper
+	ThorchainModule thorchain.AppModule
 
 	// the module manager
 	ModuleManager      *module.Manager
@@ -152,7 +155,7 @@ func NewChainApp(
 	loadLatest bool,
 	appOpts servertypes.AppOptions,
 	baseAppOptions ...func(*baseapp.BaseApp),
-) *ChainApp {
+) *THORChainApp {
 	interfaceRegistry, err := types.NewInterfaceRegistryWithOptions(types.InterfaceRegistryOptions{
 		ProtoFiles: proto.HybridResolver,
 		SigningOptions: signing.Options{
@@ -222,6 +225,7 @@ func NewChainApp(
 		consensusparamtypes.StoreKey,
 		upgradetypes.StoreKey,
 		// non sdk store keys
+		thorchaintypes.StoreKey,
 	)
 
 	tkeys := storetypes.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -231,7 +235,7 @@ func NewChainApp(
 		panic(err)
 	}
 
-	app := &ChainApp{
+	app := &THORChainApp{
 		BaseApp:           bApp,
 		legacyAmino:       legacyAmino,
 		appCodec:          appCodec,
@@ -328,24 +332,32 @@ func NewChainApp(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
-	// --- Module Options ---
+	app.ThorchainKeeper = thorchainkeeperv1.NewKeeper(
+		appCodec, app.BankKeeper, app.AccountKeeper, keys[thorchaintypes.StoreKey],
+	)
 
+	// --- Module Options ---
+	telemetryEnabled := cast.ToBool(appOpts.Get("telemetry.enabled"))
+	
 	// NOTE: Any module instantiated in the module manager that is later modified
 	// must be passed by reference here.
+	authModule := auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts, app.GetSubspace(authtypes.ModuleName))
+	bankModule := bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper, app.GetSubspace(banktypes.ModuleName))
+	consensusModule := consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper)
+	genutilModule := genutil.NewAppModule(app.AccountKeeper, app.StakingKeeper, app, txConfig)
+	paramsModule := params.NewAppModule(app.ParamsKeeper)
+	app.ThorchainModule = thorchain.NewAppModule(app.ThorchainKeeper, appCodec, app.BankKeeper, app.AccountKeeper, keys[thorchaintypes.StoreKey], telemetryEnabled)
+	upgradeModule := upgrade.NewAppModule(app.UpgradeKeeper, app.AccountKeeper.AddressCodec())
+	
 	app.ModuleManager = module.NewManager(
-		genutil.NewAppModule(
-			app.AccountKeeper,
-			app.StakingKeeper,
-			app,
-			txConfig,
-		),
-		auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts, app.GetSubspace(authtypes.ModuleName)),
-		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper, app.GetSubspace(banktypes.ModuleName)),
-		upgrade.NewAppModule(app.UpgradeKeeper, app.AccountKeeper.AddressCodec()),
-		params.NewAppModule(app.ParamsKeeper),
-		consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper),
+		genutilModule,
+		authModule,
+		bankModule,
+		upgradeModule,
+		paramsModule,
+		consensusModule,
 		// non sdk modules
-
+		app.ThorchainModule,
 	)
 
 	// BasicModuleManager defines the module BasicManager is in charge of setting up basic,
@@ -353,14 +365,25 @@ func NewChainApp(
 	// By default it is composed of all the module from the module manager.
 	// Additionally, app module basics can be overwritten by passing them as argument.
 	app.BasicModuleManager = module.NewBasicManager(
-		genutil.NewAppModuleBasic(genutiltypes.DefaultMessageValidator),
-		auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts, app.GetSubspace(authtypes.ModuleName)),
-		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper, app.GetSubspace(banktypes.ModuleName)),
+		genutilModule,
+		authModule,
+		bankModule,
+		upgradeModule,
+		paramsModule,
+		consensusModule,
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, nil, app.GetSubspace(minttypes.ModuleName)),
-		upgrade.NewAppModule(app.UpgradeKeeper, app.AccountKeeper.AddressCodec()),
-		params.NewAppModule(app.ParamsKeeper),
-		consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper),	
+		// non sdk modules
+		app.ThorchainModule,	
 	)
+	// app.BasicModuleManager = module.NewBasicManager(
+	// 	auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts, app.GetSubspace(authtypes.ModuleName)),
+	// 	genutil.NewAppModuleBasic(genutiltypes.DefaultMessageValidator),
+	// 	bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper, app.GetSubspace(banktypes.ModuleName)),
+	// 	mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, nil, app.GetSubspace(minttypes.ModuleName)),
+	// 	upgrade.NewAppModule(app.UpgradeKeeper, app.AccountKeeper.AddressCodec()),
+	// 	params.NewAppModule(app.ParamsKeeper),
+	// 	consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper),	
+	// )
 	app.BasicModuleManager.RegisterLegacyAminoCodec(legacyAmino)
 	app.BasicModuleManager.RegisterInterfaces(interfaceRegistry)
 
@@ -375,6 +398,7 @@ func NewChainApp(
 		stakingtypes.ModuleName,
 		genutiltypes.ModuleName,
 		// additional non simd modules
+		thorchaintypes.ModuleName,
 	)
 
 	app.ModuleManager.SetOrderEndBlockers(
@@ -382,6 +406,7 @@ func NewChainApp(
 		stakingtypes.ModuleName,
 		genutiltypes.ModuleName,
 		// additional non simd modules
+		thorchaintypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -396,13 +421,11 @@ func NewChainApp(
 		// simd modules
 		authtypes.ModuleName,
 		banktypes.ModuleName,
-		stakingtypes.ModuleName,
-		govtypes.ModuleName,
-		minttypes.ModuleName,
 		genutiltypes.ModuleName,
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
 		consensusparamtypes.ModuleName,
+		thorchaintypes.ModuleName,
 	}
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
 	app.ModuleManager.SetOrderExportGenesis(genesisModuleOrder...)
@@ -460,6 +483,7 @@ func NewChainApp(
 				SignModeHandler: txConfig.SignModeHandler(),
 				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 			},
+			THORChainKeeper: app.ThorchainKeeper,
 		},
 	)
 	if err != nil {
@@ -507,7 +531,7 @@ func NewChainApp(
 	return app
 }
 
-func (app *ChainApp) FinalizeBlock(req *abci.RequestFinalizeBlock) (*abci.ResponseFinalizeBlock, error) {
+func (app *THORChainApp) FinalizeBlock(req *abci.RequestFinalizeBlock) (*abci.ResponseFinalizeBlock, error) {
 	// when skipping sdk 47 for sdk 50, the upgrade handler is called too late in BaseApp
 	// this is a hack to ensure that the migration is executed when needed and not panics
 	app.once.Do(func() {
@@ -528,7 +552,7 @@ func (app *ChainApp) FinalizeBlock(req *abci.RequestFinalizeBlock) (*abci.Respon
 	return app.BaseApp.FinalizeBlock(req)
 }
 
-func (app *ChainApp) setPostHandler() {
+func (app *THORChainApp) setPostHandler() {
 	postHandler, err := posthandler.NewPostHandler(
 		posthandler.HandlerOptions{},
 	)
@@ -540,10 +564,10 @@ func (app *ChainApp) setPostHandler() {
 }
 
 // Name returns the name of the App
-func (app *ChainApp) Name() string { return app.BaseApp.Name() }
+func (app *THORChainApp) Name() string { return app.BaseApp.Name() }
 
 // PreBlocker application updates every pre block
-func (app *ChainApp) PreBlocker(ctx sdk.Context, req *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
+func (app *THORChainApp) PreBlocker(ctx sdk.Context, req *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
 	if err := app.ThorchainModule.PreBlock(ctx, req); err != nil {
 		return nil, err
 	}
@@ -551,21 +575,21 @@ func (app *ChainApp) PreBlocker(ctx sdk.Context, req *abci.RequestFinalizeBlock)
 }
 
 // BeginBlocker application updates every begin block
-func (app *ChainApp) BeginBlocker(ctx sdk.Context) (sdk.BeginBlock, error) {
+func (app *THORChainApp) BeginBlocker(ctx sdk.Context) (sdk.BeginBlock, error) {
 	return app.ModuleManager.BeginBlock(ctx)
 }
 
 // EndBlocker application updates every end block
-func (app *ChainApp) EndBlocker(ctx sdk.Context) (sdk.EndBlock, error) {
+func (app *THORChainApp) EndBlocker(ctx sdk.Context) (sdk.EndBlock, error) {
 	return app.ModuleManager.EndBlock(ctx)
 }
 
-func (a *ChainApp) Configurator() module.Configurator {
+func (a *THORChainApp) Configurator() module.Configurator {
 	return a.configurator
 }
 
 // InitChainer application update at chain initialization
-func (app *ChainApp) InitChainer(ctx sdk.Context, req *abci.RequestInitChain) (*abci.ResponseInitChain, error) {
+func (app *THORChainApp) InitChainer(ctx sdk.Context, req *abci.RequestInitChain) (*abci.ResponseInitChain, error) {
 	var genesisState GenesisState
 	if err := json.Unmarshal(req.AppStateBytes, &genesisState); err != nil {
 		panic(err)
@@ -579,7 +603,7 @@ func (app *ChainApp) InitChainer(ctx sdk.Context, req *abci.RequestInitChain) (*
 }
 
 // LoadHeight loads a particular height
-func (app *ChainApp) LoadHeight(height int64) error {
+func (app *THORChainApp) LoadHeight(height int64) error {
 	return app.LoadVersion(height)
 }
 
@@ -587,7 +611,7 @@ func (app *ChainApp) LoadHeight(height int64) error {
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
-func (app *ChainApp) LegacyAmino() *codec.LegacyAmino {
+func (app *THORChainApp) LegacyAmino() *codec.LegacyAmino {
 	return app.legacyAmino
 }
 
@@ -595,22 +619,22 @@ func (app *ChainApp) LegacyAmino() *codec.LegacyAmino {
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
-func (app *ChainApp) AppCodec() codec.Codec {
+func (app *THORChainApp) AppCodec() codec.Codec {
 	return app.appCodec
 }
 
 // InterfaceRegistry returns ChainApp's InterfaceRegistry
-func (app *ChainApp) InterfaceRegistry() types.InterfaceRegistry {
+func (app *THORChainApp) InterfaceRegistry() types.InterfaceRegistry {
 	return app.interfaceRegistry
 }
 
 // TxConfig returns ChainApp's TxConfig
-func (app *ChainApp) TxConfig() client.TxConfig {
+func (app *THORChainApp) TxConfig() client.TxConfig {
 	return app.txConfig
 }
 
 // AutoCliOpts returns the autocli options for the app.
-func (app *ChainApp) AutoCliOpts() autocli.AppOptions {
+func (app *THORChainApp) AutoCliOpts() autocli.AppOptions {
 	modules := make(map[string]appmodule.AppModule, 0)
 	for _, m := range app.ModuleManager.Modules {
 		if moduleWithName, ok := m.(module.HasName); ok {
@@ -631,19 +655,19 @@ func (app *ChainApp) AutoCliOpts() autocli.AppOptions {
 }
 
 // DefaultGenesis returns a default genesis from the registered AppModuleBasic's.
-func (a *ChainApp) DefaultGenesis() map[string]json.RawMessage {
+func (a *THORChainApp) DefaultGenesis() map[string]json.RawMessage {
 	return a.BasicModuleManager.DefaultGenesis(a.appCodec)
 }
 
 // GetKey returns the KVStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *ChainApp) GetKey(storeKey string) *storetypes.KVStoreKey {
+func (app *THORChainApp) GetKey(storeKey string) *storetypes.KVStoreKey {
 	return app.keys[storeKey]
 }
 
 // GetStoreKeys returns all the stored store keys.
-func (app *ChainApp) GetStoreKeys() []storetypes.StoreKey {
+func (app *THORChainApp) GetStoreKeys() []storetypes.StoreKey {
 	keys := make([]storetypes.StoreKey, 0, len(app.keys))
 	for _, key := range app.keys {
 		keys = append(keys, key)
@@ -657,26 +681,26 @@ func (app *ChainApp) GetStoreKeys() []storetypes.StoreKey {
 // GetTKey returns the TransientStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *ChainApp) GetTKey(storeKey string) *storetypes.TransientStoreKey {
+func (app *THORChainApp) GetTKey(storeKey string) *storetypes.TransientStoreKey {
 	return app.tkeys[storeKey]
 }
 
 // GetSubspace returns a param subspace for a given module name.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *ChainApp) GetSubspace(moduleName string) paramstypes.Subspace {
+func (app *THORChainApp) GetSubspace(moduleName string) paramstypes.Subspace {
 	subspace, _ := app.ParamsKeeper.GetSubspace(moduleName)
 	return subspace
 }
 
 // SimulationManager implements the SimulationApp interface
-func (app *ChainApp) SimulationManager() *module.SimulationManager {
+func (app *THORChainApp) SimulationManager() *module.SimulationManager {
 	return app.sm
 }
 
 // RegisterAPIRoutes registers all application module routes with the provided
 // API server.
-func (app *ChainApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
+func (app *THORChainApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
 	clientCtx := apiSvr.ClientCtx
 	// Register new tx routes from grpc-gateway.
 	authtx.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
@@ -697,12 +721,12 @@ func (app *ChainApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIC
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.
-func (app *ChainApp) RegisterTxService(clientCtx client.Context) {
+func (app *THORChainApp) RegisterTxService(clientCtx client.Context) {
 	authtx.RegisterTxService(app.BaseApp.GRPCQueryRouter(), clientCtx, app.BaseApp.Simulate, app.interfaceRegistry)
 }
 
 // RegisterTendermintService implements the Application.RegisterTendermintService method.
-func (app *ChainApp) RegisterTendermintService(clientCtx client.Context) {
+func (app *THORChainApp) RegisterTendermintService(clientCtx client.Context) {
 	cmtApp := server.NewCometABCIWrapper(app)
 	cmtservice.RegisterTendermintService(
 		clientCtx,
@@ -712,7 +736,7 @@ func (app *ChainApp) RegisterTendermintService(clientCtx client.Context) {
 	)
 }
 
-func (app *ChainApp) RegisterNodeService(clientCtx client.Context, cfg config.Config) {
+func (app *THORChainApp) RegisterNodeService(clientCtx client.Context, cfg config.Config) {
 	nodeservice.RegisterNodeService(clientCtx, app.GRPCQueryRouter(), cfg)
 }
 

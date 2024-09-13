@@ -47,7 +47,7 @@ func MakeBifrostEncodingConfig() params.EncodingConfig {
 	return makeEncodingConfig(tempApp)
 }
 
-func makeEncodingConfig(tempApp *ChainApp) params.EncodingConfig {
+func makeEncodingConfig(tempApp *THORChainApp) params.EncodingConfig {
 	encodingConfig := params.EncodingConfig{
 		InterfaceRegistry: tempApp.InterfaceRegistry(),
 		Codec:             tempApp.AppCodec(),

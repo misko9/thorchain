@@ -57,7 +57,7 @@ func setup(
 	chainID string,
 	withGenesis bool,
 	invCheckPeriod uint,
-) (*ChainApp, GenesisState) {
+) (*THORChainApp, GenesisState) {
 	db := dbm.NewMemDB()
 	nodeHome := t.TempDir()
 	snapshotDir := filepath.Join(nodeHome, "data", "snapshots")
@@ -87,7 +87,7 @@ func setup(
 }
 
 // NewChainAppWithCustomOptions initializes a new ChainApp with custom options.
-func NewChainAppWithCustomOptions(t *testing.T, isCheckTx bool, options SetupOptions) *ChainApp {
+func NewChainAppWithCustomOptions(t *testing.T, isCheckTx bool, options SetupOptions) *THORChainApp {
 	t.Helper()
 
 	privVal := mock.NewPV()
@@ -136,7 +136,7 @@ func NewChainAppWithCustomOptions(t *testing.T, isCheckTx bool, options SetupOpt
 // Setup initializes a new ChainApp. A Nop logger is set in ChainApp.
 func Setup(
 	t *testing.T,
-) *ChainApp {
+) *THORChainApp {
 	t.Helper()
 
 	privVal := mock.NewPV()
@@ -176,7 +176,7 @@ func SetupWithGenesisValSet(
 	genAccs []authtypes.GenesisAccount,
 	chainID string,
 	balances ...banktypes.Balance,
-) *ChainApp {
+) *THORChainApp {
 	t.Helper()
 
 	app, genesisState := setup(
@@ -212,14 +212,14 @@ func SetupWithGenesisValSet(
 }
 
 // SetupWithEmptyStore set up a chain app instance with empty DB
-func SetupWithEmptyStore(t testing.TB) *ChainApp {
+func SetupWithEmptyStore(t testing.TB) *THORChainApp {
 	app, _ := setup(t, "testing", false, 0)
 	return app
 }
 
 // GenesisStateWithSingleValidator initializes GenesisState with a single validator and genesis accounts
 // that also act as delegators.
-func GenesisStateWithSingleValidator(t *testing.T, app *ChainApp) GenesisState {
+func GenesisStateWithSingleValidator(t *testing.T, app *THORChainApp) GenesisState {
 	t.Helper()
 
 	privVal := mock.NewPV()
@@ -249,11 +249,11 @@ func GenesisStateWithSingleValidator(t *testing.T, app *ChainApp) GenesisState {
 
 // AddTestAddrsIncremental constructs and returns accNum amount of accounts with an
 // initial balance of accAmt in random order
-func AddTestAddrsIncremental(app *ChainApp, ctx sdk.Context, accNum int, accAmt sdkmath.Int) []sdk.AccAddress {
+func AddTestAddrsIncremental(app *THORChainApp, ctx sdk.Context, accNum int, accAmt sdkmath.Int) []sdk.AccAddress {
 	return addTestAddrs(app, ctx, accNum, accAmt, simtestutil.CreateIncrementalAccounts)
 }
 
-func addTestAddrs(app *ChainApp, ctx sdk.Context, accNum int, accAmt sdkmath.Int, strategy simtestutil.GenerateAccountStrategy) []sdk.AccAddress {
+func addTestAddrs(app *THORChainApp, ctx sdk.Context, accNum int, accAmt sdkmath.Int, strategy simtestutil.GenerateAccountStrategy) []sdk.AccAddress {
 	testAddrs := strategy(accNum)
 	bondDenom, err := app.StakingKeeper.BondDenom(ctx)
 	if err != nil {
@@ -269,7 +269,7 @@ func addTestAddrs(app *ChainApp, ctx sdk.Context, accNum int, accAmt sdkmath.Int
 	return testAddrs
 }
 
-func initAccountWithCoins(app *ChainApp, ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) {
+func initAccountWithCoins(app *THORChainApp, ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) {
 	err := app.BankKeeper.MintCoins(ctx, minttypes.ModuleName, coins)
 	if err != nil {
 		panic(err)
