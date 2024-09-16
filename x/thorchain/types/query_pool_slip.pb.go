@@ -67,7 +67,6 @@ func (m *QueryPoolSlipRequest) GetAsset() string {
 	return ""
 }
 
-// Can we replace this with LiquidityProvider proto? Check json fields...
 type QueryPoolSlipResponse struct {
 	Asset        string `protobuf:"bytes,1,opt,name=asset,proto3" json:"asset,omitempty"`
 	PoolSlip     int64  `protobuf:"varint,2,opt,name=pool_slip,json=poolSlip,proto3" json:"pool_slip,omitempty"`

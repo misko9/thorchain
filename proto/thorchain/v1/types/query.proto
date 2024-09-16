@@ -15,6 +15,7 @@ import "types/query_trade_unit.proto";
 import "types/query_trade_account.proto";
 import "types/query_node.proto";
 import "types/query_pool_slip.proto";
+import "types/query_outbound_fee.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -92,5 +93,13 @@ service Query {
 
   rpc PoolSlips(QueryPoolSlipsRequest) returns (QueryPoolSlipsResponse) {
     option (google.api.http).get = "/thorchain/slips";
+  }
+
+  rpc OutboundFee(QueryOutboundFeeRequest) returns (QueryOutboundFeeResponse) {
+    option (google.api.http).get = "/thorchain/outbound_fee/{asset}";
+  }
+
+  rpc OutboundFees(QueryOutboundFeesRequest) returns (QueryOutboundFeesResponse) {
+    option (google.api.http).get = "/thorchain/outbound_fees";
   }
 }

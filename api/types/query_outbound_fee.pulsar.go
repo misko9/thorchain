@@ -14,26 +14,26 @@ import (
 )
 
 var (
-	md_QueryPoolSlipRequest       protoreflect.MessageDescriptor
-	fd_QueryPoolSlipRequest_asset protoreflect.FieldDescriptor
+	md_QueryOutboundFeeRequest       protoreflect.MessageDescriptor
+	fd_QueryOutboundFeeRequest_asset protoreflect.FieldDescriptor
 )
 
 func init() {
-	file_types_query_pool_slip_proto_init()
-	md_QueryPoolSlipRequest = File_types_query_pool_slip_proto.Messages().ByName("QueryPoolSlipRequest")
-	fd_QueryPoolSlipRequest_asset = md_QueryPoolSlipRequest.Fields().ByName("asset")
+	file_types_query_outbound_fee_proto_init()
+	md_QueryOutboundFeeRequest = File_types_query_outbound_fee_proto.Messages().ByName("QueryOutboundFeeRequest")
+	fd_QueryOutboundFeeRequest_asset = md_QueryOutboundFeeRequest.Fields().ByName("asset")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryPoolSlipRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryOutboundFeeRequest)(nil)
 
-type fastReflection_QueryPoolSlipRequest QueryPoolSlipRequest
+type fastReflection_QueryOutboundFeeRequest QueryOutboundFeeRequest
 
-func (x *QueryPoolSlipRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryPoolSlipRequest)(x)
+func (x *QueryOutboundFeeRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryOutboundFeeRequest)(x)
 }
 
-func (x *QueryPoolSlipRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_types_query_pool_slip_proto_msgTypes[0]
+func (x *QueryOutboundFeeRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_types_query_outbound_fee_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -44,43 +44,43 @@ func (x *QueryPoolSlipRequest) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryPoolSlipRequest_messageType fastReflection_QueryPoolSlipRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryPoolSlipRequest_messageType{}
+var _fastReflection_QueryOutboundFeeRequest_messageType fastReflection_QueryOutboundFeeRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryOutboundFeeRequest_messageType{}
 
-type fastReflection_QueryPoolSlipRequest_messageType struct{}
+type fastReflection_QueryOutboundFeeRequest_messageType struct{}
 
-func (x fastReflection_QueryPoolSlipRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryPoolSlipRequest)(nil)
+func (x fastReflection_QueryOutboundFeeRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryOutboundFeeRequest)(nil)
 }
-func (x fastReflection_QueryPoolSlipRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryPoolSlipRequest)
+func (x fastReflection_QueryOutboundFeeRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryOutboundFeeRequest)
 }
-func (x fastReflection_QueryPoolSlipRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryPoolSlipRequest
+func (x fastReflection_QueryOutboundFeeRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOutboundFeeRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryPoolSlipRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryPoolSlipRequest
+func (x *fastReflection_QueryOutboundFeeRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOutboundFeeRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryPoolSlipRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryPoolSlipRequest_messageType
+func (x *fastReflection_QueryOutboundFeeRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryOutboundFeeRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryPoolSlipRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryPoolSlipRequest)
+func (x *fastReflection_QueryOutboundFeeRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryOutboundFeeRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryPoolSlipRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryPoolSlipRequest)(x)
+func (x *fastReflection_QueryOutboundFeeRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryOutboundFeeRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -88,10 +88,10 @@ func (x *fastReflection_QueryPoolSlipRequest) Interface() protoreflect.ProtoMess
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryPoolSlipRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryOutboundFeeRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Asset != "" {
 		value := protoreflect.ValueOfString(x.Asset)
-		if !f(fd_QueryPoolSlipRequest_asset, value) {
+		if !f(fd_QueryOutboundFeeRequest_asset, value) {
 			return
 		}
 	}
@@ -108,15 +108,15 @@ func (x *fastReflection_QueryPoolSlipRequest) Range(f func(protoreflect.FieldDes
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryPoolSlipRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryOutboundFeeRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipRequest.asset":
+	case "types.QueryOutboundFeeRequest.asset":
 		return x.Asset != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeeRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeeRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -126,15 +126,15 @@ func (x *fastReflection_QueryPoolSlipRequest) Has(fd protoreflect.FieldDescripto
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryOutboundFeeRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipRequest.asset":
+	case "types.QueryOutboundFeeRequest.asset":
 		x.Asset = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeeRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeeRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -144,16 +144,16 @@ func (x *fastReflection_QueryPoolSlipRequest) Clear(fd protoreflect.FieldDescrip
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryPoolSlipRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryOutboundFeeRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.QueryPoolSlipRequest.asset":
+	case "types.QueryOutboundFeeRequest.asset":
 		value := x.Asset
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeeRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeeRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -167,15 +167,15 @@ func (x *fastReflection_QueryPoolSlipRequest) Get(descriptor protoreflect.FieldD
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryOutboundFeeRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipRequest.asset":
+	case "types.QueryOutboundFeeRequest.asset":
 		x.Asset = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeeRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeeRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -189,40 +189,40 @@ func (x *fastReflection_QueryPoolSlipRequest) Set(fd protoreflect.FieldDescripto
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryOutboundFeeRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipRequest.asset":
-		panic(fmt.Errorf("field asset of message types.QueryPoolSlipRequest is not mutable"))
+	case "types.QueryOutboundFeeRequest.asset":
+		panic(fmt.Errorf("field asset of message types.QueryOutboundFeeRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeeRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeeRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryPoolSlipRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryOutboundFeeRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipRequest.asset":
+	case "types.QueryOutboundFeeRequest.asset":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeeRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeeRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryPoolSlipRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryOutboundFeeRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in types.QueryPoolSlipRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in types.QueryOutboundFeeRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -230,7 +230,7 @@ func (x *fastReflection_QueryPoolSlipRequest) WhichOneof(d protoreflect.OneofDes
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryPoolSlipRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryOutboundFeeRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -241,7 +241,7 @@ func (x *fastReflection_QueryPoolSlipRequest) GetUnknown() protoreflect.RawField
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryOutboundFeeRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -253,7 +253,7 @@ func (x *fastReflection_QueryPoolSlipRequest) SetUnknown(fields protoreflect.Raw
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryPoolSlipRequest) IsValid() bool {
+func (x *fastReflection_QueryOutboundFeeRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -263,9 +263,9 @@ func (x *fastReflection_QueryPoolSlipRequest) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryPoolSlipRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryOutboundFeeRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryPoolSlipRequest)
+		x := input.Message.Interface().(*QueryOutboundFeeRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -291,7 +291,7 @@ func (x *fastReflection_QueryPoolSlipRequest) ProtoMethods() *protoiface.Methods
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryPoolSlipRequest)
+		x := input.Message.Interface().(*QueryOutboundFeeRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -328,7 +328,7 @@ func (x *fastReflection_QueryPoolSlipRequest) ProtoMethods() *protoiface.Methods
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryPoolSlipRequest)
+		x := input.Message.Interface().(*QueryOutboundFeeRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -360,10 +360,10 @@ func (x *fastReflection_QueryPoolSlipRequest) ProtoMethods() *protoiface.Methods
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolSlipRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOutboundFeeRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolSlipRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOutboundFeeRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -434,36 +434,36 @@ func (x *fastReflection_QueryPoolSlipRequest) ProtoMethods() *protoiface.Methods
 }
 
 var (
-	md_QueryPoolSlipResponse               protoreflect.MessageDescriptor
-	fd_QueryPoolSlipResponse_asset         protoreflect.FieldDescriptor
-	fd_QueryPoolSlipResponse_pool_slip     protoreflect.FieldDescriptor
-	fd_QueryPoolSlipResponse_rollup_count  protoreflect.FieldDescriptor
-	fd_QueryPoolSlipResponse_long_rollup   protoreflect.FieldDescriptor
-	fd_QueryPoolSlipResponse_rollup        protoreflect.FieldDescriptor
-	fd_QueryPoolSlipResponse_summed_rollup protoreflect.FieldDescriptor
+	md_QueryOutboundFeeResponse                                 protoreflect.MessageDescriptor
+	fd_QueryOutboundFeeResponse_asset                           protoreflect.FieldDescriptor
+	fd_QueryOutboundFeeResponse_outbound_fee                    protoreflect.FieldDescriptor
+	fd_QueryOutboundFeeResponse_fee_withheld_rune               protoreflect.FieldDescriptor
+	fd_QueryOutboundFeeResponse_fee_spent_rune                  protoreflect.FieldDescriptor
+	fd_QueryOutboundFeeResponse_surplus_rune                    protoreflect.FieldDescriptor
+	fd_QueryOutboundFeeResponse_dynamic_multiplier_basis_points protoreflect.FieldDescriptor
 )
 
 func init() {
-	file_types_query_pool_slip_proto_init()
-	md_QueryPoolSlipResponse = File_types_query_pool_slip_proto.Messages().ByName("QueryPoolSlipResponse")
-	fd_QueryPoolSlipResponse_asset = md_QueryPoolSlipResponse.Fields().ByName("asset")
-	fd_QueryPoolSlipResponse_pool_slip = md_QueryPoolSlipResponse.Fields().ByName("pool_slip")
-	fd_QueryPoolSlipResponse_rollup_count = md_QueryPoolSlipResponse.Fields().ByName("rollup_count")
-	fd_QueryPoolSlipResponse_long_rollup = md_QueryPoolSlipResponse.Fields().ByName("long_rollup")
-	fd_QueryPoolSlipResponse_rollup = md_QueryPoolSlipResponse.Fields().ByName("rollup")
-	fd_QueryPoolSlipResponse_summed_rollup = md_QueryPoolSlipResponse.Fields().ByName("summed_rollup")
+	file_types_query_outbound_fee_proto_init()
+	md_QueryOutboundFeeResponse = File_types_query_outbound_fee_proto.Messages().ByName("QueryOutboundFeeResponse")
+	fd_QueryOutboundFeeResponse_asset = md_QueryOutboundFeeResponse.Fields().ByName("asset")
+	fd_QueryOutboundFeeResponse_outbound_fee = md_QueryOutboundFeeResponse.Fields().ByName("outbound_fee")
+	fd_QueryOutboundFeeResponse_fee_withheld_rune = md_QueryOutboundFeeResponse.Fields().ByName("fee_withheld_rune")
+	fd_QueryOutboundFeeResponse_fee_spent_rune = md_QueryOutboundFeeResponse.Fields().ByName("fee_spent_rune")
+	fd_QueryOutboundFeeResponse_surplus_rune = md_QueryOutboundFeeResponse.Fields().ByName("surplus_rune")
+	fd_QueryOutboundFeeResponse_dynamic_multiplier_basis_points = md_QueryOutboundFeeResponse.Fields().ByName("dynamic_multiplier_basis_points")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryPoolSlipResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryOutboundFeeResponse)(nil)
 
-type fastReflection_QueryPoolSlipResponse QueryPoolSlipResponse
+type fastReflection_QueryOutboundFeeResponse QueryOutboundFeeResponse
 
-func (x *QueryPoolSlipResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryPoolSlipResponse)(x)
+func (x *QueryOutboundFeeResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryOutboundFeeResponse)(x)
 }
 
-func (x *QueryPoolSlipResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_types_query_pool_slip_proto_msgTypes[1]
+func (x *QueryOutboundFeeResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_types_query_outbound_fee_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -474,43 +474,43 @@ func (x *QueryPoolSlipResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryPoolSlipResponse_messageType fastReflection_QueryPoolSlipResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryPoolSlipResponse_messageType{}
+var _fastReflection_QueryOutboundFeeResponse_messageType fastReflection_QueryOutboundFeeResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryOutboundFeeResponse_messageType{}
 
-type fastReflection_QueryPoolSlipResponse_messageType struct{}
+type fastReflection_QueryOutboundFeeResponse_messageType struct{}
 
-func (x fastReflection_QueryPoolSlipResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryPoolSlipResponse)(nil)
+func (x fastReflection_QueryOutboundFeeResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryOutboundFeeResponse)(nil)
 }
-func (x fastReflection_QueryPoolSlipResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryPoolSlipResponse)
+func (x fastReflection_QueryOutboundFeeResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryOutboundFeeResponse)
 }
-func (x fastReflection_QueryPoolSlipResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryPoolSlipResponse
+func (x fastReflection_QueryOutboundFeeResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOutboundFeeResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryPoolSlipResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryPoolSlipResponse
+func (x *fastReflection_QueryOutboundFeeResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOutboundFeeResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryPoolSlipResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryPoolSlipResponse_messageType
+func (x *fastReflection_QueryOutboundFeeResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryOutboundFeeResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryPoolSlipResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryPoolSlipResponse)
+func (x *fastReflection_QueryOutboundFeeResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryOutboundFeeResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryPoolSlipResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryPoolSlipResponse)(x)
+func (x *fastReflection_QueryOutboundFeeResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryOutboundFeeResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -518,40 +518,40 @@ func (x *fastReflection_QueryPoolSlipResponse) Interface() protoreflect.ProtoMes
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryPoolSlipResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryOutboundFeeResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Asset != "" {
 		value := protoreflect.ValueOfString(x.Asset)
-		if !f(fd_QueryPoolSlipResponse_asset, value) {
+		if !f(fd_QueryOutboundFeeResponse_asset, value) {
 			return
 		}
 	}
-	if x.PoolSlip != int64(0) {
-		value := protoreflect.ValueOfInt64(x.PoolSlip)
-		if !f(fd_QueryPoolSlipResponse_pool_slip, value) {
+	if x.OutboundFee != "" {
+		value := protoreflect.ValueOfString(x.OutboundFee)
+		if !f(fd_QueryOutboundFeeResponse_outbound_fee, value) {
 			return
 		}
 	}
-	if x.RollupCount != int64(0) {
-		value := protoreflect.ValueOfInt64(x.RollupCount)
-		if !f(fd_QueryPoolSlipResponse_rollup_count, value) {
+	if x.FeeWithheldRune != "" {
+		value := protoreflect.ValueOfString(x.FeeWithheldRune)
+		if !f(fd_QueryOutboundFeeResponse_fee_withheld_rune, value) {
 			return
 		}
 	}
-	if x.LongRollup != int64(0) {
-		value := protoreflect.ValueOfInt64(x.LongRollup)
-		if !f(fd_QueryPoolSlipResponse_long_rollup, value) {
+	if x.FeeSpentRune != "" {
+		value := protoreflect.ValueOfString(x.FeeSpentRune)
+		if !f(fd_QueryOutboundFeeResponse_fee_spent_rune, value) {
 			return
 		}
 	}
-	if x.Rollup != int64(0) {
-		value := protoreflect.ValueOfInt64(x.Rollup)
-		if !f(fd_QueryPoolSlipResponse_rollup, value) {
+	if x.SurplusRune != "" {
+		value := protoreflect.ValueOfString(x.SurplusRune)
+		if !f(fd_QueryOutboundFeeResponse_surplus_rune, value) {
 			return
 		}
 	}
-	if x.SummedRollup != int64(0) {
-		value := protoreflect.ValueOfInt64(x.SummedRollup)
-		if !f(fd_QueryPoolSlipResponse_summed_rollup, value) {
+	if x.DynamicMultiplierBasisPoints != "" {
+		value := protoreflect.ValueOfString(x.DynamicMultiplierBasisPoints)
+		if !f(fd_QueryOutboundFeeResponse_dynamic_multiplier_basis_points, value) {
 			return
 		}
 	}
@@ -568,25 +568,25 @@ func (x *fastReflection_QueryPoolSlipResponse) Range(f func(protoreflect.FieldDe
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryPoolSlipResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryOutboundFeeResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipResponse.asset":
+	case "types.QueryOutboundFeeResponse.asset":
 		return x.Asset != ""
-	case "types.QueryPoolSlipResponse.pool_slip":
-		return x.PoolSlip != int64(0)
-	case "types.QueryPoolSlipResponse.rollup_count":
-		return x.RollupCount != int64(0)
-	case "types.QueryPoolSlipResponse.long_rollup":
-		return x.LongRollup != int64(0)
-	case "types.QueryPoolSlipResponse.rollup":
-		return x.Rollup != int64(0)
-	case "types.QueryPoolSlipResponse.summed_rollup":
-		return x.SummedRollup != int64(0)
+	case "types.QueryOutboundFeeResponse.outbound_fee":
+		return x.OutboundFee != ""
+	case "types.QueryOutboundFeeResponse.fee_withheld_rune":
+		return x.FeeWithheldRune != ""
+	case "types.QueryOutboundFeeResponse.fee_spent_rune":
+		return x.FeeSpentRune != ""
+	case "types.QueryOutboundFeeResponse.surplus_rune":
+		return x.SurplusRune != ""
+	case "types.QueryOutboundFeeResponse.dynamic_multiplier_basis_points":
+		return x.DynamicMultiplierBasisPoints != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeeResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeeResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -596,25 +596,25 @@ func (x *fastReflection_QueryPoolSlipResponse) Has(fd protoreflect.FieldDescript
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryOutboundFeeResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipResponse.asset":
+	case "types.QueryOutboundFeeResponse.asset":
 		x.Asset = ""
-	case "types.QueryPoolSlipResponse.pool_slip":
-		x.PoolSlip = int64(0)
-	case "types.QueryPoolSlipResponse.rollup_count":
-		x.RollupCount = int64(0)
-	case "types.QueryPoolSlipResponse.long_rollup":
-		x.LongRollup = int64(0)
-	case "types.QueryPoolSlipResponse.rollup":
-		x.Rollup = int64(0)
-	case "types.QueryPoolSlipResponse.summed_rollup":
-		x.SummedRollup = int64(0)
+	case "types.QueryOutboundFeeResponse.outbound_fee":
+		x.OutboundFee = ""
+	case "types.QueryOutboundFeeResponse.fee_withheld_rune":
+		x.FeeWithheldRune = ""
+	case "types.QueryOutboundFeeResponse.fee_spent_rune":
+		x.FeeSpentRune = ""
+	case "types.QueryOutboundFeeResponse.surplus_rune":
+		x.SurplusRune = ""
+	case "types.QueryOutboundFeeResponse.dynamic_multiplier_basis_points":
+		x.DynamicMultiplierBasisPoints = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeeResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeeResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -624,31 +624,31 @@ func (x *fastReflection_QueryPoolSlipResponse) Clear(fd protoreflect.FieldDescri
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryPoolSlipResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryOutboundFeeResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.QueryPoolSlipResponse.asset":
+	case "types.QueryOutboundFeeResponse.asset":
 		value := x.Asset
 		return protoreflect.ValueOfString(value)
-	case "types.QueryPoolSlipResponse.pool_slip":
-		value := x.PoolSlip
-		return protoreflect.ValueOfInt64(value)
-	case "types.QueryPoolSlipResponse.rollup_count":
-		value := x.RollupCount
-		return protoreflect.ValueOfInt64(value)
-	case "types.QueryPoolSlipResponse.long_rollup":
-		value := x.LongRollup
-		return protoreflect.ValueOfInt64(value)
-	case "types.QueryPoolSlipResponse.rollup":
-		value := x.Rollup
-		return protoreflect.ValueOfInt64(value)
-	case "types.QueryPoolSlipResponse.summed_rollup":
-		value := x.SummedRollup
-		return protoreflect.ValueOfInt64(value)
+	case "types.QueryOutboundFeeResponse.outbound_fee":
+		value := x.OutboundFee
+		return protoreflect.ValueOfString(value)
+	case "types.QueryOutboundFeeResponse.fee_withheld_rune":
+		value := x.FeeWithheldRune
+		return protoreflect.ValueOfString(value)
+	case "types.QueryOutboundFeeResponse.fee_spent_rune":
+		value := x.FeeSpentRune
+		return protoreflect.ValueOfString(value)
+	case "types.QueryOutboundFeeResponse.surplus_rune":
+		value := x.SurplusRune
+		return protoreflect.ValueOfString(value)
+	case "types.QueryOutboundFeeResponse.dynamic_multiplier_basis_points":
+		value := x.DynamicMultiplierBasisPoints
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeeResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeeResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -662,25 +662,25 @@ func (x *fastReflection_QueryPoolSlipResponse) Get(descriptor protoreflect.Field
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryOutboundFeeResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipResponse.asset":
+	case "types.QueryOutboundFeeResponse.asset":
 		x.Asset = value.Interface().(string)
-	case "types.QueryPoolSlipResponse.pool_slip":
-		x.PoolSlip = value.Int()
-	case "types.QueryPoolSlipResponse.rollup_count":
-		x.RollupCount = value.Int()
-	case "types.QueryPoolSlipResponse.long_rollup":
-		x.LongRollup = value.Int()
-	case "types.QueryPoolSlipResponse.rollup":
-		x.Rollup = value.Int()
-	case "types.QueryPoolSlipResponse.summed_rollup":
-		x.SummedRollup = value.Int()
+	case "types.QueryOutboundFeeResponse.outbound_fee":
+		x.OutboundFee = value.Interface().(string)
+	case "types.QueryOutboundFeeResponse.fee_withheld_rune":
+		x.FeeWithheldRune = value.Interface().(string)
+	case "types.QueryOutboundFeeResponse.fee_spent_rune":
+		x.FeeSpentRune = value.Interface().(string)
+	case "types.QueryOutboundFeeResponse.surplus_rune":
+		x.SurplusRune = value.Interface().(string)
+	case "types.QueryOutboundFeeResponse.dynamic_multiplier_basis_points":
+		x.DynamicMultiplierBasisPoints = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeeResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeeResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -694,60 +694,60 @@ func (x *fastReflection_QueryPoolSlipResponse) Set(fd protoreflect.FieldDescript
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryOutboundFeeResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipResponse.asset":
-		panic(fmt.Errorf("field asset of message types.QueryPoolSlipResponse is not mutable"))
-	case "types.QueryPoolSlipResponse.pool_slip":
-		panic(fmt.Errorf("field pool_slip of message types.QueryPoolSlipResponse is not mutable"))
-	case "types.QueryPoolSlipResponse.rollup_count":
-		panic(fmt.Errorf("field rollup_count of message types.QueryPoolSlipResponse is not mutable"))
-	case "types.QueryPoolSlipResponse.long_rollup":
-		panic(fmt.Errorf("field long_rollup of message types.QueryPoolSlipResponse is not mutable"))
-	case "types.QueryPoolSlipResponse.rollup":
-		panic(fmt.Errorf("field rollup of message types.QueryPoolSlipResponse is not mutable"))
-	case "types.QueryPoolSlipResponse.summed_rollup":
-		panic(fmt.Errorf("field summed_rollup of message types.QueryPoolSlipResponse is not mutable"))
+	case "types.QueryOutboundFeeResponse.asset":
+		panic(fmt.Errorf("field asset of message types.QueryOutboundFeeResponse is not mutable"))
+	case "types.QueryOutboundFeeResponse.outbound_fee":
+		panic(fmt.Errorf("field outbound_fee of message types.QueryOutboundFeeResponse is not mutable"))
+	case "types.QueryOutboundFeeResponse.fee_withheld_rune":
+		panic(fmt.Errorf("field fee_withheld_rune of message types.QueryOutboundFeeResponse is not mutable"))
+	case "types.QueryOutboundFeeResponse.fee_spent_rune":
+		panic(fmt.Errorf("field fee_spent_rune of message types.QueryOutboundFeeResponse is not mutable"))
+	case "types.QueryOutboundFeeResponse.surplus_rune":
+		panic(fmt.Errorf("field surplus_rune of message types.QueryOutboundFeeResponse is not mutable"))
+	case "types.QueryOutboundFeeResponse.dynamic_multiplier_basis_points":
+		panic(fmt.Errorf("field dynamic_multiplier_basis_points of message types.QueryOutboundFeeResponse is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeeResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeeResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryPoolSlipResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryOutboundFeeResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipResponse.asset":
+	case "types.QueryOutboundFeeResponse.asset":
 		return protoreflect.ValueOfString("")
-	case "types.QueryPoolSlipResponse.pool_slip":
-		return protoreflect.ValueOfInt64(int64(0))
-	case "types.QueryPoolSlipResponse.rollup_count":
-		return protoreflect.ValueOfInt64(int64(0))
-	case "types.QueryPoolSlipResponse.long_rollup":
-		return protoreflect.ValueOfInt64(int64(0))
-	case "types.QueryPoolSlipResponse.rollup":
-		return protoreflect.ValueOfInt64(int64(0))
-	case "types.QueryPoolSlipResponse.summed_rollup":
-		return protoreflect.ValueOfInt64(int64(0))
+	case "types.QueryOutboundFeeResponse.outbound_fee":
+		return protoreflect.ValueOfString("")
+	case "types.QueryOutboundFeeResponse.fee_withheld_rune":
+		return protoreflect.ValueOfString("")
+	case "types.QueryOutboundFeeResponse.fee_spent_rune":
+		return protoreflect.ValueOfString("")
+	case "types.QueryOutboundFeeResponse.surplus_rune":
+		return protoreflect.ValueOfString("")
+	case "types.QueryOutboundFeeResponse.dynamic_multiplier_basis_points":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeeResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeeResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryPoolSlipResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryOutboundFeeResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in types.QueryPoolSlipResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in types.QueryOutboundFeeResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -755,7 +755,7 @@ func (x *fastReflection_QueryPoolSlipResponse) WhichOneof(d protoreflect.OneofDe
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryPoolSlipResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryOutboundFeeResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -766,7 +766,7 @@ func (x *fastReflection_QueryPoolSlipResponse) GetUnknown() protoreflect.RawFiel
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryOutboundFeeResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -778,7 +778,7 @@ func (x *fastReflection_QueryPoolSlipResponse) SetUnknown(fields protoreflect.Ra
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryPoolSlipResponse) IsValid() bool {
+func (x *fastReflection_QueryOutboundFeeResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -788,9 +788,9 @@ func (x *fastReflection_QueryPoolSlipResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryPoolSlipResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryOutboundFeeResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryPoolSlipResponse)
+		x := input.Message.Interface().(*QueryOutboundFeeResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -806,20 +806,25 @@ func (x *fastReflection_QueryPoolSlipResponse) ProtoMethods() *protoiface.Method
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.PoolSlip != 0 {
-			n += 1 + runtime.Sov(uint64(x.PoolSlip))
+		l = len(x.OutboundFee)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.RollupCount != 0 {
-			n += 1 + runtime.Sov(uint64(x.RollupCount))
+		l = len(x.FeeWithheldRune)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.LongRollup != 0 {
-			n += 1 + runtime.Sov(uint64(x.LongRollup))
+		l = len(x.FeeSpentRune)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.Rollup != 0 {
-			n += 1 + runtime.Sov(uint64(x.Rollup))
+		l = len(x.SurplusRune)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.SummedRollup != 0 {
-			n += 1 + runtime.Sov(uint64(x.SummedRollup))
+		l = len(x.DynamicMultiplierBasisPoints)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -831,7 +836,7 @@ func (x *fastReflection_QueryPoolSlipResponse) ProtoMethods() *protoiface.Method
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryPoolSlipResponse)
+		x := input.Message.Interface().(*QueryOutboundFeeResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -850,30 +855,40 @@ func (x *fastReflection_QueryPoolSlipResponse) ProtoMethods() *protoiface.Method
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.SummedRollup != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.SummedRollup))
+		if len(x.DynamicMultiplierBasisPoints) > 0 {
+			i -= len(x.DynamicMultiplierBasisPoints)
+			copy(dAtA[i:], x.DynamicMultiplierBasisPoints)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DynamicMultiplierBasisPoints)))
 			i--
-			dAtA[i] = 0x30
+			dAtA[i] = 0x32
 		}
-		if x.Rollup != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Rollup))
+		if len(x.SurplusRune) > 0 {
+			i -= len(x.SurplusRune)
+			copy(dAtA[i:], x.SurplusRune)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.SurplusRune)))
 			i--
-			dAtA[i] = 0x28
+			dAtA[i] = 0x2a
 		}
-		if x.LongRollup != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.LongRollup))
+		if len(x.FeeSpentRune) > 0 {
+			i -= len(x.FeeSpentRune)
+			copy(dAtA[i:], x.FeeSpentRune)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.FeeSpentRune)))
 			i--
-			dAtA[i] = 0x20
+			dAtA[i] = 0x22
 		}
-		if x.RollupCount != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.RollupCount))
+		if len(x.FeeWithheldRune) > 0 {
+			i -= len(x.FeeWithheldRune)
+			copy(dAtA[i:], x.FeeWithheldRune)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.FeeWithheldRune)))
 			i--
-			dAtA[i] = 0x18
+			dAtA[i] = 0x1a
 		}
-		if x.PoolSlip != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.PoolSlip))
+		if len(x.OutboundFee) > 0 {
+			i -= len(x.OutboundFee)
+			copy(dAtA[i:], x.OutboundFee)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.OutboundFee)))
 			i--
-			dAtA[i] = 0x10
+			dAtA[i] = 0x12
 		}
 		if len(x.Asset) > 0 {
 			i -= len(x.Asset)
@@ -893,7 +908,7 @@ func (x *fastReflection_QueryPoolSlipResponse) ProtoMethods() *protoiface.Method
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryPoolSlipResponse)
+		x := input.Message.Interface().(*QueryOutboundFeeResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -925,10 +940,10 @@ func (x *fastReflection_QueryPoolSlipResponse) ProtoMethods() *protoiface.Method
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolSlipResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOutboundFeeResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolSlipResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOutboundFeeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -964,10 +979,10 @@ func (x *fastReflection_QueryPoolSlipResponse) ProtoMethods() *protoiface.Method
 				x.Asset = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolSlip", wireType)
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OutboundFee", wireType)
 				}
-				x.PoolSlip = 0
+				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -977,16 +992,29 @@ func (x *fastReflection_QueryPoolSlipResponse) ProtoMethods() *protoiface.Method
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.PoolSlip |= int64(b&0x7F) << shift
+					stringLen |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.OutboundFee = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			case 3:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RollupCount", wireType)
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FeeWithheldRune", wireType)
 				}
-				x.RollupCount = 0
+				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -996,16 +1024,29 @@ func (x *fastReflection_QueryPoolSlipResponse) ProtoMethods() *protoiface.Method
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.RollupCount |= int64(b&0x7F) << shift
+					stringLen |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.FeeWithheldRune = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			case 4:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LongRollup", wireType)
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FeeSpentRune", wireType)
 				}
-				x.LongRollup = 0
+				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1015,16 +1056,29 @@ func (x *fastReflection_QueryPoolSlipResponse) ProtoMethods() *protoiface.Method
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.LongRollup |= int64(b&0x7F) << shift
+					stringLen |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.FeeSpentRune = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			case 5:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Rollup", wireType)
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SurplusRune", wireType)
 				}
-				x.Rollup = 0
+				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1034,16 +1088,29 @@ func (x *fastReflection_QueryPoolSlipResponse) ProtoMethods() *protoiface.Method
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.Rollup |= int64(b&0x7F) << shift
+					stringLen |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.SurplusRune = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			case 6:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SummedRollup", wireType)
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DynamicMultiplierBasisPoints", wireType)
 				}
-				x.SummedRollup = 0
+				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1053,11 +1120,24 @@ func (x *fastReflection_QueryPoolSlipResponse) ProtoMethods() *protoiface.Method
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.SummedRollup |= int64(b&0x7F) << shift
+					stringLen |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DynamicMultiplierBasisPoints = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -1094,24 +1174,24 @@ func (x *fastReflection_QueryPoolSlipResponse) ProtoMethods() *protoiface.Method
 }
 
 var (
-	md_QueryPoolSlipsRequest protoreflect.MessageDescriptor
+	md_QueryOutboundFeesRequest protoreflect.MessageDescriptor
 )
 
 func init() {
-	file_types_query_pool_slip_proto_init()
-	md_QueryPoolSlipsRequest = File_types_query_pool_slip_proto.Messages().ByName("QueryPoolSlipsRequest")
+	file_types_query_outbound_fee_proto_init()
+	md_QueryOutboundFeesRequest = File_types_query_outbound_fee_proto.Messages().ByName("QueryOutboundFeesRequest")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryPoolSlipsRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryOutboundFeesRequest)(nil)
 
-type fastReflection_QueryPoolSlipsRequest QueryPoolSlipsRequest
+type fastReflection_QueryOutboundFeesRequest QueryOutboundFeesRequest
 
-func (x *QueryPoolSlipsRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryPoolSlipsRequest)(x)
+func (x *QueryOutboundFeesRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryOutboundFeesRequest)(x)
 }
 
-func (x *QueryPoolSlipsRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_types_query_pool_slip_proto_msgTypes[2]
+func (x *QueryOutboundFeesRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_types_query_outbound_fee_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1122,43 +1202,43 @@ func (x *QueryPoolSlipsRequest) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryPoolSlipsRequest_messageType fastReflection_QueryPoolSlipsRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryPoolSlipsRequest_messageType{}
+var _fastReflection_QueryOutboundFeesRequest_messageType fastReflection_QueryOutboundFeesRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryOutboundFeesRequest_messageType{}
 
-type fastReflection_QueryPoolSlipsRequest_messageType struct{}
+type fastReflection_QueryOutboundFeesRequest_messageType struct{}
 
-func (x fastReflection_QueryPoolSlipsRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryPoolSlipsRequest)(nil)
+func (x fastReflection_QueryOutboundFeesRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryOutboundFeesRequest)(nil)
 }
-func (x fastReflection_QueryPoolSlipsRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryPoolSlipsRequest)
+func (x fastReflection_QueryOutboundFeesRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryOutboundFeesRequest)
 }
-func (x fastReflection_QueryPoolSlipsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryPoolSlipsRequest
+func (x fastReflection_QueryOutboundFeesRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOutboundFeesRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryPoolSlipsRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryPoolSlipsRequest
+func (x *fastReflection_QueryOutboundFeesRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOutboundFeesRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryPoolSlipsRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryPoolSlipsRequest_messageType
+func (x *fastReflection_QueryOutboundFeesRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryOutboundFeesRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryPoolSlipsRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryPoolSlipsRequest)
+func (x *fastReflection_QueryOutboundFeesRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryOutboundFeesRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryPoolSlipsRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryPoolSlipsRequest)(x)
+func (x *fastReflection_QueryOutboundFeesRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryOutboundFeesRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1166,7 +1246,7 @@ func (x *fastReflection_QueryPoolSlipsRequest) Interface() protoreflect.ProtoMes
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryPoolSlipsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryOutboundFeesRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -1180,13 +1260,13 @@ func (x *fastReflection_QueryPoolSlipsRequest) Range(f func(protoreflect.FieldDe
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryPoolSlipsRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryOutboundFeesRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeesRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeesRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1196,13 +1276,13 @@ func (x *fastReflection_QueryPoolSlipsRequest) Has(fd protoreflect.FieldDescript
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipsRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryOutboundFeesRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeesRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeesRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1212,13 +1292,13 @@ func (x *fastReflection_QueryPoolSlipsRequest) Clear(fd protoreflect.FieldDescri
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryPoolSlipsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryOutboundFeesRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeesRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipsRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeesRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1232,13 +1312,13 @@ func (x *fastReflection_QueryPoolSlipsRequest) Get(descriptor protoreflect.Field
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryOutboundFeesRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeesRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeesRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1252,36 +1332,36 @@ func (x *fastReflection_QueryPoolSlipsRequest) Set(fd protoreflect.FieldDescript
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryOutboundFeesRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeesRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeesRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryPoolSlipsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryOutboundFeesRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeesRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeesRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryPoolSlipsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryOutboundFeesRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in types.QueryPoolSlipsRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in types.QueryOutboundFeesRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1289,7 +1369,7 @@ func (x *fastReflection_QueryPoolSlipsRequest) WhichOneof(d protoreflect.OneofDe
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryPoolSlipsRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryOutboundFeesRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1300,7 +1380,7 @@ func (x *fastReflection_QueryPoolSlipsRequest) GetUnknown() protoreflect.RawFiel
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipsRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryOutboundFeesRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1312,7 +1392,7 @@ func (x *fastReflection_QueryPoolSlipsRequest) SetUnknown(fields protoreflect.Ra
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryPoolSlipsRequest) IsValid() bool {
+func (x *fastReflection_QueryOutboundFeesRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -1322,9 +1402,9 @@ func (x *fastReflection_QueryPoolSlipsRequest) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryPoolSlipsRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryOutboundFeesRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryPoolSlipsRequest)
+		x := input.Message.Interface().(*QueryOutboundFeesRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1346,7 +1426,7 @@ func (x *fastReflection_QueryPoolSlipsRequest) ProtoMethods() *protoiface.Method
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryPoolSlipsRequest)
+		x := input.Message.Interface().(*QueryOutboundFeesRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1376,7 +1456,7 @@ func (x *fastReflection_QueryPoolSlipsRequest) ProtoMethods() *protoiface.Method
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryPoolSlipsRequest)
+		x := input.Message.Interface().(*QueryOutboundFeesRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1408,10 +1488,10 @@ func (x *fastReflection_QueryPoolSlipsRequest) ProtoMethods() *protoiface.Method
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolSlipsRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOutboundFeesRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolSlipsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOutboundFeesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -1449,78 +1529,78 @@ func (x *fastReflection_QueryPoolSlipsRequest) ProtoMethods() *protoiface.Method
 	}
 }
 
-var _ protoreflect.List = (*_QueryPoolSlipsResponse_1_list)(nil)
+var _ protoreflect.List = (*_QueryOutboundFeesResponse_1_list)(nil)
 
-type _QueryPoolSlipsResponse_1_list struct {
-	list *[]*QueryPoolSlipResponse
+type _QueryOutboundFeesResponse_1_list struct {
+	list *[]*QueryOutboundFeeResponse
 }
 
-func (x *_QueryPoolSlipsResponse_1_list) Len() int {
+func (x *_QueryOutboundFeesResponse_1_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_QueryPoolSlipsResponse_1_list) Get(i int) protoreflect.Value {
+func (x *_QueryOutboundFeesResponse_1_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_QueryPoolSlipsResponse_1_list) Set(i int, value protoreflect.Value) {
+func (x *_QueryOutboundFeesResponse_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*QueryPoolSlipResponse)
+	concreteValue := valueUnwrapped.Interface().(*QueryOutboundFeeResponse)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_QueryPoolSlipsResponse_1_list) Append(value protoreflect.Value) {
+func (x *_QueryOutboundFeesResponse_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*QueryPoolSlipResponse)
+	concreteValue := valueUnwrapped.Interface().(*QueryOutboundFeeResponse)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_QueryPoolSlipsResponse_1_list) AppendMutable() protoreflect.Value {
-	v := new(QueryPoolSlipResponse)
+func (x *_QueryOutboundFeesResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(QueryOutboundFeeResponse)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_QueryPoolSlipsResponse_1_list) Truncate(n int) {
+func (x *_QueryOutboundFeesResponse_1_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_QueryPoolSlipsResponse_1_list) NewElement() protoreflect.Value {
-	v := new(QueryPoolSlipResponse)
+func (x *_QueryOutboundFeesResponse_1_list) NewElement() protoreflect.Value {
+	v := new(QueryOutboundFeeResponse)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_QueryPoolSlipsResponse_1_list) IsValid() bool {
+func (x *_QueryOutboundFeesResponse_1_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_QueryPoolSlipsResponse            protoreflect.MessageDescriptor
-	fd_QueryPoolSlipsResponse_pool_slips protoreflect.FieldDescriptor
+	md_QueryOutboundFeesResponse               protoreflect.MessageDescriptor
+	fd_QueryOutboundFeesResponse_outbound_fees protoreflect.FieldDescriptor
 )
 
 func init() {
-	file_types_query_pool_slip_proto_init()
-	md_QueryPoolSlipsResponse = File_types_query_pool_slip_proto.Messages().ByName("QueryPoolSlipsResponse")
-	fd_QueryPoolSlipsResponse_pool_slips = md_QueryPoolSlipsResponse.Fields().ByName("pool_slips")
+	file_types_query_outbound_fee_proto_init()
+	md_QueryOutboundFeesResponse = File_types_query_outbound_fee_proto.Messages().ByName("QueryOutboundFeesResponse")
+	fd_QueryOutboundFeesResponse_outbound_fees = md_QueryOutboundFeesResponse.Fields().ByName("outbound_fees")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryPoolSlipsResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryOutboundFeesResponse)(nil)
 
-type fastReflection_QueryPoolSlipsResponse QueryPoolSlipsResponse
+type fastReflection_QueryOutboundFeesResponse QueryOutboundFeesResponse
 
-func (x *QueryPoolSlipsResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryPoolSlipsResponse)(x)
+func (x *QueryOutboundFeesResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryOutboundFeesResponse)(x)
 }
 
-func (x *QueryPoolSlipsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_types_query_pool_slip_proto_msgTypes[3]
+func (x *QueryOutboundFeesResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_types_query_outbound_fee_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1531,43 +1611,43 @@ func (x *QueryPoolSlipsResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryPoolSlipsResponse_messageType fastReflection_QueryPoolSlipsResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryPoolSlipsResponse_messageType{}
+var _fastReflection_QueryOutboundFeesResponse_messageType fastReflection_QueryOutboundFeesResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryOutboundFeesResponse_messageType{}
 
-type fastReflection_QueryPoolSlipsResponse_messageType struct{}
+type fastReflection_QueryOutboundFeesResponse_messageType struct{}
 
-func (x fastReflection_QueryPoolSlipsResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryPoolSlipsResponse)(nil)
+func (x fastReflection_QueryOutboundFeesResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryOutboundFeesResponse)(nil)
 }
-func (x fastReflection_QueryPoolSlipsResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryPoolSlipsResponse)
+func (x fastReflection_QueryOutboundFeesResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryOutboundFeesResponse)
 }
-func (x fastReflection_QueryPoolSlipsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryPoolSlipsResponse
+func (x fastReflection_QueryOutboundFeesResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOutboundFeesResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryPoolSlipsResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryPoolSlipsResponse
+func (x *fastReflection_QueryOutboundFeesResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOutboundFeesResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryPoolSlipsResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryPoolSlipsResponse_messageType
+func (x *fastReflection_QueryOutboundFeesResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryOutboundFeesResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryPoolSlipsResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryPoolSlipsResponse)
+func (x *fastReflection_QueryOutboundFeesResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryOutboundFeesResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryPoolSlipsResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryPoolSlipsResponse)(x)
+func (x *fastReflection_QueryOutboundFeesResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryOutboundFeesResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1575,10 +1655,10 @@ func (x *fastReflection_QueryPoolSlipsResponse) Interface() protoreflect.ProtoMe
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryPoolSlipsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if len(x.PoolSlips) != 0 {
-		value := protoreflect.ValueOfList(&_QueryPoolSlipsResponse_1_list{list: &x.PoolSlips})
-		if !f(fd_QueryPoolSlipsResponse_pool_slips, value) {
+func (x *fastReflection_QueryOutboundFeesResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.OutboundFees) != 0 {
+		value := protoreflect.ValueOfList(&_QueryOutboundFeesResponse_1_list{list: &x.OutboundFees})
+		if !f(fd_QueryOutboundFeesResponse_outbound_fees, value) {
 			return
 		}
 	}
@@ -1595,15 +1675,15 @@ func (x *fastReflection_QueryPoolSlipsResponse) Range(f func(protoreflect.FieldD
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryPoolSlipsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryOutboundFeesResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipsResponse.pool_slips":
-		return len(x.PoolSlips) != 0
+	case "types.QueryOutboundFeesResponse.outbound_fees":
+		return len(x.OutboundFees) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeesResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeesResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1613,15 +1693,15 @@ func (x *fastReflection_QueryPoolSlipsResponse) Has(fd protoreflect.FieldDescrip
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipsResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryOutboundFeesResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipsResponse.pool_slips":
-		x.PoolSlips = nil
+	case "types.QueryOutboundFeesResponse.outbound_fees":
+		x.OutboundFees = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeesResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeesResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1631,19 +1711,19 @@ func (x *fastReflection_QueryPoolSlipsResponse) Clear(fd protoreflect.FieldDescr
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryPoolSlipsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryOutboundFeesResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.QueryPoolSlipsResponse.pool_slips":
-		if len(x.PoolSlips) == 0 {
-			return protoreflect.ValueOfList(&_QueryPoolSlipsResponse_1_list{})
+	case "types.QueryOutboundFeesResponse.outbound_fees":
+		if len(x.OutboundFees) == 0 {
+			return protoreflect.ValueOfList(&_QueryOutboundFeesResponse_1_list{})
 		}
-		listValue := &_QueryPoolSlipsResponse_1_list{list: &x.PoolSlips}
+		listValue := &_QueryOutboundFeesResponse_1_list{list: &x.OutboundFees}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeesResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipsResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeesResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1657,17 +1737,17 @@ func (x *fastReflection_QueryPoolSlipsResponse) Get(descriptor protoreflect.Fiel
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryOutboundFeesResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipsResponse.pool_slips":
+	case "types.QueryOutboundFeesResponse.outbound_fees":
 		lv := value.List()
-		clv := lv.(*_QueryPoolSlipsResponse_1_list)
-		x.PoolSlips = *clv.list
+		clv := lv.(*_QueryOutboundFeesResponse_1_list)
+		x.OutboundFees = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeesResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeesResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1681,45 +1761,45 @@ func (x *fastReflection_QueryPoolSlipsResponse) Set(fd protoreflect.FieldDescrip
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryOutboundFeesResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipsResponse.pool_slips":
-		if x.PoolSlips == nil {
-			x.PoolSlips = []*QueryPoolSlipResponse{}
+	case "types.QueryOutboundFeesResponse.outbound_fees":
+		if x.OutboundFees == nil {
+			x.OutboundFees = []*QueryOutboundFeeResponse{}
 		}
-		value := &_QueryPoolSlipsResponse_1_list{list: &x.PoolSlips}
+		value := &_QueryOutboundFeesResponse_1_list{list: &x.OutboundFees}
 		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeesResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeesResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryPoolSlipsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryOutboundFeesResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryPoolSlipsResponse.pool_slips":
-		list := []*QueryPoolSlipResponse{}
-		return protoreflect.ValueOfList(&_QueryPoolSlipsResponse_1_list{list: &list})
+	case "types.QueryOutboundFeesResponse.outbound_fees":
+		list := []*QueryOutboundFeeResponse{}
+		return protoreflect.ValueOfList(&_QueryOutboundFeesResponse_1_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryPoolSlipsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryOutboundFeesResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryPoolSlipsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryOutboundFeesResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryPoolSlipsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryOutboundFeesResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in types.QueryPoolSlipsResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in types.QueryOutboundFeesResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1727,7 +1807,7 @@ func (x *fastReflection_QueryPoolSlipsResponse) WhichOneof(d protoreflect.OneofD
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryPoolSlipsResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryOutboundFeesResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1738,7 +1818,7 @@ func (x *fastReflection_QueryPoolSlipsResponse) GetUnknown() protoreflect.RawFie
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryPoolSlipsResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryOutboundFeesResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1750,7 +1830,7 @@ func (x *fastReflection_QueryPoolSlipsResponse) SetUnknown(fields protoreflect.R
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryPoolSlipsResponse) IsValid() bool {
+func (x *fastReflection_QueryOutboundFeesResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -1760,9 +1840,9 @@ func (x *fastReflection_QueryPoolSlipsResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryPoolSlipsResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryOutboundFeesResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryPoolSlipsResponse)
+		x := input.Message.Interface().(*QueryOutboundFeesResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1774,8 +1854,8 @@ func (x *fastReflection_QueryPoolSlipsResponse) ProtoMethods() *protoiface.Metho
 		var n int
 		var l int
 		_ = l
-		if len(x.PoolSlips) > 0 {
-			for _, e := range x.PoolSlips {
+		if len(x.OutboundFees) > 0 {
+			for _, e := range x.OutboundFees {
 				l = options.Size(e)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
@@ -1790,7 +1870,7 @@ func (x *fastReflection_QueryPoolSlipsResponse) ProtoMethods() *protoiface.Metho
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryPoolSlipsResponse)
+		x := input.Message.Interface().(*QueryOutboundFeesResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1809,9 +1889,9 @@ func (x *fastReflection_QueryPoolSlipsResponse) ProtoMethods() *protoiface.Metho
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.PoolSlips) > 0 {
-			for iNdEx := len(x.PoolSlips) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.PoolSlips[iNdEx])
+		if len(x.OutboundFees) > 0 {
+			for iNdEx := len(x.OutboundFees) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.OutboundFees[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1836,7 +1916,7 @@ func (x *fastReflection_QueryPoolSlipsResponse) ProtoMethods() *protoiface.Metho
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryPoolSlipsResponse)
+		x := input.Message.Interface().(*QueryOutboundFeesResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1868,15 +1948,15 @@ func (x *fastReflection_QueryPoolSlipsResponse) ProtoMethods() *protoiface.Metho
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolSlipsResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOutboundFeesResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolSlipsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOutboundFeesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolSlips", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OutboundFees", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -1903,8 +1983,8 @@ func (x *fastReflection_QueryPoolSlipsResponse) ProtoMethods() *protoiface.Metho
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.PoolSlips = append(x.PoolSlips, &QueryPoolSlipResponse{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.PoolSlips[len(x.PoolSlips)-1]); err != nil {
+				x.OutboundFees = append(x.OutboundFees, &QueryOutboundFeeResponse{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.OutboundFees[len(x.OutboundFees)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -1947,7 +2027,7 @@ func (x *fastReflection_QueryPoolSlipsResponse) ProtoMethods() *protoiface.Metho
 // versions:
 // 	protoc-gen-go v1.27.0
 // 	protoc        (unknown)
-// source: types/query_pool_slip.proto
+// source: types/query_outbound_fee.proto
 
 const (
 	// Verify that this generated code is sufficiently up-to-date.
@@ -1956,7 +2036,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type QueryPoolSlipRequest struct {
+type QueryOutboundFeeRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -1964,231 +2044,236 @@ type QueryPoolSlipRequest struct {
 	Asset string `protobuf:"bytes,1,opt,name=asset,proto3" json:"asset,omitempty"`
 }
 
-func (x *QueryPoolSlipRequest) Reset() {
-	*x = QueryPoolSlipRequest{}
+func (x *QueryOutboundFeeRequest) Reset() {
+	*x = QueryOutboundFeeRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_types_query_pool_slip_proto_msgTypes[0]
+		mi := &file_types_query_outbound_fee_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *QueryPoolSlipRequest) String() string {
+func (x *QueryOutboundFeeRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryPoolSlipRequest) ProtoMessage() {}
+func (*QueryOutboundFeeRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryPoolSlipRequest.ProtoReflect.Descriptor instead.
-func (*QueryPoolSlipRequest) Descriptor() ([]byte, []int) {
-	return file_types_query_pool_slip_proto_rawDescGZIP(), []int{0}
+// Deprecated: Use QueryOutboundFeeRequest.ProtoReflect.Descriptor instead.
+func (*QueryOutboundFeeRequest) Descriptor() ([]byte, []int) {
+	return file_types_query_outbound_fee_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *QueryPoolSlipRequest) GetAsset() string {
+func (x *QueryOutboundFeeRequest) GetAsset() string {
 	if x != nil {
 		return x.Asset
 	}
 	return ""
 }
 
-type QueryPoolSlipResponse struct {
+type QueryOutboundFeeResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Asset        string `protobuf:"bytes,1,opt,name=asset,proto3" json:"asset,omitempty"`
-	PoolSlip     int64  `protobuf:"varint,2,opt,name=pool_slip,json=poolSlip,proto3" json:"pool_slip,omitempty"`
-	RollupCount  int64  `protobuf:"varint,3,opt,name=rollup_count,json=rollupCount,proto3" json:"rollup_count,omitempty"`
-	LongRollup   int64  `protobuf:"varint,4,opt,name=long_rollup,json=longRollup,proto3" json:"long_rollup,omitempty"`
-	Rollup       int64  `protobuf:"varint,5,opt,name=rollup,proto3" json:"rollup,omitempty"`
-	SummedRollup int64  `protobuf:"varint,6,opt,name=summed_rollup,json=summedRollup,proto3" json:"summed_rollup,omitempty"`
+	Asset                        string `protobuf:"bytes,1,opt,name=asset,proto3" json:"asset,omitempty"`
+	OutboundFee                  string `protobuf:"bytes,2,opt,name=outbound_fee,json=outboundFee,proto3" json:"outbound_fee,omitempty"`
+	FeeWithheldRune              string `protobuf:"bytes,3,opt,name=fee_withheld_rune,json=feeWithheldRune,proto3" json:"fee_withheld_rune,omitempty"`
+	FeeSpentRune                 string `protobuf:"bytes,4,opt,name=fee_spent_rune,json=feeSpentRune,proto3" json:"fee_spent_rune,omitempty"`
+	SurplusRune                  string `protobuf:"bytes,5,opt,name=surplus_rune,json=surplusRune,proto3" json:"surplus_rune,omitempty"`
+	DynamicMultiplierBasisPoints string `protobuf:"bytes,6,opt,name=dynamic_multiplier_basis_points,json=dynamicMultiplierBasisPoints,proto3" json:"dynamic_multiplier_basis_points,omitempty"`
 }
 
-func (x *QueryPoolSlipResponse) Reset() {
-	*x = QueryPoolSlipResponse{}
+func (x *QueryOutboundFeeResponse) Reset() {
+	*x = QueryOutboundFeeResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_types_query_pool_slip_proto_msgTypes[1]
+		mi := &file_types_query_outbound_fee_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *QueryPoolSlipResponse) String() string {
+func (x *QueryOutboundFeeResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryPoolSlipResponse) ProtoMessage() {}
+func (*QueryOutboundFeeResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryPoolSlipResponse.ProtoReflect.Descriptor instead.
-func (*QueryPoolSlipResponse) Descriptor() ([]byte, []int) {
-	return file_types_query_pool_slip_proto_rawDescGZIP(), []int{1}
+// Deprecated: Use QueryOutboundFeeResponse.ProtoReflect.Descriptor instead.
+func (*QueryOutboundFeeResponse) Descriptor() ([]byte, []int) {
+	return file_types_query_outbound_fee_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *QueryPoolSlipResponse) GetAsset() string {
+func (x *QueryOutboundFeeResponse) GetAsset() string {
 	if x != nil {
 		return x.Asset
 	}
 	return ""
 }
 
-func (x *QueryPoolSlipResponse) GetPoolSlip() int64 {
+func (x *QueryOutboundFeeResponse) GetOutboundFee() string {
 	if x != nil {
-		return x.PoolSlip
+		return x.OutboundFee
 	}
-	return 0
+	return ""
 }
 
-func (x *QueryPoolSlipResponse) GetRollupCount() int64 {
+func (x *QueryOutboundFeeResponse) GetFeeWithheldRune() string {
 	if x != nil {
-		return x.RollupCount
+		return x.FeeWithheldRune
 	}
-	return 0
+	return ""
 }
 
-func (x *QueryPoolSlipResponse) GetLongRollup() int64 {
+func (x *QueryOutboundFeeResponse) GetFeeSpentRune() string {
 	if x != nil {
-		return x.LongRollup
+		return x.FeeSpentRune
 	}
-	return 0
+	return ""
 }
 
-func (x *QueryPoolSlipResponse) GetRollup() int64 {
+func (x *QueryOutboundFeeResponse) GetSurplusRune() string {
 	if x != nil {
-		return x.Rollup
+		return x.SurplusRune
 	}
-	return 0
+	return ""
 }
 
-func (x *QueryPoolSlipResponse) GetSummedRollup() int64 {
+func (x *QueryOutboundFeeResponse) GetDynamicMultiplierBasisPoints() string {
 	if x != nil {
-		return x.SummedRollup
+		return x.DynamicMultiplierBasisPoints
 	}
-	return 0
+	return ""
 }
 
-type QueryPoolSlipsRequest struct {
+type QueryOutboundFeesRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *QueryPoolSlipsRequest) Reset() {
-	*x = QueryPoolSlipsRequest{}
+func (x *QueryOutboundFeesRequest) Reset() {
+	*x = QueryOutboundFeesRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_types_query_pool_slip_proto_msgTypes[2]
+		mi := &file_types_query_outbound_fee_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *QueryPoolSlipsRequest) String() string {
+func (x *QueryOutboundFeesRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryPoolSlipsRequest) ProtoMessage() {}
+func (*QueryOutboundFeesRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryPoolSlipsRequest.ProtoReflect.Descriptor instead.
-func (*QueryPoolSlipsRequest) Descriptor() ([]byte, []int) {
-	return file_types_query_pool_slip_proto_rawDescGZIP(), []int{2}
+// Deprecated: Use QueryOutboundFeesRequest.ProtoReflect.Descriptor instead.
+func (*QueryOutboundFeesRequest) Descriptor() ([]byte, []int) {
+	return file_types_query_outbound_fee_proto_rawDescGZIP(), []int{2}
 }
 
-type QueryPoolSlipsResponse struct {
+type QueryOutboundFeesResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PoolSlips []*QueryPoolSlipResponse `protobuf:"bytes,1,rep,name=pool_slips,json=poolSlips,proto3" json:"pool_slips,omitempty"`
+	OutboundFees []*QueryOutboundFeeResponse `protobuf:"bytes,1,rep,name=outbound_fees,json=outboundFees,proto3" json:"outbound_fees,omitempty"`
 }
 
-func (x *QueryPoolSlipsResponse) Reset() {
-	*x = QueryPoolSlipsResponse{}
+func (x *QueryOutboundFeesResponse) Reset() {
+	*x = QueryOutboundFeesResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_types_query_pool_slip_proto_msgTypes[3]
+		mi := &file_types_query_outbound_fee_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *QueryPoolSlipsResponse) String() string {
+func (x *QueryOutboundFeesResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryPoolSlipsResponse) ProtoMessage() {}
+func (*QueryOutboundFeesResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryPoolSlipsResponse.ProtoReflect.Descriptor instead.
-func (*QueryPoolSlipsResponse) Descriptor() ([]byte, []int) {
-	return file_types_query_pool_slip_proto_rawDescGZIP(), []int{3}
+// Deprecated: Use QueryOutboundFeesResponse.ProtoReflect.Descriptor instead.
+func (*QueryOutboundFeesResponse) Descriptor() ([]byte, []int) {
+	return file_types_query_outbound_fee_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *QueryPoolSlipsResponse) GetPoolSlips() []*QueryPoolSlipResponse {
+func (x *QueryOutboundFeesResponse) GetOutboundFees() []*QueryOutboundFeeResponse {
 	if x != nil {
-		return x.PoolSlips
+		return x.OutboundFees
 	}
 	return nil
 }
 
-var File_types_query_pool_slip_proto protoreflect.FileDescriptor
+var File_types_query_outbound_fee_proto protoreflect.FileDescriptor
 
-var file_types_query_pool_slip_proto_rawDesc = []byte{
-	0x0a, 0x1b, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2f, 0x71, 0x75, 0x65, 0x72, 0x79, 0x5f, 0x70, 0x6f,
-	0x6f, 0x6c, 0x5f, 0x73, 0x6c, 0x69, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x05, 0x74,
-	0x79, 0x70, 0x65, 0x73, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f,
-	0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x2c, 0x0a, 0x14, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x6c, 0x69, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x61, 0x73, 0x73, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x05, 0x61, 0x73, 0x73, 0x65, 0x74, 0x22, 0xd1, 0x01, 0x0a, 0x15, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x6c, 0x69, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x61, 0x73, 0x73, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x05, 0x61, 0x73, 0x73, 0x65, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x70, 0x6f, 0x6f, 0x6c,
-	0x5f, 0x73, 0x6c, 0x69, 0x70, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x70, 0x6f, 0x6f,
-	0x6c, 0x53, 0x6c, 0x69, 0x70, 0x12, 0x21, 0x0a, 0x0c, 0x72, 0x6f, 0x6c, 0x6c, 0x75, 0x70, 0x5f,
-	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0b, 0x72, 0x6f, 0x6c,
-	0x6c, 0x75, 0x70, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x6c, 0x6f, 0x6e, 0x67,
-	0x5f, 0x72, 0x6f, 0x6c, 0x6c, 0x75, 0x70, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x6c,
-	0x6f, 0x6e, 0x67, 0x52, 0x6f, 0x6c, 0x6c, 0x75, 0x70, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x6f, 0x6c,
-	0x6c, 0x75, 0x70, 0x18, 0x05, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x72, 0x6f, 0x6c, 0x6c, 0x75,
-	0x70, 0x12, 0x29, 0x0a, 0x0d, 0x73, 0x75, 0x6d, 0x6d, 0x65, 0x64, 0x5f, 0x72, 0x6f, 0x6c, 0x6c,
-	0x75, 0x70, 0x18, 0x06, 0x20, 0x01, 0x28, 0x03, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x01, 0x52, 0x0c,
-	0x73, 0x75, 0x6d, 0x6d, 0x65, 0x64, 0x52, 0x6f, 0x6c, 0x6c, 0x75, 0x70, 0x22, 0x17, 0x0a, 0x15,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x6c, 0x69, 0x70, 0x73, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x55, 0x0a, 0x16, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f,
-	0x6f, 0x6c, 0x53, 0x6c, 0x69, 0x70, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x3b, 0x0a, 0x0a, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x73, 0x6c, 0x69, 0x70, 0x73, 0x18, 0x01, 0x20,
-	0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x6c, 0x69, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x52, 0x09, 0x70, 0x6f, 0x6f, 0x6c, 0x53, 0x6c, 0x69, 0x70, 0x73, 0x42, 0x80, 0x01, 0x0a,
-	0x09, 0x63, 0x6f, 0x6d, 0x2e, 0x74, 0x79, 0x70, 0x65, 0x73, 0x42, 0x12, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x6c, 0x69, 0x70, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01,
-	0x5a, 0x27, 0x67, 0x69, 0x74, 0x6c, 0x61, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x74, 0x68, 0x6f,
-	0x72, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x74, 0x68, 0x6f, 0x72, 0x6e, 0x6f, 0x64, 0x65, 0x2f,
-	0x61, 0x70, 0x69, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0xa2, 0x02, 0x03, 0x54, 0x58, 0x58, 0xaa,
-	0x02, 0x05, 0x54, 0x79, 0x70, 0x65, 0x73, 0xca, 0x02, 0x05, 0x54, 0x79, 0x70, 0x65, 0x73, 0xe2,
-	0x02, 0x11, 0x54, 0x79, 0x70, 0x65, 0x73, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64,
-	0x61, 0x74, 0x61, 0xea, 0x02, 0x05, 0x54, 0x79, 0x70, 0x65, 0x73, 0xc8, 0xe2, 0x1e, 0x01, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+var file_types_query_outbound_fee_proto_rawDesc = []byte{
+	0x0a, 0x1e, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2f, 0x71, 0x75, 0x65, 0x72, 0x79, 0x5f, 0x6f, 0x75,
+	0x74, 0x62, 0x6f, 0x75, 0x6e, 0x64, 0x5f, 0x66, 0x65, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x12, 0x05, 0x74, 0x79, 0x70, 0x65, 0x73, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x2f, 0x0a,
+	0x17, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x75, 0x74, 0x62, 0x6f, 0x75, 0x6e, 0x64, 0x46, 0x65,
+	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x61, 0x73, 0x73, 0x65,
+	0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x61, 0x73, 0x73, 0x65, 0x74, 0x22, 0x8f,
+	0x02, 0x0a, 0x18, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x75, 0x74, 0x62, 0x6f, 0x75, 0x6e, 0x64,
+	0x46, 0x65, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x61,
+	0x73, 0x73, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x61, 0x73, 0x73, 0x65,
+	0x74, 0x12, 0x21, 0x0a, 0x0c, 0x6f, 0x75, 0x74, 0x62, 0x6f, 0x75, 0x6e, 0x64, 0x5f, 0x66, 0x65,
+	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x6f, 0x75, 0x74, 0x62, 0x6f, 0x75, 0x6e,
+	0x64, 0x46, 0x65, 0x65, 0x12, 0x2a, 0x0a, 0x11, 0x66, 0x65, 0x65, 0x5f, 0x77, 0x69, 0x74, 0x68,
+	0x68, 0x65, 0x6c, 0x64, 0x5f, 0x72, 0x75, 0x6e, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0f, 0x66, 0x65, 0x65, 0x57, 0x69, 0x74, 0x68, 0x68, 0x65, 0x6c, 0x64, 0x52, 0x75, 0x6e, 0x65,
+	0x12, 0x24, 0x0a, 0x0e, 0x66, 0x65, 0x65, 0x5f, 0x73, 0x70, 0x65, 0x6e, 0x74, 0x5f, 0x72, 0x75,
+	0x6e, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x66, 0x65, 0x65, 0x53, 0x70, 0x65,
+	0x6e, 0x74, 0x52, 0x75, 0x6e, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x73, 0x75, 0x72, 0x70, 0x6c, 0x75,
+	0x73, 0x5f, 0x72, 0x75, 0x6e, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x73, 0x75,
+	0x72, 0x70, 0x6c, 0x75, 0x73, 0x52, 0x75, 0x6e, 0x65, 0x12, 0x45, 0x0a, 0x1f, 0x64, 0x79, 0x6e,
+	0x61, 0x6d, 0x69, 0x63, 0x5f, 0x6d, 0x75, 0x6c, 0x74, 0x69, 0x70, 0x6c, 0x69, 0x65, 0x72, 0x5f,
+	0x62, 0x61, 0x73, 0x69, 0x73, 0x5f, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x73, 0x18, 0x06, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x1c, 0x64, 0x79, 0x6e, 0x61, 0x6d, 0x69, 0x63, 0x4d, 0x75, 0x6c, 0x74, 0x69,
+	0x70, 0x6c, 0x69, 0x65, 0x72, 0x42, 0x61, 0x73, 0x69, 0x73, 0x50, 0x6f, 0x69, 0x6e, 0x74, 0x73,
+	0x22, 0x1a, 0x0a, 0x18, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x75, 0x74, 0x62, 0x6f, 0x75, 0x6e,
+	0x64, 0x46, 0x65, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x61, 0x0a, 0x19,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x75, 0x74, 0x62, 0x6f, 0x75, 0x6e, 0x64, 0x46, 0x65, 0x65,
+	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x44, 0x0a, 0x0d, 0x6f, 0x75, 0x74,
+	0x62, 0x6f, 0x75, 0x6e, 0x64, 0x5f, 0x66, 0x65, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x1f, 0x2e, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x75,
+	0x74, 0x62, 0x6f, 0x75, 0x6e, 0x64, 0x46, 0x65, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x52, 0x0c, 0x6f, 0x75, 0x74, 0x62, 0x6f, 0x75, 0x6e, 0x64, 0x46, 0x65, 0x65, 0x73, 0x42,
+	0x83, 0x01, 0x0a, 0x09, 0x63, 0x6f, 0x6d, 0x2e, 0x74, 0x79, 0x70, 0x65, 0x73, 0x42, 0x15, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x4f, 0x75, 0x74, 0x62, 0x6f, 0x75, 0x6e, 0x64, 0x46, 0x65, 0x65, 0x50,
+	0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x27, 0x67, 0x69, 0x74, 0x6c, 0x61, 0x62, 0x2e, 0x63,
+	0x6f, 0x6d, 0x2f, 0x74, 0x68, 0x6f, 0x72, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x74, 0x68, 0x6f,
+	0x72, 0x6e, 0x6f, 0x64, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0xa2,
+	0x02, 0x03, 0x54, 0x58, 0x58, 0xaa, 0x02, 0x05, 0x54, 0x79, 0x70, 0x65, 0x73, 0xca, 0x02, 0x05,
+	0x54, 0x79, 0x70, 0x65, 0x73, 0xe2, 0x02, 0x11, 0x54, 0x79, 0x70, 0x65, 0x73, 0x5c, 0x47, 0x50,
+	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x05, 0x54, 0x79, 0x70, 0x65,
+	0x73, 0xc8, 0xe2, 0x1e, 0x01, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_types_query_pool_slip_proto_rawDescOnce sync.Once
-	file_types_query_pool_slip_proto_rawDescData = file_types_query_pool_slip_proto_rawDesc
+	file_types_query_outbound_fee_proto_rawDescOnce sync.Once
+	file_types_query_outbound_fee_proto_rawDescData = file_types_query_outbound_fee_proto_rawDesc
 )
 
-func file_types_query_pool_slip_proto_rawDescGZIP() []byte {
-	file_types_query_pool_slip_proto_rawDescOnce.Do(func() {
-		file_types_query_pool_slip_proto_rawDescData = protoimpl.X.CompressGZIP(file_types_query_pool_slip_proto_rawDescData)
+func file_types_query_outbound_fee_proto_rawDescGZIP() []byte {
+	file_types_query_outbound_fee_proto_rawDescOnce.Do(func() {
+		file_types_query_outbound_fee_proto_rawDescData = protoimpl.X.CompressGZIP(file_types_query_outbound_fee_proto_rawDescData)
 	})
-	return file_types_query_pool_slip_proto_rawDescData
+	return file_types_query_outbound_fee_proto_rawDescData
 }
 
-var file_types_query_pool_slip_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_types_query_pool_slip_proto_goTypes = []interface{}{
-	(*QueryPoolSlipRequest)(nil),   // 0: types.QueryPoolSlipRequest
-	(*QueryPoolSlipResponse)(nil),  // 1: types.QueryPoolSlipResponse
-	(*QueryPoolSlipsRequest)(nil),  // 2: types.QueryPoolSlipsRequest
-	(*QueryPoolSlipsResponse)(nil), // 3: types.QueryPoolSlipsResponse
+var file_types_query_outbound_fee_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_types_query_outbound_fee_proto_goTypes = []interface{}{
+	(*QueryOutboundFeeRequest)(nil),   // 0: types.QueryOutboundFeeRequest
+	(*QueryOutboundFeeResponse)(nil),  // 1: types.QueryOutboundFeeResponse
+	(*QueryOutboundFeesRequest)(nil),  // 2: types.QueryOutboundFeesRequest
+	(*QueryOutboundFeesResponse)(nil), // 3: types.QueryOutboundFeesResponse
 }
-var file_types_query_pool_slip_proto_depIdxs = []int32{
-	1, // 0: types.QueryPoolSlipsResponse.pool_slips:type_name -> types.QueryPoolSlipResponse
+var file_types_query_outbound_fee_proto_depIdxs = []int32{
+	1, // 0: types.QueryOutboundFeesResponse.outbound_fees:type_name -> types.QueryOutboundFeeResponse
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -2196,14 +2281,14 @@ var file_types_query_pool_slip_proto_depIdxs = []int32{
 	0, // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_types_query_pool_slip_proto_init() }
-func file_types_query_pool_slip_proto_init() {
-	if File_types_query_pool_slip_proto != nil {
+func init() { file_types_query_outbound_fee_proto_init() }
+func file_types_query_outbound_fee_proto_init() {
+	if File_types_query_outbound_fee_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_types_query_pool_slip_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryPoolSlipRequest); i {
+		file_types_query_outbound_fee_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryOutboundFeeRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2214,8 +2299,8 @@ func file_types_query_pool_slip_proto_init() {
 				return nil
 			}
 		}
-		file_types_query_pool_slip_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryPoolSlipResponse); i {
+		file_types_query_outbound_fee_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryOutboundFeeResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2226,8 +2311,8 @@ func file_types_query_pool_slip_proto_init() {
 				return nil
 			}
 		}
-		file_types_query_pool_slip_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryPoolSlipsRequest); i {
+		file_types_query_outbound_fee_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryOutboundFeesRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2238,8 +2323,8 @@ func file_types_query_pool_slip_proto_init() {
 				return nil
 			}
 		}
-		file_types_query_pool_slip_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryPoolSlipsResponse); i {
+		file_types_query_outbound_fee_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryOutboundFeesResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2255,18 +2340,18 @@ func file_types_query_pool_slip_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_types_query_pool_slip_proto_rawDesc,
+			RawDescriptor: file_types_query_outbound_fee_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_types_query_pool_slip_proto_goTypes,
-		DependencyIndexes: file_types_query_pool_slip_proto_depIdxs,
-		MessageInfos:      file_types_query_pool_slip_proto_msgTypes,
+		GoTypes:           file_types_query_outbound_fee_proto_goTypes,
+		DependencyIndexes: file_types_query_outbound_fee_proto_depIdxs,
+		MessageInfos:      file_types_query_outbound_fee_proto_msgTypes,
 	}.Build()
-	File_types_query_pool_slip_proto = out.File
-	file_types_query_pool_slip_proto_rawDesc = nil
-	file_types_query_pool_slip_proto_goTypes = nil
-	file_types_query_pool_slip_proto_depIdxs = nil
+	File_types_query_outbound_fee_proto = out.File
+	file_types_query_outbound_fee_proto_rawDesc = nil
+	file_types_query_outbound_fee_proto_goTypes = nil
+	file_types_query_outbound_fee_proto_depIdxs = nil
 }

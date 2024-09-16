@@ -33,8 +33,6 @@ func (q Query) Path(args ...string) string {
 
 // query endpoints supported by the thorchain Querier
 var (
-	QueryPoolSlip            = Query{Key: "poolslip", EndpointTemplate: "/%s/slip/{%s}"}
-	QueryPoolSlips           = Query{Key: "poolslips", EndpointTemplate: "/%s/slips"}
 	QueryTx                  = Query{Key: "tx", EndpointTemplate: "/%s/tx/{%s}"}
 	QueryTxVoterOld          = Query{Key: "txvoterold", EndpointTemplate: "/%s/tx/{%s}/signers"}
 	QueryTxVoter             = Query{Key: "txvoter", EndpointTemplate: "/%s/tx/details/{%s}"}
@@ -61,8 +59,6 @@ var (
 	QueryMimirNodesValues    = Query{Key: "nodesmimirs", EndpointTemplate: "/%s/mimir/nodes"}
 	QueryMimirNodesAllValues = Query{Key: "nodesmimirsall", EndpointTemplate: "/%s/mimir/nodes_all"}
 	QueryMimirNodeValues     = Query{Key: "nodemimirs", EndpointTemplate: "/%s/mimir/node/{%s}"}
-	QueryOutboundFees        = Query{Key: "outboundfees", EndpointTemplate: "/%s/outbound_fees"}
-	QueryOutboundFee         = Query{Key: "outboundfee", EndpointTemplate: "/%s/outbound_fee/{%s}"}
 	QueryBan                 = Query{Key: "ban", EndpointTemplate: "/%s/ban/{%s}"}
 	QueryRagnarok            = Query{Key: "ragnarok", EndpointTemplate: "/%s/ragnarok"}
 	QueryRUNEPool            = Query{Key: "runepool", EndpointTemplate: "/%s/runepool"}
@@ -92,8 +88,6 @@ var (
 
 // Queries all queries
 var Queries = []Query{
-	QueryPoolSlip,
-	QueryPoolSlips,
 	QueryTxStages,
 	QueryTxStatus,
 	QueryTxVoter,
@@ -120,8 +114,6 @@ var Queries = []Query{
 	QueryMimirNodesAllValues,
 	QueryMimirNodesValues,
 	QueryMimirNodeValues,
-	QueryOutboundFees,
-	QueryOutboundFee,
 	QueryBan,
 	QueryRagnarok,
 	QueryRUNEPool,

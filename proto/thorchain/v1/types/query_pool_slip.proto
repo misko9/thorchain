@@ -11,7 +11,6 @@ message QueryPoolSlipRequest{
   string asset = 1;
 }
 
-// Can we replace this with LiquidityProvider proto? Check json fields...
 message QueryPoolSlipResponse{
   string asset = 1;
   int64  pool_slip = 2;

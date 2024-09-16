@@ -1,0 +1,27 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryOutboundFeeRequest{
+  string asset = 1;
+}
+
+message QueryOutboundFeeResponse{
+  string asset = 1;
+  string outbound_fee = 2;
+  string fee_withheld_rune = 3;
+  string fee_spent_rune = 4;
+  string surplus_rune = 5;
+  string dynamic_multiplier_basis_points = 6;
+}
+
+message QueryOutboundFeesRequest{}
+
+message QueryOutboundFeesResponse{
+  repeated QueryOutboundFeeResponse outbound_fees = 1;
+}

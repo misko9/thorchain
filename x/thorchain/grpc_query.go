@@ -107,3 +107,13 @@ func (s queryServer) PoolSlips(c context.Context, req *types.QueryPoolSlipsReque
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryPoolSlips(ctx, req)
 }
+
+func (s queryServer) OutboundFee(c context.Context, req *types.QueryOutboundFeeRequest) (*types.QueryOutboundFeesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryOutboundFees(ctx, req.Asset)
+}
+
+func (s queryServer) OutboundFees(c context.Context, req *types.QueryOutboundFeesRequest) (*types.QueryOutboundFeesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryOutboundFees(ctx, "")
+}
