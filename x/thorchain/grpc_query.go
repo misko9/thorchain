@@ -9,12 +9,12 @@ import (
 )
 
 type queryServer struct {
-	mgr Manager
+	mgr *Mgrs
 }
 
 var _ types.QueryServer = queryServer{}
 
-func NewQueryServerImpl(mgr Manager) types.QueryServer {
+func NewQueryServerImpl(mgr *Mgrs) types.QueryServer {
 	return queryServer{mgr: mgr}
 }
 
@@ -86,4 +86,24 @@ func (s queryServer) TradeAccount(c context.Context, req *types.QueryTradeAccoun
 func (s queryServer) TradeAccounts(c context.Context, req *types.QueryTradeAccountsRequest) (*types.QueryTradeAccountsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryTradeAccounts(ctx, req)
+}
+
+func (s queryServer) Node(c context.Context, req *types.QueryNodeRequest) (*types.QueryNodeResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryNode(ctx, req)
+}
+
+func (s queryServer) Nodes(c context.Context, req *types.QueryNodesRequest) (*types.QueryNodesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryNodes(ctx, req)
+}
+
+func (s queryServer) PoolSlip(c context.Context, req *types.QueryPoolSlipRequest) (*types.QueryPoolSlipsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryPoolSlip(ctx, req)
+}
+
+func (s queryServer) PoolSlips(c context.Context, req *types.QueryPoolSlipsRequest) (*types.QueryPoolSlipsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryPoolSlips(ctx, req)
 }

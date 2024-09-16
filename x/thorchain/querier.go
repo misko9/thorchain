@@ -74,22 +74,21 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 			return queryTxVoters(ctx, path[1:], req, mgr)
 		case q.QueryTx.Key:
 			return queryTx(ctx, path[1:], req, mgr)
+
 		case q.QueryKeysignArray.Key:
 			return queryKeysign(ctx, kbs, path[1:], req, mgr)
 		case q.QueryKeysignArrayPubkey.Key:
 			return queryKeysign(ctx, kbs, path[1:], req, mgr)
 		case q.QueryKeygensPubkey.Key:
 			return queryKeygen(ctx, kbs, path[1:], req, mgr)
+
 		case q.QueryQueue.Key:
 			return queryQueue(ctx, path[1:], req, mgr)
 		case q.QueryHeights.Key:
 			return queryLastBlockHeights(ctx, path[1:], req, mgr)
 		case q.QueryChainHeights.Key:
 			return queryLastBlockHeights(ctx, path[1:], req, mgr)
-		case q.QueryNode.Key:
-			return queryNode(ctx, path[1:], req, mgr)
-		case q.QueryNodes.Key:
-			return queryNodes(ctx, path[1:], req, mgr)
+
 		case q.QueryInboundAddresses.Key:
 			return queryInboundAddresses(ctx, path[1:], req, mgr)
 		case q.QueryNetwork.Key:
@@ -138,10 +137,7 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 			return queryScheduledOutbound(ctx, mgr)
 		case q.QuerySwapQueue.Key:
 			return querySwapQueue(ctx, mgr)
-		case q.QueryPoolSlip.Key:
-			return queryPoolSlips(ctx, path[1:], req, mgr)
-		case q.QueryPoolSlips.Key:
-			return queryPoolSlips(ctx, path[1:], req, mgr)
+
 		case q.QuerySwapperClout.Key:
 			return querySwapperClout(ctx, path[1:], mgr)
 		case q.QueryStreamingSwap.Key:
@@ -668,47 +664,46 @@ func queryInboundAddresses(ctx cosmos.Context, path []string, req abci.RequestQu
 
 // queryNode return the Node information related to the request node address
 // /thorchain/node/{nodeaddress}
-func queryNode(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	if len(path) == 0 {
+func (qs queryServer) queryNode(ctx cosmos.Context, req *types.QueryNodeRequest) (*types.QueryNodeResponse, error) {
+	if len(req.Address) == 0 {
 		return nil, errors.New("node address not provided")
 	}
-	nodeAddress := path[0]
+	nodeAddress := req.Address
 	addr, err := cosmos.AccAddressFromBech32(nodeAddress)
 	if err != nil {
 		return nil, cosmos.ErrUnknownRequest("invalid account address")
 	}
 
-	nodeAcc, err := mgr.Keeper().GetNodeAccount(ctx, addr)
+	nodeAcc, err := qs.mgr.Keeper().GetNodeAccount(ctx, addr)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get node accounts: %w", err)
 	}
 
-	slashPts, err := mgr.Keeper().GetNodeAccountSlashPoints(ctx, addr)
+	slashPts, err := qs.mgr.Keeper().GetNodeAccountSlashPoints(ctx, addr)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get node slash points: %w", err)
 	}
-	jail, err := mgr.Keeper().GetNodeAccountJail(ctx, nodeAcc.NodeAddress)
+	jail, err := qs.mgr.Keeper().GetNodeAccountJail(ctx, nodeAcc.NodeAddress)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get node jail: %w", err)
 	}
 
-	bp, err := mgr.Keeper().GetBondProviders(ctx, nodeAcc.NodeAddress)
+	bp, err := qs.mgr.Keeper().GetBondProviders(ctx, nodeAcc.NodeAddress)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get bond providers: %w", err)
 	}
 	bp.Adjust(nodeAcc.Bond)
 
-	active, err := mgr.Keeper().ListActiveValidators(ctx)
+	active, err := qs.mgr.Keeper().ListActiveValidators(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get all active node account: %w", err)
 	}
-
-	result := openapi.Node{
+	result := types.QueryNodeResponse{
 		NodeAddress: nodeAcc.NodeAddress.String(),
 		Status:      nodeAcc.Status.String(),
-		PubKeySet: openapi.NodePubKeySet{
-			Secp256k1: wrapString(nodeAcc.PubKeySet.Secp256k1.String()),
-			Ed25519:   wrapString(nodeAcc.PubKeySet.Ed25519.String()),
+		PubKeySet: common.PubKeySet{
+			Secp256k1: common.PubKey(nodeAcc.PubKeySet.Secp256k1.String()),
+			Ed25519:   common.PubKey(nodeAcc.PubKeySet.Ed25519.String()),
 		},
 		ValidatorConsPubKey: nodeAcc.ValidatorConsPubKey,
 		ActiveBlockHeight:   nodeAcc.ActiveBlockHeight,
@@ -726,23 +721,23 @@ func queryNode(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mg
 	result.PeerId = getPeerIDFromPubKey(nodeAcc.PubKeySet.Secp256k1)
 	result.SlashPoints = slashPts
 
-	result.Jail = openapi.NodeJail{
+	result.Jail = &types.NodeJail{
 		// Since redundant, leave out the node address
-		ReleaseHeight: wrapInt64(jail.ReleaseHeight),
-		Reason:        wrapString(jail.Reason),
+		ReleaseHeight: jail.ReleaseHeight,
+		Reason:        jail.Reason,
 	}
 
-	var providers []openapi.NodeBondProvider
+	var providers []*types.NodeBondProvider
 	// Leave this nil (null rather than []) if the source is nil.
 	if bp.Providers != nil {
-		providers = make([]openapi.NodeBondProvider, len(bp.Providers))
+		providers = make([]*types.NodeBondProvider, len(bp.Providers))
 		for i := range bp.Providers {
-			providers[i].BondAddress = wrapString(bp.Providers[i].BondAddress.String())
-			providers[i].Bond = wrapString(bp.Providers[i].Bond.String())
+			providers[i].BondAddress = bp.Providers[i].BondAddress.String()
+			providers[i].Bond = bp.Providers[i].Bond.String()
 		}
 	}
 
-	result.BondProviders = openapi.NodeBondProviders{
+	result.BondProviders = &types.NodeBondProviders{
 		// Since redundant, leave out the node address
 		NodeOperatorFee: bp.NodeOperatorFee.String(),
 		Providers:       providers,
@@ -751,11 +746,11 @@ func queryNode(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mg
 	// CurrentAward is an estimation of reward for node in active status
 	// Node in other status should not have current reward
 	if nodeAcc.Status == NodeActive && !nodeAcc.Bond.IsZero() {
-		network, err := mgr.Keeper().GetNetwork(ctx)
+		network, err := qs.mgr.Keeper().GetNetwork(ctx)
 		if err != nil {
 			return nil, fmt.Errorf("fail to get network: %w", err)
 		}
-		vaults, err := mgr.Keeper().GetAsgardVaultsByStatus(ctx, ActiveVault)
+		vaults, err := qs.mgr.Keeper().GetAsgardVaultsByStatus(ctx, ActiveVault)
 		if err != nil {
 			return nil, fmt.Errorf("fail to get active vaults: %w", err)
 		}
@@ -774,7 +769,7 @@ func queryNode(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mg
 		// (Nodes .cxmy and .uy3a .)
 		lastChurnHeight := vaults[0].BlockHeight
 
-		reward, err := getNodeCurrentRewards(ctx, mgr, nodeAcc, lastChurnHeight, network.BondRewardRune, totalEffectiveBond, bondHardCap)
+		reward, err := getNodeCurrentRewards(ctx, qs.mgr, nodeAcc, lastChurnHeight, network.BondRewardRune, totalEffectiveBond, bondHardCap)
 		if err != nil {
 			return nil, fmt.Errorf("fail to get current node rewards: %w", err)
 		}
@@ -784,30 +779,30 @@ func queryNode(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mg
 
 	// TODO: Represent this map as the field directly, instead of making an array?
 	// It would then always be represented in alphabetical order.
-	chainHeights, err := mgr.Keeper().GetLastObserveHeight(ctx, addr)
+	chainHeights, err := qs.mgr.Keeper().GetLastObserveHeight(ctx, addr)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get last observe chain height: %w", err)
 	}
 	// analyze-ignore(map-iteration)
 	for c, h := range chainHeights {
-		result.ObserveChains = append(result.ObserveChains, openapi.ChainHeight{
+		result.ObserveChains = append(result.ObserveChains, &types.ChainHeight{
 			Chain:  c.String(),
 			Height: h,
 		})
 	}
 
-	preflightCheckResult, err := getNodePreflightResult(ctx, mgr, nodeAcc)
+	preflightCheckResult, err := getNodePreflightResult(ctx, qs.mgr, nodeAcc)
 	if err != nil {
 		ctx.Logger().Error("fail to get node preflight result", "error", err)
 	} else {
-		result.PreflightStatus = preflightCheckResult
+		result.PreflightStatus = &preflightCheckResult
 	}
-	return jsonify(ctx, result)
+	return &result, nil
 }
 
-func getNodePreflightResult(ctx cosmos.Context, mgr *Mgrs, nodeAcc NodeAccount) (openapi.NodePreflightStatus, error) {
+func getNodePreflightResult(ctx cosmos.Context, mgr *Mgrs, nodeAcc NodeAccount) (types.NodePreflightStatus, error) {
 	constAccessor := mgr.GetConstants()
-	preflightResult := openapi.NodePreflightStatus{}
+	preflightResult := types.NodePreflightStatus{}
 	status, err := mgr.ValidatorMgr().NodeAccountPreflightCheck(ctx, nodeAcc, constAccessor)
 	preflightResult.Status = status.String()
 	if err != nil {
@@ -849,23 +844,23 @@ func getNodeCurrentRewards(ctx cosmos.Context, mgr *Mgrs, nodeAcc NodeAccount, l
 
 // queryNodes return all the nodes that has bond
 // /thorchain/nodes
-func queryNodes(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	nodeAccounts, err := mgr.Keeper().ListValidatorsWithBond(ctx)
+func (qs queryServer) queryNodes(ctx cosmos.Context, req *types.QueryNodesRequest) (*types.QueryNodesResponse, error) {
+	nodeAccounts, err := qs.mgr.Keeper().ListValidatorsWithBond(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get node accounts: %w", err)
 	}
 
-	active, err := mgr.Keeper().ListActiveValidators(ctx)
+	active, err := qs.mgr.Keeper().ListActiveValidators(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get all active node account: %w", err)
 	}
 
-	network, err := mgr.Keeper().GetNetwork(ctx)
+	network, err := qs.mgr.Keeper().GetNetwork(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get network: %w", err)
 	}
 
-	vaults, err := mgr.Keeper().GetAsgardVaultsByStatus(ctx, ActiveVault)
+	vaults, err := qs.mgr.Keeper().GetAsgardVaultsByStatus(ctx, ActiveVault)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get active vaults: %w", err)
 	}
@@ -876,33 +871,33 @@ func queryNodes(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *M
 	totalEffectiveBond, bondHardCap := getTotalEffectiveBond(active)
 
 	lastChurnHeight := vaults[0].BlockHeight
-	result := make([]openapi.Node, len(nodeAccounts))
+	result := make([]*types.QueryNodeResponse, len(nodeAccounts))
 	for i, na := range nodeAccounts {
 		if na.RequestedToLeave && na.Bond.LTE(cosmos.NewUint(common.One)) {
 			// ignore the node , it left and also has very little bond
 			// Set the default display for fields which would otherwise be "".
-			result[i] = openapi.Node{
+			result[i] = &types.QueryNodeResponse{
 				Status:          types.NodeStatus_Unknown.String(),
 				TotalBond:       cosmos.ZeroUint().String(),
-				BondProviders:   openapi.NodeBondProviders{NodeOperatorFee: cosmos.ZeroUint().String()},
+				BondProviders:   &types.NodeBondProviders{NodeOperatorFee: cosmos.ZeroUint().String()},
 				Version:         semver.MustParse("0.0.0").String(),
 				CurrentAward:    cosmos.ZeroUint().String(),
-				PreflightStatus: openapi.NodePreflightStatus{Status: types.NodeStatus_Unknown.String()},
+				PreflightStatus: &types.NodePreflightStatus{Status: types.NodeStatus_Unknown.String()},
 			}
 			continue
 		}
 
-		slashPts, err := mgr.Keeper().GetNodeAccountSlashPoints(ctx, na.NodeAddress)
+		slashPts, err := qs.mgr.Keeper().GetNodeAccountSlashPoints(ctx, na.NodeAddress)
 		if err != nil {
 			return nil, fmt.Errorf("fail to get node slash points: %w", err)
 		}
 
-		result[i] = openapi.Node{
+		result[i] = &types.QueryNodeResponse{
 			NodeAddress: na.NodeAddress.String(),
 			Status:      na.Status.String(),
-			PubKeySet: openapi.NodePubKeySet{
-				Secp256k1: wrapString(na.PubKeySet.Secp256k1.String()),
-				Ed25519:   wrapString(na.PubKeySet.Ed25519.String()),
+			PubKeySet: common.PubKeySet{
+				Secp256k1: common.PubKey(na.PubKeySet.Secp256k1.String()),
+				Ed25519:   common.PubKey(na.PubKeySet.Ed25519.String()),
 			},
 			ValidatorConsPubKey: na.ValidatorConsPubKey,
 			ActiveBlockHeight:   na.ActiveBlockHeight,
@@ -920,7 +915,7 @@ func queryNodes(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *M
 		result[i].PeerId = getPeerIDFromPubKey(na.PubKeySet.Secp256k1)
 		result[i].SlashPoints = slashPts
 		if na.Status == NodeActive {
-			reward, err := getNodeCurrentRewards(ctx, mgr, na, lastChurnHeight, network.BondRewardRune, totalEffectiveBond, bondHardCap)
+			reward, err := getNodeCurrentRewards(ctx, qs.mgr, na, lastChurnHeight, network.BondRewardRune, totalEffectiveBond, bondHardCap)
 			if err != nil {
 				return nil, fmt.Errorf("fail to get current node rewards: %w", err)
 			}
@@ -928,61 +923,61 @@ func queryNodes(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *M
 			result[i].CurrentAward = reward.String()
 		}
 
-		jail, err := mgr.Keeper().GetNodeAccountJail(ctx, na.NodeAddress)
+		jail, err := qs.mgr.Keeper().GetNodeAccountJail(ctx, na.NodeAddress)
 		if err != nil {
 			return nil, fmt.Errorf("fail to get node jail: %w", err)
 		}
-		result[i].Jail = openapi.NodeJail{
+		result[i].Jail = &types.NodeJail{
 			// Since redundant, leave out the node address
-			ReleaseHeight: wrapInt64(jail.ReleaseHeight),
-			Reason:        wrapString(jail.Reason),
+			ReleaseHeight: jail.ReleaseHeight,
+			Reason:        jail.Reason,
 		}
 
 		// TODO: Represent this map as the field directly, instead of making an array?
 		// It would then always be represented in alphabetical order.
-		chainHeights, err := mgr.Keeper().GetLastObserveHeight(ctx, na.NodeAddress)
+		chainHeights, err := qs.mgr.Keeper().GetLastObserveHeight(ctx, na.NodeAddress)
 		if err != nil {
 			return nil, fmt.Errorf("fail to get last observe chain height: %w", err)
 		}
 		// analyze-ignore(map-iteration)
 		for c, h := range chainHeights {
-			result[i].ObserveChains = append(result[i].ObserveChains, openapi.ChainHeight{
+			result[i].ObserveChains = append(result[i].ObserveChains, &types.ChainHeight{
 				Chain:  c.String(),
 				Height: h,
 			})
 		}
 
-		preflightCheckResult, err := getNodePreflightResult(ctx, mgr, na)
+		preflightCheckResult, err := getNodePreflightResult(ctx, qs.mgr, na)
 		if err != nil {
 			ctx.Logger().Error("fail to get node preflight result", "error", err)
 		} else {
-			result[i].PreflightStatus = preflightCheckResult
+			result[i].PreflightStatus = &preflightCheckResult
 		}
 
-		bp, err := mgr.Keeper().GetBondProviders(ctx, na.NodeAddress)
+		bp, err := qs.mgr.Keeper().GetBondProviders(ctx, na.NodeAddress)
 		if err != nil {
 			ctx.Logger().Error("fail to get bond providers", "error", err)
 		}
 		bp.Adjust(na.Bond)
 
-		var providers []openapi.NodeBondProvider
+		var providers []*types.NodeBondProvider
 		// Leave this nil (null rather than []) if the source is nil.
 		if bp.Providers != nil {
-			providers = make([]openapi.NodeBondProvider, len(bp.Providers))
+			providers = make([]*types.NodeBondProvider, len(bp.Providers))
 			for i := range bp.Providers {
-				providers[i].BondAddress = wrapString(bp.Providers[i].BondAddress.String())
-				providers[i].Bond = wrapString(bp.Providers[i].Bond.String())
+				providers[i].BondAddress = bp.Providers[i].BondAddress.String()
+				providers[i].Bond = bp.Providers[i].Bond.String()
 			}
 		}
 
-		result[i].BondProviders = openapi.NodeBondProviders{
+		result[i].BondProviders = &types.NodeBondProviders{
 			// Since redundant, leave out the node address
 			NodeOperatorFee: bp.NodeOperatorFee.String(),
 			Providers:       providers,
 		}
 	}
 
-	return jsonify(ctx, result)
+	return &types.QueryNodesResponse{Nodes: result}, nil
 }
 
 // queryBorrowers
@@ -1621,83 +1616,109 @@ func (qs queryServer) queryPools(ctx cosmos.Context, req *types.QueryPoolsReques
 	return &types.QueryPoolsResponse{Pools: pools}, nil
 }
 
-func queryPoolSlips(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	var assets []common.Asset
-	if len(path) > 0 && len(path[0]) > 0 {
-		// If an Asset has been specified, return information for just that Asset
-		// (even if for instance a Derived Asset to check whether it has values set).
-		asset, err := common.NewAsset(path[0])
-		if err != nil {
-			ctx.Logger().Error("fail to parse asset", "error", err, "asset", path[0])
-			return nil, fmt.Errorf("fail to parse asset (%s): %w", path[0], err)
-		}
-		assets = []common.Asset{asset}
-	} else {
-		iterator := mgr.Keeper().GetPoolIterator(ctx)
-		for ; iterator.Valid(); iterator.Next() {
-			var pool Pool
-			if err := mgr.Keeper().Cdc().Unmarshal(iterator.Value(), &pool); err != nil {
-				return nil, fmt.Errorf("fail to unmarshal pool: %w", err)
-			}
-
-			// Display the swap slips of Available-pool Layer 1 assets.
-			if pool.Status != PoolAvailable || pool.Asset.IsNative() {
-				continue
-			}
-			assets = append(assets, pool.Asset)
-		}
+func (qs queryServer) queryPoolSlip(ctx cosmos.Context, req *types.QueryPoolSlipRequest) (*types.QueryPoolSlipsResponse, error) {
+	if len(req.Asset) == 0 {
+		return nil, errors.New("asset not provided")
+	}
+	asset, err := common.NewAsset(req.Asset)
+	if err != nil {
+		ctx.Logger().Error("fail to parse asset", "error", err, "asset", req.Asset)
+		return nil, fmt.Errorf("fail to parse asset (%s): %w", req.Asset, err)
 	}
 
-	result := make([]openapi.PoolSlipResponseInner, len(assets))
+	result := make([]*types.QueryPoolSlipResponse, 1)
+	result[0].Asset = asset.String()
+
+	poolSlip, err := qs.mgr.Keeper().GetPoolSwapSlip(ctx, ctx.BlockHeight(), asset)
+	if err != nil {
+		return nil, fmt.Errorf("fail to get swap slip for asset (%s) height (%d), err:%w", asset, ctx.BlockHeight(), err)
+	}
+	result[0].PoolSlip = poolSlip.Int64()
+
+	rollupCount, err := qs.mgr.Keeper().GetRollupCount(ctx, asset)
+	if err != nil {
+		return nil, fmt.Errorf("fail to get rollup count for asset (%s) height (%d), err:%w", asset, ctx.BlockHeight(), err)
+	}
+	result[0].RollupCount = rollupCount
+
+	longRollup, err := qs.mgr.Keeper().GetLongRollup(ctx, asset)
+	if err != nil {
+		return nil, fmt.Errorf("fail to get long rollup for asset (%s) height (%d), err:%w", asset, ctx.BlockHeight(), err)
+	}
+	result[0].LongRollup = longRollup
+
+	rollup, err := qs.mgr.Keeper().GetCurrentRollup(ctx, asset)
+	if err != nil {
+		return nil, fmt.Errorf("fail to get rollup count for asset (%s) height (%d), err:%w", asset, ctx.BlockHeight(), err)
+	}
+	result[0].Rollup = rollup
+
+	// For performance, only sum the rollup swap slip for comparison
+	// when a single asset has been specified.
+	maxAnchorBlocks := qs.mgr.Keeper().GetConfigInt64(ctx, constants.MaxAnchorBlocks)
+	var summedRollup int64
+	for i := ctx.BlockHeight() - maxAnchorBlocks; i < ctx.BlockHeight(); i++ {
+		poolSlip, err := qs.mgr.Keeper().GetPoolSwapSlip(ctx, i, asset)
+		if err != nil {
+			// Log the error, zero the sum, and exit the loop.
+			ctx.Logger().Error("fail to get swap slip", "error", err, "asset", asset, "height", i)
+			summedRollup = 0
+			break
+		}
+		summedRollup += poolSlip.Int64()
+	}
+	result[0].SummedRollup = summedRollup
+
+	return &types.QueryPoolSlipsResponse{PoolSlips: result}, nil
+}
+
+func (qs queryServer) queryPoolSlips(ctx cosmos.Context, req *types.QueryPoolSlipsRequest) (*types.QueryPoolSlipsResponse, error) {
+	var assets []common.Asset
+	iterator := qs.mgr.Keeper().GetPoolIterator(ctx)
+	for ; iterator.Valid(); iterator.Next() {
+		var pool Pool
+		if err := qs.mgr.Keeper().Cdc().Unmarshal(iterator.Value(), &pool); err != nil {
+			return nil, fmt.Errorf("fail to unmarshal pool: %w", err)
+		}
+
+		// Display the swap slips of Available-pool Layer 1 assets.
+		if pool.Status != PoolAvailable || pool.Asset.IsNative() {
+			continue
+		}
+		assets = append(assets, pool.Asset)
+	}
+
+	result := make([]*types.QueryPoolSlipResponse, len(assets))
 	for i := range assets {
 		result[i].Asset = assets[i].String()
 
-		poolSlip, err := mgr.Keeper().GetPoolSwapSlip(ctx, ctx.BlockHeight(), assets[i])
+		poolSlip, err := qs.mgr.Keeper().GetPoolSwapSlip(ctx, ctx.BlockHeight(), assets[i])
 		if err != nil {
 			return nil, fmt.Errorf("fail to get swap slip for asset (%s) height (%d), err:%w", assets[i], ctx.BlockHeight(), err)
 		}
 		result[i].PoolSlip = poolSlip.Int64()
 
-		rollupCount, err := mgr.Keeper().GetRollupCount(ctx, assets[i])
+		rollupCount, err := qs.mgr.Keeper().GetRollupCount(ctx, assets[i])
 		if err != nil {
 			return nil, fmt.Errorf("fail to get rollup count for asset (%s) height (%d), err:%w", assets[i], ctx.BlockHeight(), err)
 		}
 		result[i].RollupCount = rollupCount
 
-		longRollup, err := mgr.Keeper().GetLongRollup(ctx, assets[i])
+		longRollup, err := qs.mgr.Keeper().GetLongRollup(ctx, assets[i])
 		if err != nil {
 			return nil, fmt.Errorf("fail to get long rollup for asset (%s) height (%d), err:%w", assets[i], ctx.BlockHeight(), err)
 		}
 		result[i].LongRollup = longRollup
 
-		rollup, err := mgr.Keeper().GetCurrentRollup(ctx, assets[i])
+		rollup, err := qs.mgr.Keeper().GetCurrentRollup(ctx, assets[i])
 		if err != nil {
 			return nil, fmt.Errorf("fail to get rollup count for asset (%s) height (%d), err:%w", assets[i], ctx.BlockHeight(), err)
 		}
 		result[i].Rollup = rollup
 	}
 
-	// For performance, only sum the rollup swap slip for comparison
-	// when a single asset has been specified.
-	if len(assets) == 1 {
-		maxAnchorBlocks := mgr.Keeper().GetConfigInt64(ctx, constants.MaxAnchorBlocks)
-		var summedRollup int64
-		for i := ctx.BlockHeight() - maxAnchorBlocks; i < ctx.BlockHeight(); i++ {
-			poolSlip, err := mgr.Keeper().GetPoolSwapSlip(ctx, i, assets[0])
-			if err != nil {
-				// Log the error, zero the sum, and exit the loop.
-				ctx.Logger().Error("fail to get swap slip", "error", err, "asset", assets[0], "height", i)
-				summedRollup = 0
-				break
-			}
-			summedRollup += poolSlip.Int64()
-		}
-		result[0].SummedRollup = &summedRollup
-	}
-
-	return jsonify(ctx, result)
+	return &types.QueryPoolSlipsResponse{PoolSlips: result}, nil
 }
-
 func (qs queryServer) queryDerivedPool(ctx cosmos.Context,  req *types.QueryDerivedPoolRequest) (*types.QueryDerivedPoolResponse, error) {
 	if len(req.Asset) == 0 {
 		return nil, errors.New("asset not provided")

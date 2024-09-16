@@ -13,6 +13,8 @@ import "types/query_saver.proto";
 import "types/query_borrower.proto";
 import "types/query_trade_unit.proto";
 import "types/query_trade_account.proto";
+import "types/query_node.proto";
+import "types/query_pool_slip.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -74,5 +76,21 @@ service Query {
 
   rpc TradeAccounts(QueryTradeAccountsRequest) returns (QueryTradeAccountsResponse) {
     option (google.api.http).get = "/thorchain/trade/accounts/{asset}";
+  }
+
+  rpc Node(QueryNodeRequest) returns (QueryNodeResponse) {
+    option (google.api.http).get = "/thorchain/node/{address}";
+  }
+
+  rpc Nodes(QueryNodesRequest) returns (QueryNodesResponse) {
+    option (google.api.http).get = "/thorchain/nodes";
+  }
+
+  rpc PoolSlip(QueryPoolSlipRequest) returns (QueryPoolSlipsResponse) {
+    option (google.api.http).get = "/thorchain/slip/{asset}";
+  }
+
+  rpc PoolSlips(QueryPoolSlipsRequest) returns (QueryPoolSlipsResponse) {
+    option (google.api.http).get = "/thorchain/slips";
   }
 }

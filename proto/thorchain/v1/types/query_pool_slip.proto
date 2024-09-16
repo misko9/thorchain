@@ -1,0 +1,28 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryPoolSlipRequest{
+  string asset = 1;
+}
+
+// Can we replace this with LiquidityProvider proto? Check json fields...
+message QueryPoolSlipResponse{
+  string asset = 1;
+  int64  pool_slip = 2;
+  int64  rollup_count = 3;
+  int64  long_rollup = 4;
+  int64  rollup = 5;
+  int64  summed_rollup = 6  [(gogoproto.nullable) = true];
+}
+
+message QueryPoolSlipsRequest{}
+
+message QueryPoolSlipsResponse{
+  repeated QueryPoolSlipResponse pool_slips = 1;
+}

@@ -1,0 +1,71 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+import "common/common.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryNodeRequest{
+  string address = 1;
+}
+
+// TODO: update with comments and nullables
+message QueryNodeResponse{
+  string node_address = 1;
+  string status = 2;
+  common.PubKeySet pub_key_set = 3 [(gogoproto.nullable) = false];
+  string validator_cons_pub_key = 4;
+  string peer_id = 5;
+  int64 active_block_height = 6;
+  int64 status_since = 7;
+  string node_operator_address = 8;
+  string total_bond = 9;
+  NodeBondProviders bond_providers = 10;
+  repeated string signer_membership = 11;
+  bool requested_to_leave = 12;
+  bool forced_to_leave = 13;
+  int64 leave_height = 14;
+  string ip_address = 15;
+  string version = 16;
+  int64 slash_points = 17;
+  NodeJail jail = 18;
+  string current_award = 19;
+  repeated ChainHeight observe_chains = 20;
+  NodePreflightStatus preflight_status = 21;
+}
+
+message QueryNodesRequest{}
+
+// Update with pagination?
+message QueryNodesResponse{
+  repeated QueryNodeResponse nodes = 1;
+}
+
+message NodeBondProviders{
+  string node_operator_fee = 1;
+  repeated NodeBondProvider providers = 2;
+}
+
+message NodeBondProvider{
+  string bond_address = 1;
+  string bond = 2;
+}
+
+message NodeJail{
+  int64 release_height = 1;
+  string reason = 2;
+}
+
+message ChainHeight{
+  string chain = 1;
+  int64 height = 2;
+}
+
+message NodePreflightStatus{
+  string status = 1;
+  string reason = 2;
+  int64  code = 3;
+}

@@ -33,6 +33,10 @@ const (
 	Query_TradeUnits_FullMethodName         = "/types.Query/TradeUnits"
 	Query_TradeAccount_FullMethodName       = "/types.Query/TradeAccount"
 	Query_TradeAccounts_FullMethodName      = "/types.Query/TradeAccounts"
+	Query_Node_FullMethodName               = "/types.Query/Node"
+	Query_Nodes_FullMethodName              = "/types.Query/Nodes"
+	Query_PoolSlip_FullMethodName           = "/types.Query/PoolSlip"
+	Query_PoolSlips_FullMethodName          = "/types.Query/PoolSlips"
 )
 
 // QueryClient is the client API for Query service.
@@ -55,6 +59,10 @@ type QueryClient interface {
 	TradeUnits(ctx context.Context, in *QueryTradeUnitsRequest, opts ...grpc.CallOption) (*QueryTradeUnitsResponse, error)
 	TradeAccount(ctx context.Context, in *QueryTradeAccountRequest, opts ...grpc.CallOption) (*QueryTradeAccountsResponse, error)
 	TradeAccounts(ctx context.Context, in *QueryTradeAccountsRequest, opts ...grpc.CallOption) (*QueryTradeAccountsResponse, error)
+	Node(ctx context.Context, in *QueryNodeRequest, opts ...grpc.CallOption) (*QueryNodeResponse, error)
+	Nodes(ctx context.Context, in *QueryNodesRequest, opts ...grpc.CallOption) (*QueryNodesResponse, error)
+	PoolSlip(ctx context.Context, in *QueryPoolSlipRequest, opts ...grpc.CallOption) (*QueryPoolSlipsResponse, error)
+	PoolSlips(ctx context.Context, in *QueryPoolSlipsRequest, opts ...grpc.CallOption) (*QueryPoolSlipsResponse, error)
 }
 
 type queryClient struct {
@@ -191,6 +199,42 @@ func (c *queryClient) TradeAccounts(ctx context.Context, in *QueryTradeAccountsR
 	return out, nil
 }
 
+func (c *queryClient) Node(ctx context.Context, in *QueryNodeRequest, opts ...grpc.CallOption) (*QueryNodeResponse, error) {
+	out := new(QueryNodeResponse)
+	err := c.cc.Invoke(ctx, Query_Node_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Nodes(ctx context.Context, in *QueryNodesRequest, opts ...grpc.CallOption) (*QueryNodesResponse, error) {
+	out := new(QueryNodesResponse)
+	err := c.cc.Invoke(ctx, Query_Nodes_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) PoolSlip(ctx context.Context, in *QueryPoolSlipRequest, opts ...grpc.CallOption) (*QueryPoolSlipsResponse, error) {
+	out := new(QueryPoolSlipsResponse)
+	err := c.cc.Invoke(ctx, Query_PoolSlip_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) PoolSlips(ctx context.Context, in *QueryPoolSlipsRequest, opts ...grpc.CallOption) (*QueryPoolSlipsResponse, error) {
+	out := new(QueryPoolSlipsResponse)
+	err := c.cc.Invoke(ctx, Query_PoolSlips_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -211,6 +255,10 @@ type QueryServer interface {
 	TradeUnits(context.Context, *QueryTradeUnitsRequest) (*QueryTradeUnitsResponse, error)
 	TradeAccount(context.Context, *QueryTradeAccountRequest) (*QueryTradeAccountsResponse, error)
 	TradeAccounts(context.Context, *QueryTradeAccountsRequest) (*QueryTradeAccountsResponse, error)
+	Node(context.Context, *QueryNodeRequest) (*QueryNodeResponse, error)
+	Nodes(context.Context, *QueryNodesRequest) (*QueryNodesResponse, error)
+	PoolSlip(context.Context, *QueryPoolSlipRequest) (*QueryPoolSlipsResponse, error)
+	PoolSlips(context.Context, *QueryPoolSlipsRequest) (*QueryPoolSlipsResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -259,6 +307,18 @@ func (UnimplementedQueryServer) TradeAccount(context.Context, *QueryTradeAccount
 }
 func (UnimplementedQueryServer) TradeAccounts(context.Context, *QueryTradeAccountsRequest) (*QueryTradeAccountsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TradeAccounts not implemented")
+}
+func (UnimplementedQueryServer) Node(context.Context, *QueryNodeRequest) (*QueryNodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Node not implemented")
+}
+func (UnimplementedQueryServer) Nodes(context.Context, *QueryNodesRequest) (*QueryNodesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Nodes not implemented")
+}
+func (UnimplementedQueryServer) PoolSlip(context.Context, *QueryPoolSlipRequest) (*QueryPoolSlipsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PoolSlip not implemented")
+}
+func (UnimplementedQueryServer) PoolSlips(context.Context, *QueryPoolSlipsRequest) (*QueryPoolSlipsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PoolSlips not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -525,6 +585,78 @@ func _Query_TradeAccounts_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_Node_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryNodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Node(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Node_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Node(ctx, req.(*QueryNodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Nodes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryNodesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Nodes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Nodes_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Nodes(ctx, req.(*QueryNodesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_PoolSlip_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPoolSlipRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).PoolSlip(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_PoolSlip_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).PoolSlip(ctx, req.(*QueryPoolSlipRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_PoolSlips_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPoolSlipsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).PoolSlips(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_PoolSlips_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).PoolSlips(ctx, req.(*QueryPoolSlipsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -587,6 +719,22 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "TradeAccounts",
 			Handler:    _Query_TradeAccounts_Handler,
+		},
+		{
+			MethodName: "Node",
+			Handler:    _Query_Node_Handler,
+		},
+		{
+			MethodName: "Nodes",
+			Handler:    _Query_Nodes_Handler,
+		},
+		{
+			MethodName: "PoolSlip",
+			Handler:    _Query_PoolSlip_Handler,
+		},
+		{
+			MethodName: "PoolSlips",
+			Handler:    _Query_PoolSlips_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
