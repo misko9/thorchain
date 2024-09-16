@@ -1,0 +1,45 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryPoolRequest{
+  string asset = 1;
+}
+
+message QueryPoolResponse{
+  string asset = 1;
+  string short_code = 2;
+  string status = 3;
+  int64 decimals = 4;
+  string pending_inbound_asset = 5;
+  string pending_inbound_rune = 6;
+  string balance_asset = 7;
+  string balance_rune = 8;
+  string asset_tor_price = 9;
+  string pool_units = 10;
+  string LP_units = 11;
+  string synth_units = 12;
+  string synth_supply = 13;
+  string savers_depth = 14;
+  string savers_units = 15;
+  string savers_fill_bps = 16;
+  string savers_capacity_remaining = 17;
+  bool synth_mint_paused = 18;
+  string synth_supply_remaining = 19;
+  string loan_collateral = 20;
+  string loan_collateral_remaining = 21;
+  string loan_cr = 22;
+  string derived_depth_bps = 23;
+}
+
+message QueryPoolsRequest{
+}
+
+message QueryPoolsResponse{
+  repeated QueryPoolResponse pools = 1;
+}

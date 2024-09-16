@@ -64,10 +64,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 
 		defer telemetry.MeasureSince(time.Now(), path[0])
 		switch path[0] {
-		case q.QueryPool.Key:
-			return queryPool(ctx, path[1:], req, mgr)
-		case q.QueryPools.Key:
-			return queryPools(ctx, req, mgr)
 		case q.QueryDerivedPool.Key:
 			return queryDerivedPool(ctx, path[1:], req, mgr)
 		case q.QueryDerivedPools.Key:
@@ -1397,57 +1393,57 @@ func queryStreamingSwap(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, e
 	return jsonify(ctx, result)
 }
 
-func queryPool(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	if len(path) == 0 {
+func (qs queryServer) queryPool(ctx cosmos.Context, req *types.QueryPoolRequest) (*types.QueryPoolResponse, error) {
+	if len(req.Asset) == 0 {
 		return nil, errors.New("asset not provided")
 	}
-	asset, err := common.NewAsset(path[0])
+	asset, err := common.NewAsset(req.Asset)
 	if err != nil {
 		ctx.Logger().Error("fail to parse asset", "error", err)
 		return nil, fmt.Errorf("could not parse asset: %w", err)
 	}
 
 	if asset.IsDerivedAsset() {
-		return nil, fmt.Errorf("asset: %s is a derived asset", path[0])
+		return nil, fmt.Errorf("asset: %s is a derived asset", req.Asset)
 	}
 
-	pool, err := mgr.Keeper().GetPool(ctx, asset)
+	pool, err := qs.mgr.Keeper().GetPool(ctx, asset)
 	if err != nil {
 		ctx.Logger().Error("fail to get pool", "error", err)
 		return nil, fmt.Errorf("could not get pool: %w", err)
 	}
 	if pool.IsEmpty() {
-		return nil, fmt.Errorf("pool: %s doesn't exist", path[0])
+		return nil, fmt.Errorf("pool: %s doesn't exist", req.Asset)
 	}
 
 	// Get Savers Vault for this L1 pool if it's a gas asset
 	saversAsset := pool.Asset.GetSyntheticAsset()
-	saversPool, err := mgr.Keeper().GetPool(ctx, saversAsset)
+	saversPool, err := qs.mgr.Keeper().GetPool(ctx, saversAsset)
 	if err != nil {
 		return nil, fmt.Errorf("fail to unmarshal savers vault: %w", err)
 	}
 
 	saversDepth := saversPool.BalanceAsset
 	saversUnits := saversPool.LPUnits
-	synthSupply := mgr.Keeper().GetTotalSupply(ctx, pool.Asset.GetSyntheticAsset())
+	synthSupply := qs.mgr.Keeper().GetTotalSupply(ctx, pool.Asset.GetSyntheticAsset())
 	pool.CalcUnits(synthSupply)
 
-	synthMintPausedErr := isSynthMintPaused(ctx, mgr, saversAsset, cosmos.ZeroUint())
-	synthSupplyRemaining, _ := getSynthSupplyRemaining(ctx, mgr, saversAsset)
+	synthMintPausedErr := isSynthMintPaused(ctx, qs.mgr, saversAsset, cosmos.ZeroUint())
+	synthSupplyRemaining, _ := getSynthSupplyRemaining(ctx, qs.mgr, saversAsset)
 
-	maxSynthsForSaversYield := mgr.Keeper().GetConfigInt64(ctx, constants.MaxSynthsForSaversYield)
+	maxSynthsForSaversYield := qs.mgr.Keeper().GetConfigInt64(ctx, constants.MaxSynthsForSaversYield)
 	// Capping the synths at double the pool balance of Assets.
 	maxSynthsForSaversYieldUint := common.GetUncappedShare(cosmos.NewUint(uint64(maxSynthsForSaversYield)), cosmos.NewUint(constants.MaxBasisPts), pool.BalanceAsset.MulUint64(2))
 
 	saversFillBps := common.GetUncappedShare(synthSupply, maxSynthsForSaversYieldUint, cosmos.NewUint(constants.MaxBasisPts))
 	saversCapacityRemaining := common.SafeSub(maxSynthsForSaversYieldUint, synthSupply)
 
-	totalCollateral, err := mgr.Keeper().GetTotalCollateral(ctx, pool.Asset)
+	totalCollateral, err := qs.mgr.Keeper().GetTotalCollateral(ctx, pool.Asset)
 	if err != nil {
 		return nil, fmt.Errorf("fail to fetch total loan collateral: %w", err)
 	}
 
-	loanHandler := NewLoanOpenHandler(mgr)
+	loanHandler := NewLoanOpenHandler(qs.mgr)
 	// getPoolCR and GetLoanCollateralRemainingForPool
 	// are expected to error for block heights earlier than 12241034
 	// from negative MaxRuneSupply, so dropping the errors for both
@@ -1455,18 +1451,18 @@ func queryPool(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mg
 	cr, _ := loanHandler.getPoolCR(ctx, pool, cosmos.OneUint())
 	loanCollateralRemaining, _ := loanHandler.GetLoanCollateralRemainingForPool(ctx, pool)
 
-	runeDepth, _, _ := mgr.NetworkMgr().CalcAnchor(ctx, mgr, asset)
-	dpool, _ := mgr.Keeper().GetPool(ctx, asset.GetDerivedAsset())
+	runeDepth, _, _ := qs.mgr.NetworkMgr().CalcAnchor(ctx, qs.mgr, asset)
+	dpool, _ := qs.mgr.Keeper().GetPool(ctx, asset.GetDerivedAsset())
 	dbps := common.GetUncappedShare(dpool.BalanceRune, runeDepth, cosmos.NewUint(constants.MaxBasisPts))
 	if dpool.Status != PoolAvailable {
 		dbps = cosmos.ZeroUint()
 	}
 
-	p := openapi.Pool{
+	p := types.QueryPoolResponse{
 		Asset:               pool.Asset.String(),
-		ShortCode:           wrapString(pool.Asset.ShortCode()),
+		ShortCode:           pool.Asset.ShortCode(),
 		Status:              pool.Status.String(),
-		Decimals:            wrapInt64(pool.Decimals),
+		Decimals:            pool.Decimals,
 		PendingInboundAsset: pool.PendingInboundAsset.String(),
 		PendingInboundRune:  pool.PendingInboundRune.String(),
 		BalanceAsset:        pool.BalanceAsset.String(),
@@ -1488,20 +1484,20 @@ func queryPool(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mg
 	p.LoanCr = cr.String()
 
 	if !pool.BalanceAsset.IsZero() && !pool.BalanceRune.IsZero() {
-		dollarsPerRune := mgr.Keeper().DollarsPerRune(ctx)
+		dollarsPerRune := qs.mgr.Keeper().DollarsPerRune(ctx)
 		p.AssetTorPrice = dollarsPerRune.Mul(pool.BalanceRune).Quo(pool.BalanceAsset).String()
 	}
 
-	return jsonify(ctx, p)
+	return &p, nil
 }
 
-func queryPools(ctx cosmos.Context, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	dollarsPerRune := mgr.Keeper().DollarsPerRune(ctx)
-	pools := make([]openapi.Pool, 0)
-	iterator := mgr.Keeper().GetPoolIterator(ctx)
+func (qs queryServer) queryPools(ctx cosmos.Context, req *types.QueryPoolsRequest) (*types.QueryPoolsResponse, error) {
+	dollarsPerRune := qs.mgr.Keeper().DollarsPerRune(ctx)
+	pools := make([]*types.QueryPoolResponse, 0)
+	iterator := qs.mgr.Keeper().GetPoolIterator(ctx)
 	for ; iterator.Valid(); iterator.Next() {
 		var pool Pool
-		if err := mgr.Keeper().Cdc().Unmarshal(iterator.Value(), &pool); err != nil {
+		if err := qs.mgr.Keeper().Cdc().Unmarshal(iterator.Value(), &pool); err != nil {
 			return nil, fmt.Errorf("fail to unmarshal pool: %w", err)
 		}
 		// ignore pool if no liquidity provider units
@@ -1521,7 +1517,7 @@ func queryPools(ctx cosmos.Context, req abci.RequestQuery, mgr *Mgrs) ([]byte, e
 
 		// Get Savers Vault
 		saversAsset := pool.Asset.GetSyntheticAsset()
-		saversPool, err := mgr.Keeper().GetPool(ctx, saversAsset)
+		saversPool, err := qs.mgr.Keeper().GetPool(ctx, saversAsset)
 		if err != nil {
 			return nil, fmt.Errorf("fail to unmarshal savers vault: %w", err)
 		}
@@ -1529,25 +1525,25 @@ func queryPools(ctx cosmos.Context, req abci.RequestQuery, mgr *Mgrs) ([]byte, e
 		saversDepth := saversPool.BalanceAsset
 		saversUnits := saversPool.LPUnits
 
-		synthSupply := mgr.Keeper().GetTotalSupply(ctx, pool.Asset.GetSyntheticAsset())
+		synthSupply := qs.mgr.Keeper().GetTotalSupply(ctx, pool.Asset.GetSyntheticAsset())
 		pool.CalcUnits(synthSupply)
 
-		synthMintPausedErr := isSynthMintPaused(ctx, mgr, pool.Asset, cosmos.ZeroUint())
-		synthSupplyRemaining, _ := getSynthSupplyRemaining(ctx, mgr, pool.Asset)
+		synthMintPausedErr := isSynthMintPaused(ctx, qs.mgr, pool.Asset, cosmos.ZeroUint())
+		synthSupplyRemaining, _ := getSynthSupplyRemaining(ctx, qs.mgr, pool.Asset)
 
-		maxSynthsForSaversYield := mgr.Keeper().GetConfigInt64(ctx, constants.MaxSynthsForSaversYield)
+		maxSynthsForSaversYield := qs.mgr.Keeper().GetConfigInt64(ctx, constants.MaxSynthsForSaversYield)
 		// Capping the synths at double the pool balance of Assets.
 		maxSynthsForSaversYieldUint := common.GetUncappedShare(cosmos.NewUint(uint64(maxSynthsForSaversYield)), cosmos.NewUint(constants.MaxBasisPts), pool.BalanceAsset.MulUint64(2))
 
 		saversFillBps := common.GetUncappedShare(synthSupply, maxSynthsForSaversYieldUint, cosmos.NewUint(constants.MaxBasisPts))
 		saversCapacityRemaining := common.SafeSub(maxSynthsForSaversYieldUint, synthSupply)
 
-		totalCollateral, err := mgr.Keeper().GetTotalCollateral(ctx, pool.Asset)
+		totalCollateral, err := qs.mgr.Keeper().GetTotalCollateral(ctx, pool.Asset)
 		if err != nil {
 			return nil, fmt.Errorf("fail to fetch total loan collateral: %w", err)
 		}
 
-		loanHandler := NewLoanOpenHandler(mgr)
+		loanHandler := NewLoanOpenHandler(qs.mgr)
 		// getPoolCR and GetLoanCollateralRemainingForPool
 		// are expected to error for block heights earlier than 12241034
 		// from negative MaxRuneSupply, so dropping the errors for both
@@ -1555,18 +1551,18 @@ func queryPools(ctx cosmos.Context, req abci.RequestQuery, mgr *Mgrs) ([]byte, e
 		cr, _ := loanHandler.getPoolCR(ctx, pool, cosmos.OneUint())
 		loanCollateralRemaining, _ := loanHandler.GetLoanCollateralRemainingForPool(ctx, pool)
 
-		runeDepth, _, _ := mgr.NetworkMgr().CalcAnchor(ctx, mgr, pool.Asset)
-		dpool, _ := mgr.Keeper().GetPool(ctx, pool.Asset.GetDerivedAsset())
+		runeDepth, _, _ := qs.mgr.NetworkMgr().CalcAnchor(ctx, qs.mgr, pool.Asset)
+		dpool, _ := qs.mgr.Keeper().GetPool(ctx, pool.Asset.GetDerivedAsset())
 		dbps := common.GetUncappedShare(dpool.BalanceRune, runeDepth, cosmos.NewUint(constants.MaxBasisPts))
 		if dpool.Status != PoolAvailable {
 			dbps = cosmos.ZeroUint()
 		}
 
-		p := openapi.Pool{
+		p := types.QueryPoolResponse{
 			Asset:               pool.Asset.String(),
-			ShortCode:           wrapString(pool.Asset.ShortCode()),
+			ShortCode:           pool.Asset.ShortCode(),
 			Status:              pool.Status.String(),
-			Decimals:            wrapInt64(pool.Decimals),
+			Decimals:            pool.Decimals,
 			PendingInboundAsset: pool.PendingInboundAsset.String(),
 			PendingInboundRune:  pool.PendingInboundRune.String(),
 			BalanceAsset:        pool.BalanceAsset.String(),
@@ -1592,9 +1588,9 @@ func queryPools(ctx cosmos.Context, req abci.RequestQuery, mgr *Mgrs) ([]byte, e
 			p.AssetTorPrice = dollarsPerRune.Mul(pool.BalanceRune).Quo(pool.BalanceAsset).String()
 		}
 
-		pools = append(pools, p)
+		pools = append(pools, &p)
 	}
-	return jsonify(ctx, pools)
+	return &types.QueryPoolsResponse{Pools: pools}, nil
 }
 
 func queryPoolSlips(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {

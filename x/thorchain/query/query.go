@@ -33,8 +33,6 @@ func (q Query) Path(args ...string) string {
 
 // query endpoints supported by the thorchain Querier
 var (
-	QueryPool                = Query{Key: "pool", EndpointTemplate: "/%s/pool/{%s}"}
-	QueryPools               = Query{Key: "pools", EndpointTemplate: "/%s/pools"}
 	QueryPoolSlip            = Query{Key: "poolslip", EndpointTemplate: "/%s/slip/{%s}"}
 	QueryPoolSlips           = Query{Key: "poolslips", EndpointTemplate: "/%s/slips"}
 	QueryDerivedPools        = Query{Key: "derived_pools", EndpointTemplate: "/%s/dpools"}
@@ -108,8 +106,6 @@ var (
 
 // Queries all queries
 var Queries = []Query{
-	QueryPool,
-	QueryPools,
 	QueryPoolSlip,
 	QueryPoolSlips,
 	QueryDerivedPool,
