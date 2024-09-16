@@ -64,10 +64,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 
 		defer telemetry.MeasureSince(time.Now(), path[0])
 		switch path[0] {
-		case q.QueryDerivedPool.Key:
-			return queryDerivedPool(ctx, path[1:], req, mgr)
-		case q.QueryDerivedPools.Key:
-			return queryDerivedPools(ctx, req, mgr)
 		case q.QuerySavers.Key:
 			return queryLiquidityProviders(ctx, path[1:], req, mgr, true)
 		case q.QuerySaver.Key:
@@ -1670,11 +1666,11 @@ func queryPoolSlips(ctx cosmos.Context, path []string, req abci.RequestQuery, mg
 	return jsonify(ctx, result)
 }
 
-func queryDerivedPool(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	if len(path) == 0 {
+func (qs queryServer) queryDerivedPool(ctx cosmos.Context,  req *types.QueryDerivedPoolRequest) (*types.QueryDerivedPoolResponse, error) {
+	if len(req.Asset) == 0 {
 		return nil, errors.New("asset not provided")
 	}
-	asset, err := common.NewAsset(path[0])
+	asset, err := common.NewAsset(req.Asset)
 	if err != nil {
 		ctx.Logger().Error("fail to parse asset", "error", err)
 		return nil, fmt.Errorf("could not parse asset: %w", err)
@@ -1685,39 +1681,39 @@ func queryDerivedPool(ctx cosmos.Context, path []string, req abci.RequestQuery, 
 	}
 
 	// call begin block so the derived depth matches the next block execution state
-	_ = mgr.NetworkMgr().BeginBlock(ctx.WithBlockHeight(ctx.BlockHeight()+1), mgr)
+	_ = qs.mgr.NetworkMgr().BeginBlock(ctx.WithBlockHeight(ctx.BlockHeight()+1), qs.mgr)
 
 	// sum rune depth of anchor pools
 	runeDepth := sdkmath.ZeroUint()
-	for _, anchor := range mgr.Keeper().GetAnchors(ctx, asset) {
-		aPool, _ := mgr.Keeper().GetPool(ctx, anchor)
+	for _, anchor := range qs.mgr.Keeper().GetAnchors(ctx, asset) {
+		aPool, _ := qs.mgr.Keeper().GetPool(ctx, anchor)
 		runeDepth = runeDepth.Add(aPool.BalanceRune)
 	}
 
-	dpool, _ := mgr.Keeper().GetPool(ctx, asset.GetDerivedAsset())
+	dpool, _ := qs.mgr.Keeper().GetPool(ctx, asset.GetDerivedAsset())
 	dbps := cosmos.ZeroUint()
 	if dpool.Status == PoolAvailable {
 		dbps = common.GetUncappedShare(dpool.BalanceRune, runeDepth, cosmos.NewUint(constants.MaxBasisPts))
 	}
 
-	p := openapi.DerivedPool{
+	p := types.QueryDerivedPoolResponse{
 		Asset:        dpool.Asset.String(),
 		Status:       dpool.Status.String(),
-		Decimals:     wrapInt64(dpool.Decimals),
+		Decimals:     dpool.Decimals,
 		BalanceAsset: dpool.BalanceAsset.String(),
 		BalanceRune:  dpool.BalanceRune.String(),
 	}
 	p.DerivedDepthBps = dbps.String()
 
-	return jsonify(ctx, p)
+	return &p, nil
 }
 
-func queryDerivedPools(ctx cosmos.Context, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	pools := make([]openapi.DerivedPool, 0)
-	iterator := mgr.Keeper().GetPoolIterator(ctx)
+func (qs queryServer) queryDerivedPools(ctx cosmos.Context, req *types.QueryDerivedPoolsRequest) (*types.QueryDerivedPoolsResponse, error) {
+	pools := make([]*types.QueryDerivedPoolResponse, 0)
+	iterator := qs.mgr.Keeper().GetPoolIterator(ctx)
 	for ; iterator.Valid(); iterator.Next() {
 		var pool Pool
-		if err := mgr.Keeper().Cdc().Unmarshal(iterator.Value(), &pool); err != nil {
+		if err := qs.mgr.Keeper().Cdc().Unmarshal(iterator.Value(), &pool); err != nil {
 			return nil, fmt.Errorf("fail to unmarshal pool: %w", err)
 		}
 		// Ignore derived assets (except TOR)
@@ -1725,8 +1721,8 @@ func queryDerivedPools(ctx cosmos.Context, req abci.RequestQuery, mgr *Mgrs) ([]
 			continue
 		}
 
-		runeDepth, _, _ := mgr.NetworkMgr().CalcAnchor(ctx, mgr, pool.Asset)
-		dpool, _ := mgr.Keeper().GetPool(ctx, pool.Asset.GetDerivedAsset())
+		runeDepth, _, _ := qs.mgr.NetworkMgr().CalcAnchor(ctx, qs.mgr, pool.Asset)
+		dpool, _ := qs.mgr.Keeper().GetPool(ctx, pool.Asset.GetDerivedAsset())
 		dbps := cosmos.ZeroUint()
 		if dpool.Status == PoolAvailable {
 			dbps = common.GetUncappedShare(
@@ -1736,18 +1732,19 @@ func queryDerivedPools(ctx cosmos.Context, req abci.RequestQuery, mgr *Mgrs) ([]
 			)
 		}
 
-		p := openapi.DerivedPool{
+		p := types.QueryDerivedPoolResponse{
 			Asset:        dpool.Asset.String(),
 			Status:       dpool.Status.String(),
-			Decimals:     wrapInt64(dpool.Decimals),
+			Decimals:     dpool.Decimals,
 			BalanceAsset: dpool.BalanceAsset.String(),
 			BalanceRune:  dpool.BalanceRune.String(),
 		}
 		p.DerivedDepthBps = dbps.String()
 
-		pools = append(pools, p)
+		pools = append(pools, &p)
 	}
-	return jsonify(ctx, pools)
+
+	return &types.QueryDerivedPoolsResponse{Pools: pools}, nil
 }
 
 func queryTradeUnit(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {

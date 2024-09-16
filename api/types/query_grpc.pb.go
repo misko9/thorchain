@@ -19,8 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Pool_FullMethodName  = "/types.Query/Pool"
-	Query_Pools_FullMethodName = "/types.Query/Pools"
+	Query_Pool_FullMethodName         = "/types.Query/Pool"
+	Query_Pools_FullMethodName        = "/types.Query/Pools"
+	Query_DerivedPool_FullMethodName  = "/types.Query/DerivedPool"
+	Query_DerivedPools_FullMethodName = "/types.Query/DerivedPools"
 )
 
 // QueryClient is the client API for Query service.
@@ -31,6 +33,8 @@ type QueryClient interface {
 	Pool(ctx context.Context, in *QueryPoolRequest, opts ...grpc.CallOption) (*QueryPoolResponse, error)
 	// Pools returns all extended pools
 	Pools(ctx context.Context, in *QueryPoolsRequest, opts ...grpc.CallOption) (*QueryPoolsResponse, error)
+	DerivedPool(ctx context.Context, in *QueryDerivedPoolRequest, opts ...grpc.CallOption) (*QueryDerivedPoolResponse, error)
+	DerivedPools(ctx context.Context, in *QueryDerivedPoolsRequest, opts ...grpc.CallOption) (*QueryDerivedPoolsResponse, error)
 }
 
 type queryClient struct {
@@ -59,6 +63,24 @@ func (c *queryClient) Pools(ctx context.Context, in *QueryPoolsRequest, opts ...
 	return out, nil
 }
 
+func (c *queryClient) DerivedPool(ctx context.Context, in *QueryDerivedPoolRequest, opts ...grpc.CallOption) (*QueryDerivedPoolResponse, error) {
+	out := new(QueryDerivedPoolResponse)
+	err := c.cc.Invoke(ctx, Query_DerivedPool_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) DerivedPools(ctx context.Context, in *QueryDerivedPoolsRequest, opts ...grpc.CallOption) (*QueryDerivedPoolsResponse, error) {
+	out := new(QueryDerivedPoolsResponse)
+	err := c.cc.Invoke(ctx, Query_DerivedPools_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -67,6 +89,8 @@ type QueryServer interface {
 	Pool(context.Context, *QueryPoolRequest) (*QueryPoolResponse, error)
 	// Pools returns all extended pools
 	Pools(context.Context, *QueryPoolsRequest) (*QueryPoolsResponse, error)
+	DerivedPool(context.Context, *QueryDerivedPoolRequest) (*QueryDerivedPoolResponse, error)
+	DerivedPools(context.Context, *QueryDerivedPoolsRequest) (*QueryDerivedPoolsResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -79,6 +103,12 @@ func (UnimplementedQueryServer) Pool(context.Context, *QueryPoolRequest) (*Query
 }
 func (UnimplementedQueryServer) Pools(context.Context, *QueryPoolsRequest) (*QueryPoolsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Pools not implemented")
+}
+func (UnimplementedQueryServer) DerivedPool(context.Context, *QueryDerivedPoolRequest) (*QueryDerivedPoolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DerivedPool not implemented")
+}
+func (UnimplementedQueryServer) DerivedPools(context.Context, *QueryDerivedPoolsRequest) (*QueryDerivedPoolsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DerivedPools not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -129,6 +159,42 @@ func _Query_Pools_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_DerivedPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDerivedPoolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).DerivedPool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_DerivedPool_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).DerivedPool(ctx, req.(*QueryDerivedPoolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_DerivedPools_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDerivedPoolsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).DerivedPools(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_DerivedPools_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).DerivedPools(ctx, req.(*QueryDerivedPoolsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +209,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Pools",
 			Handler:    _Query_Pools_Handler,
+		},
+		{
+			MethodName: "DerivedPool",
+			Handler:    _Query_DerivedPool_Handler,
+		},
+		{
+			MethodName: "DerivedPools",
+			Handler:    _Query_DerivedPools_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

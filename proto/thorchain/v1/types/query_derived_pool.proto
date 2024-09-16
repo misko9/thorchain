@@ -1,0 +1,27 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryDerivedPoolRequest{
+  string asset = 1;
+}
+
+message QueryDerivedPoolResponse{
+  string asset = 1;
+  string status = 2;
+  int64  decimals = 3;
+  string balance_asset = 4;
+  string balance_rune = 5;
+  string derived_depth_bps = 6;
+}
+
+message QueryDerivedPoolsRequest{}
+
+message QueryDerivedPoolsResponse{
+  repeated QueryDerivedPoolResponse pools = 1;
+}

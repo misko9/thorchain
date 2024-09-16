@@ -7,6 +7,7 @@ option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
 import "google/api/annotations.proto";
 import "gogoproto/gogo.proto";
 import "types/query_pool.proto";
+import "types/query_derived_pool.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -20,5 +21,13 @@ service Query {
   // Pools returns all extended pools
   rpc Pools(QueryPoolsRequest) returns (QueryPoolsResponse) {
     option (google.api.http).get = "/thorchain/pools";
+  }
+
+  rpc DerivedPool(QueryDerivedPoolRequest) returns (QueryDerivedPoolResponse) {
+    option (google.api.http).get = "/thorchain/dpool/{asset}";
+  }
+
+  rpc DerivedPools(QueryDerivedPoolsRequest) returns (QueryDerivedPoolsResponse) {
+    option (google.api.http).get = "/thorchain/dpools";
   }
 }

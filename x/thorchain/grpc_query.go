@@ -27,3 +27,13 @@ func (s queryServer) Pools(c context.Context, req *types.QueryPoolsRequest) (*ty
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryPools(ctx, req)
 }
+
+func (s queryServer) DerivedPool(c context.Context, req *types.QueryDerivedPoolRequest) (*types.QueryDerivedPoolResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryDerivedPool(ctx, req)
+}
+
+func (s queryServer)DerivedPools(c context.Context, req *types.QueryDerivedPoolsRequest) (*types.QueryDerivedPoolsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryDerivedPools(ctx, req)
+}

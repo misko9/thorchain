@@ -37,8 +37,7 @@ message QueryPoolResponse{
   string derived_depth_bps = 23;
 }
 
-message QueryPoolsRequest{
-}
+message QueryPoolsRequest{}
 
 message QueryPoolsResponse{
   repeated QueryPoolResponse pools = 1;
