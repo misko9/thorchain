@@ -35,10 +35,6 @@ func (q Query) Path(args ...string) string {
 var (
 	QueryPoolSlip            = Query{Key: "poolslip", EndpointTemplate: "/%s/slip/{%s}"}
 	QueryPoolSlips           = Query{Key: "poolslips", EndpointTemplate: "/%s/slips"}
-	QueryTradeUnit           = Query{Key: "tradeunit", EndpointTemplate: "/%s/trade/unit/{%s}"}
-	QueryTradeUnits          = Query{Key: "tradeunits", EndpointTemplate: "/%s/trade/units"}
-	QueryTradeAccount        = Query{Key: "tradeaccount", EndpointTemplate: "/%s/trade/account/{%s}"}
-	QueryTradeAccounts       = Query{Key: "tradeaccounts", EndpointTemplate: "/%s/trade/accounts/{%s}"}
 	QueryTx                  = Query{Key: "tx", EndpointTemplate: "/%s/tx/{%s}"}
 	QueryTxVoterOld          = Query{Key: "txvoterold", EndpointTemplate: "/%s/tx/{%s}/signers"}
 	QueryTxVoter             = Query{Key: "txvoter", EndpointTemplate: "/%s/tx/details/{%s}"}
@@ -100,10 +96,6 @@ var (
 var Queries = []Query{
 	QueryPoolSlip,
 	QueryPoolSlips,
-	QueryTradeUnit,
-	QueryTradeUnits,
-	QueryTradeAccount,
-	QueryTradeAccounts,
 	QueryTxStages,
 	QueryTxStatus,
 	QueryTxVoter,

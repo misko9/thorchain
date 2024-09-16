@@ -1,0 +1,28 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryTradeAccountRequest{
+  string address = 1;
+}
+
+message QueryTradeAccountResponse{
+  string asset = 1;
+  string units = 2;
+  string owner = 3;
+  int64  last_add_height = 4;
+  int64  last_withdraw_height = 5;
+}
+
+message QueryTradeAccountsRequest{
+  string asset = 1;
+}
+
+message QueryTradeAccountsResponse{
+  repeated QueryTradeAccountResponse trade_accounts = 1;
+}

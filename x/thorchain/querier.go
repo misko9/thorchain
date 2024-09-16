@@ -64,10 +64,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 
 		defer telemetry.MeasureSince(time.Now(), path[0])
 		switch path[0] {
-		case q.QueryTradeAccount.Key:
-			return queryTradeAccount(ctx, path[1:], req, mgr)
-		case q.QueryTradeAccounts.Key:
-			return queryTradeAccounts(ctx, path[1:], req, mgr)
 		case q.QueryTxStages.Key:
 			return queryTxStages(ctx, path[1:], req, mgr)
 		case q.QueryTxStatus.Key:
@@ -1834,22 +1830,22 @@ func (qs queryServer) queryTradeUnits(ctx cosmos.Context, req *types.QueryTradeU
 	return &types.QueryTradeUnitsResponse{TradeUnits: units}, nil
 }
 
-func queryTradeAccounts(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	if len(path) == 0 {
+func (qs queryServer) queryTradeAccounts(ctx cosmos.Context, req *types.QueryTradeAccountsRequest) (*types.QueryTradeAccountsResponse, error) {
+	if len(req.Asset) == 0 {
 		return nil, errors.New("asset not provided")
 	}
-	asset, err := common.NewAsset(path[0])
+	asset, err := common.NewAsset(req.Asset)
 	if err != nil {
 		ctx.Logger().Error("fail to parse address", "error", err)
 		return nil, fmt.Errorf("could not parse address: %w", err)
 	}
 
-	accounts := make([]openapi.TradeAccountResponse, 0)
-	iter := mgr.Keeper().GetTradeAccountIterator(ctx)
+	accounts := make([]*types.QueryTradeAccountResponse, 0)
+	iter := qs.mgr.Keeper().GetTradeAccountIterator(ctx)
 	defer iter.Close()
 	for ; iter.Valid(); iter.Next() {
 		var ta TradeAccount
-		if err := mgr.Keeper().Cdc().Unmarshal(iter.Value(), &ta); err != nil {
+		if err := qs.mgr.Keeper().Cdc().Unmarshal(iter.Value(), &ta); err != nil {
 			continue
 		}
 		if !ta.Asset.Equals(asset) {
@@ -1858,52 +1854,52 @@ func queryTradeAccounts(ctx cosmos.Context, path []string, req abci.RequestQuery
 		if ta.Units.IsZero() {
 			continue
 		}
-		taResp := openapi.TradeAccountResponse{
+		taResp := types.QueryTradeAccountResponse{
 			Asset:              ta.Asset.String(),
 			Units:              ta.Units.String(),
 			Owner:              ta.Owner.String(),
-			LastAddHeight:      &ta.LastAddHeight,
-			LastWithdrawHeight: &ta.LastWithdrawHeight,
+			LastAddHeight:      ta.LastAddHeight,
+			LastWithdrawHeight: ta.LastWithdrawHeight,
 		}
-		accounts = append(accounts, taResp)
+		accounts = append(accounts, &taResp)
 	}
 
-	return jsonify(ctx, accounts)
+	return &types.QueryTradeAccountsResponse{TradeAccounts: accounts}, nil
 }
 
-func queryTradeAccount(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	if len(path) == 0 {
+func (qs queryServer) queryTradeAccount(ctx cosmos.Context, req *types.QueryTradeAccountRequest) (*types.QueryTradeAccountsResponse, error) {
+	if len(req.Address) == 0 {
 		return nil, errors.New("address not provided")
 	}
-	addr, err := cosmos.AccAddressFromBech32(path[0])
+	addr, err := cosmos.AccAddressFromBech32(req.Address)
 	if err != nil {
 		ctx.Logger().Error("fail to parse address", "error", err)
 		return nil, fmt.Errorf("could not parse address: %w", err)
 	}
 
-	accounts := make([]openapi.TradeAccountResponse, 0)
-	iter := mgr.Keeper().GetTradeAccountIteratorWithAddress(ctx, addr)
+	accounts := make([]*types.QueryTradeAccountResponse, 0)
+	iter := qs.mgr.Keeper().GetTradeAccountIteratorWithAddress(ctx, addr)
 	defer iter.Close()
 	for ; iter.Valid(); iter.Next() {
 		var ta TradeAccount
-		if err := mgr.Keeper().Cdc().Unmarshal(iter.Value(), &ta); err != nil {
+		if err := qs.mgr.Keeper().Cdc().Unmarshal(iter.Value(), &ta); err != nil {
 			continue
 		}
 		if ta.Units.IsZero() {
 			continue
 		}
 
-		taResp := openapi.TradeAccountResponse{
+		taResp := types.QueryTradeAccountResponse{
 			Asset:              ta.Asset.String(),
 			Units:              ta.Units.String(),
 			Owner:              ta.Owner.String(),
-			LastAddHeight:      &ta.LastAddHeight,
-			LastWithdrawHeight: &ta.LastWithdrawHeight,
+			LastAddHeight:      ta.LastAddHeight,
+			LastWithdrawHeight: ta.LastWithdrawHeight,
 		}
-		accounts = append(accounts, taResp)
+		accounts = append(accounts, &taResp)
 	}
 
-	return jsonify(ctx, accounts)
+	return &types.QueryTradeAccountsResponse{TradeAccounts: accounts}, nil
 }
 
 func extractVoter(ctx cosmos.Context, path []string, mgr *Mgrs) (common.TxID, ObservedTxVoter, error) {

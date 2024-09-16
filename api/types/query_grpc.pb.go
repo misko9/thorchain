@@ -31,6 +31,8 @@ const (
 	Query_Borrowers_FullMethodName          = "/types.Query/Borrowers"
 	Query_TradeUnit_FullMethodName          = "/types.Query/TradeUnit"
 	Query_TradeUnits_FullMethodName         = "/types.Query/TradeUnits"
+	Query_TradeAccount_FullMethodName       = "/types.Query/TradeAccount"
+	Query_TradeAccounts_FullMethodName      = "/types.Query/TradeAccounts"
 )
 
 // QueryClient is the client API for Query service.
@@ -51,6 +53,8 @@ type QueryClient interface {
 	Borrowers(ctx context.Context, in *QueryBorrowersRequest, opts ...grpc.CallOption) (*QueryBorrowersResponse, error)
 	TradeUnit(ctx context.Context, in *QueryTradeUnitRequest, opts ...grpc.CallOption) (*QueryTradeUnitResponse, error)
 	TradeUnits(ctx context.Context, in *QueryTradeUnitsRequest, opts ...grpc.CallOption) (*QueryTradeUnitsResponse, error)
+	TradeAccount(ctx context.Context, in *QueryTradeAccountRequest, opts ...grpc.CallOption) (*QueryTradeAccountsResponse, error)
+	TradeAccounts(ctx context.Context, in *QueryTradeAccountsRequest, opts ...grpc.CallOption) (*QueryTradeAccountsResponse, error)
 }
 
 type queryClient struct {
@@ -169,6 +173,24 @@ func (c *queryClient) TradeUnits(ctx context.Context, in *QueryTradeUnitsRequest
 	return out, nil
 }
 
+func (c *queryClient) TradeAccount(ctx context.Context, in *QueryTradeAccountRequest, opts ...grpc.CallOption) (*QueryTradeAccountsResponse, error) {
+	out := new(QueryTradeAccountsResponse)
+	err := c.cc.Invoke(ctx, Query_TradeAccount_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) TradeAccounts(ctx context.Context, in *QueryTradeAccountsRequest, opts ...grpc.CallOption) (*QueryTradeAccountsResponse, error) {
+	out := new(QueryTradeAccountsResponse)
+	err := c.cc.Invoke(ctx, Query_TradeAccounts_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -187,6 +209,8 @@ type QueryServer interface {
 	Borrowers(context.Context, *QueryBorrowersRequest) (*QueryBorrowersResponse, error)
 	TradeUnit(context.Context, *QueryTradeUnitRequest) (*QueryTradeUnitResponse, error)
 	TradeUnits(context.Context, *QueryTradeUnitsRequest) (*QueryTradeUnitsResponse, error)
+	TradeAccount(context.Context, *QueryTradeAccountRequest) (*QueryTradeAccountsResponse, error)
+	TradeAccounts(context.Context, *QueryTradeAccountsRequest) (*QueryTradeAccountsResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -229,6 +253,12 @@ func (UnimplementedQueryServer) TradeUnit(context.Context, *QueryTradeUnitReques
 }
 func (UnimplementedQueryServer) TradeUnits(context.Context, *QueryTradeUnitsRequest) (*QueryTradeUnitsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TradeUnits not implemented")
+}
+func (UnimplementedQueryServer) TradeAccount(context.Context, *QueryTradeAccountRequest) (*QueryTradeAccountsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TradeAccount not implemented")
+}
+func (UnimplementedQueryServer) TradeAccounts(context.Context, *QueryTradeAccountsRequest) (*QueryTradeAccountsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TradeAccounts not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -459,6 +489,42 @@ func _Query_TradeUnits_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_TradeAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTradeAccountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).TradeAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_TradeAccount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).TradeAccount(ctx, req.(*QueryTradeAccountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_TradeAccounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTradeAccountsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).TradeAccounts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_TradeAccounts_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).TradeAccounts(ctx, req.(*QueryTradeAccountsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -513,6 +579,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "TradeUnits",
 			Handler:    _Query_TradeUnits_Handler,
+		},
+		{
+			MethodName: "TradeAccount",
+			Handler:    _Query_TradeAccount_Handler,
+		},
+		{
+			MethodName: "TradeAccounts",
+			Handler:    _Query_TradeAccounts_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

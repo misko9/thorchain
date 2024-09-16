@@ -77,3 +77,13 @@ func (s queryServer) TradeUnits(c context.Context, req *types.QueryTradeUnitsReq
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryTradeUnits(ctx, req)
 }
+
+func (s queryServer) TradeAccount(c context.Context, req *types.QueryTradeAccountRequest) (*types.QueryTradeAccountsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryTradeAccount(ctx, req)
+}
+
+func (s queryServer) TradeAccounts(c context.Context, req *types.QueryTradeAccountsRequest) (*types.QueryTradeAccountsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryTradeAccounts(ctx, req)
+}
