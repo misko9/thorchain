@@ -64,22 +64,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 
 		defer telemetry.MeasureSince(time.Now(), path[0])
 		switch path[0] {
-		case q.QuerySavers.Key:
-			return queryLiquidityProviders(ctx, path[1:], req, mgr, true)
-		case q.QuerySaver.Key:
-			return queryLiquidityProvider(ctx, path[1:], req, mgr, true)
-		case q.QueryBorrowers.Key:
-			return queryBorrowers(ctx, path[1:], req, mgr)
-		case q.QueryBorrower.Key:
-			return queryBorrower(ctx, path[1:], req, mgr)
-		case q.QueryLiquidityProviders.Key:
-			return queryLiquidityProviders(ctx, path[1:], req, mgr, false)
-		case q.QueryLiquidityProvider.Key:
-			return queryLiquidityProvider(ctx, path[1:], req, mgr, false)
-		case q.QueryTradeUnit.Key:
-			return queryTradeUnit(ctx, path[1:], req, mgr)
-		case q.QueryTradeUnits.Key:
-			return queryTradeUnits(ctx, path[1:], req, mgr)
 		case q.QueryTradeAccount.Key:
 			return queryTradeAccount(ctx, path[1:], req, mgr)
 		case q.QueryTradeAccounts.Key:
@@ -1006,88 +990,90 @@ func queryNodes(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *M
 }
 
 // queryBorrowers
-func queryBorrowers(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	if len(path) == 0 {
+func (qs queryServer) queryBorrowers(ctx cosmos.Context, req *types.QueryBorrowersRequest) (*types.QueryBorrowersResponse, error) {
+	if len(req.Asset) == 0 {
 		return nil, errors.New("asset not provided")
 	}
-	asset, err := common.NewAsset(path[0])
+	asset, err := common.NewAsset(req.Asset)
 	if err != nil {
 		ctx.Logger().Error("fail to get parse asset", "error", err)
 		return nil, fmt.Errorf("fail to parse asset: %w", err)
 	}
 
 	var loans Loans
-	iterator := mgr.Keeper().GetLoanIterator(ctx, asset)
+	iterator := qs.mgr.Keeper().GetLoanIterator(ctx, asset)
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
 		var loan Loan
-		mgr.Keeper().Cdc().MustUnmarshal(iterator.Value(), &loan)
+		qs.mgr.Keeper().Cdc().MustUnmarshal(iterator.Value(), &loan)
 		if loan.CollateralDeposited.Equal(loan.CollateralWithdrawn) && loan.DebtIssued.Equal(loan.DebtRepaid) {
 			continue
 		}
 		loans = append(loans, loan)
 	}
 
-	borrowers := make([]openapi.Borrower, len(loans))
+	borrowers := make([]*types.QueryBorrowerResponse, len(loans))
 	for i, loan := range loans {
-		borrower := openapi.NewBorrower(
-			loan.Owner.String(),
-			loan.Asset.String(),
-			loan.DebtIssued.String(),
-			loan.DebtRepaid.String(),
-			loan.Debt().String(),
-			loan.CollateralDeposited.String(),
-			loan.CollateralWithdrawn.String(),
-			loan.Collateral().String(),
-			loan.LastOpenHeight,
-			loan.LastRepayHeight,
-		)
-		borrowers[i] = *borrower
+		borrowers[i] = &types.QueryBorrowerResponse{
+			Owner: loan.Owner.String(),
+			Asset: loan.Asset.String(),
+			DebtIssued: loan.DebtIssued.String(),
+			DebtRepaid: loan.DebtRepaid.String(),
+			DebtCurrent: loan.Debt().String(),
+			CollateralDeposited: loan.CollateralDeposited.String(),
+			CollateralWithdrawn: loan.CollateralWithdrawn.String(),
+			CollateralCurrent: loan.Collateral().String(),
+			LastOpenHeight: loan.LastOpenHeight,
+			LastReplayHeight: loan.LastRepayHeight,
+		}
 	}
 
-	return jsonify(ctx, borrowers)
+	return &types.QueryBorrowersResponse{Borrowers: borrowers}, nil
 }
 
 // queryBorrower
-func queryBorrower(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	if len(path) < 2 {
-		return nil, errors.New("asset/loan not provided")
+func (qs queryServer) queryBorrower(ctx cosmos.Context, req *types.QueryBorrowerRequest) (*types.QueryBorrowerResponse, error) {
+	if len(req.Asset) == 0 {
+		return nil, errors.New("asset not provided")
 	}
-	asset, err := common.NewAsset(path[0])
+	if len(req.Address) == 0 {
+		return nil, errors.New("loan not provided")
+	}
+	asset, err := common.NewAsset(req.Asset)
 	if err != nil {
 		ctx.Logger().Error("fail to get parse asset", "error", err)
 		return nil, fmt.Errorf("fail to parse asset: %w", err)
 	}
 
-	addr, err := common.NewAddress(path[1])
+	addr, err := common.NewAddress(req.Address)
 	if err != nil {
 		ctx.Logger().Error("fail to get parse address", "error", err)
 		return nil, fmt.Errorf("fail to parse address: %w", err)
 	}
 
-	loan, err := mgr.Keeper().GetLoan(ctx, asset, addr)
+	loan, err := qs.mgr.Keeper().GetLoan(ctx, asset, addr)
 	if err != nil {
 		ctx.Logger().Error("fail to get borrower", "error", err)
 		return nil, fmt.Errorf("fail to borrower: %w", err)
 	}
 
-	borrower := openapi.NewBorrower(
-		loan.Owner.String(),
-		loan.Asset.String(),
-		loan.DebtIssued.String(),
-		loan.DebtRepaid.String(),
-		loan.Debt().String(),
-		loan.CollateralDeposited.String(),
-		loan.CollateralWithdrawn.String(),
-		loan.Collateral().String(),
-		loan.LastOpenHeight,
-		loan.LastRepayHeight,
-	)
+	borrower := types.QueryBorrowerResponse{
+		Owner: loan.Owner.String(),
+		Asset: loan.Asset.String(),
+		DebtIssued: loan.DebtIssued.String(),
+		DebtRepaid: loan.DebtRepaid.String(),
+		DebtCurrent: loan.Debt().String(),
+		CollateralDeposited: loan.CollateralDeposited.String(),
+		CollateralWithdrawn: loan.CollateralWithdrawn.String(),
+		CollateralCurrent: loan.Collateral().String(),
+		LastOpenHeight: loan.LastOpenHeight,
+		LastReplayHeight: loan.LastRepayHeight,
+	}
 
-	return jsonify(ctx, borrower)
+	return &borrower, nil
 }
 
-func newSaver(lp LiquidityProvider, pool Pool) openapi.Saver {
+func newSaver(lp LiquidityProvider, pool Pool) *types.QuerySaverResponse {
 	assetRedeemableValue := lp.GetSaversAssetRedeemValue(pool)
 
 	gp := cosmos.NewDec(0)
@@ -1098,11 +1084,11 @@ func newSaver(lp LiquidityProvider, pool Pool) openapi.Saver {
 		gp = gp.Quo(adv)
 	}
 
-	return openapi.Saver{
+	return &types.QuerySaverResponse{
 		Asset:              lp.Asset.GetLayer1Asset().String(),
 		AssetAddress:       lp.AssetAddress.String(),
-		LastAddHeight:      wrapInt64(lp.LastAddHeight),
-		LastWithdrawHeight: wrapInt64(lp.LastWithdrawHeight),
+		LastAddHeight:      lp.LastAddHeight,
+		LastWithdrawHeight: lp.LastWithdrawHeight,
 		Units:              lp.Units.String(),
 		AssetDepositValue:  lp.AssetDepositValue.String(),
 		AssetRedeemValue:   assetRedeemableValue.String(),
@@ -1111,15 +1097,11 @@ func newSaver(lp LiquidityProvider, pool Pool) openapi.Saver {
 }
 
 // queryLiquidityProviders
-// isSavers is true if request is for the savers of a Savers Pool, if false the request is for an L1 pool
-func queryLiquidityProviders(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs, isSavers bool) ([]byte, error) {
-	if len(path) == 0 {
+func (qs queryServer) queryLiquidityProviders(ctx cosmos.Context, req *types.QueryLiquidityProvidersRequest) (*types.QueryLiquidityProvidersResponse, error) {
+	if len(req.Asset) == 0 {
 		return nil, errors.New("asset not provided")
 	}
-	if isSavers {
-		path[0] = strings.Replace(path[0], ".", "/", 1)
-	}
-	asset, err := common.NewAsset(path[0])
+	asset, err := common.NewAsset(req.Asset)
 	if err != nil {
 		ctx.Logger().Error("fail to get parse asset", "error", err)
 		return nil, fmt.Errorf("fail to parse asset: %w", err)
@@ -1127,66 +1109,43 @@ func queryLiquidityProviders(ctx cosmos.Context, path []string, req abci.Request
 	if asset.IsDerivedAsset() {
 		return nil, fmt.Errorf("must not be a derived asset")
 	}
-	if isSavers && !asset.IsVaultAsset() {
-		return nil, fmt.Errorf("invalid request: requested pool is not a SaversPool")
-	} else if !isSavers && asset.IsVaultAsset() {
+	if asset.IsVaultAsset() {
 		return nil, fmt.Errorf("invalid request: requested pool is a SaversPool")
 	}
 
-	poolAsset := asset
-	if isSavers {
-		poolAsset = asset.GetSyntheticAsset()
-	}
-
-	pool, err := mgr.Keeper().GetPool(ctx, poolAsset)
-	if err != nil {
-		ctx.Logger().Error("fail to get pool", "error", err)
-		return nil, fmt.Errorf("fail to get pool: %w", err)
-	}
-
-	var lps []openapi.LiquidityProvider
-	var savers []openapi.Saver
-	iterator := mgr.Keeper().GetLiquidityProviderIterator(ctx, asset)
+	var lps []*types.QueryLiquidityProviderResponse
+	iterator := qs.mgr.Keeper().GetLiquidityProviderIterator(ctx, asset)
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
 		var lp LiquidityProvider
-		mgr.Keeper().Cdc().MustUnmarshal(iterator.Value(), &lp)
-		if !isSavers {
-			lps = append(lps, openapi.LiquidityProvider{
-				// No redeem or LUVI calculations for the array response.
-				Asset:              lp.Asset.GetLayer1Asset().String(),
-				RuneAddress:        wrapString(lp.RuneAddress.String()),
-				AssetAddress:       wrapString(lp.AssetAddress.String()),
-				LastAddHeight:      wrapInt64(lp.LastAddHeight),
-				LastWithdrawHeight: wrapInt64(lp.LastWithdrawHeight),
-				Units:              lp.Units.String(),
-				PendingRune:        lp.PendingRune.String(),
-				PendingAsset:       lp.PendingAsset.String(),
-				PendingTxId:        wrapString(lp.PendingTxID.String()),
-				RuneDepositValue:   lp.RuneDepositValue.String(),
-				AssetDepositValue:  lp.AssetDepositValue.String(),
-			})
-		} else {
-			savers = append(savers, newSaver(lp, pool))
-		}
+		qs.mgr.Keeper().Cdc().MustUnmarshal(iterator.Value(), &lp)
+		lps = append(lps, &types.QueryLiquidityProviderResponse{
+			// No redeem or LUVI calculations for the array response.
+			Asset:              lp.Asset.GetLayer1Asset().String(),
+			RuneAddress:        lp.RuneAddress.String(),
+			AssetAddress:       lp.AssetAddress.String(),
+			LastAddHeight:      lp.LastAddHeight,
+			LastWithdrawHeight: lp.LastWithdrawHeight,
+			Units:              lp.Units.String(),
+			PendingRune:        lp.PendingRune.String(),
+			PendingAsset:       lp.PendingAsset.String(),
+			PendingTxId:        lp.PendingTxID.String(),
+			RuneDepositValue:   lp.RuneDepositValue.String(),
+			AssetDepositValue:  lp.AssetDepositValue.String(),
+		})
 	}
-	if !isSavers {
-		return jsonify(ctx, lps)
-	} else {
-		return jsonify(ctx, savers)
-	}
+	return &types.QueryLiquidityProvidersResponse{LiquidityProviders: lps}, nil
 }
 
 // queryLiquidityProvider
-// isSavers is true if request is for the savers of a Savers Pool, if false the request is for an L1 pool
-func queryLiquidityProvider(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs, isSavers bool) ([]byte, error) {
-	if len(path) < 2 {
-		return nil, errors.New("asset/lp not provided")
+func (qs queryServer) queryLiquidityProvider(ctx cosmos.Context, req *types.QueryLiquidityProviderRequest) (*types.QueryLiquidityProviderResponse, error) {
+	if len(req.Asset) == 0 {
+		return nil, errors.New("asset not provided")
 	}
-	if isSavers {
-		path[0] = strings.Replace(path[0], ".", "/", 1)
+	if len(req.Address) == 0 {
+		return nil, errors.New("lp not provided")
 	}
-	asset, err := common.NewAsset(path[0])
+	asset, err := common.NewAsset(req.Asset)
 	if err != nil {
 		ctx.Logger().Error("fail to get parse asset", "error", err)
 		return nil, fmt.Errorf("fail to parse asset: %w", err)
@@ -1196,72 +1155,149 @@ func queryLiquidityProvider(ctx cosmos.Context, path []string, req abci.RequestQ
 		return nil, fmt.Errorf("must not be a derived asset")
 	}
 
-	if isSavers && !asset.IsVaultAsset() {
-		return nil, fmt.Errorf("invalid request: requested pool is not a SaversPool")
-	} else if !isSavers && asset.IsVaultAsset() {
+	if asset.IsVaultAsset() {
 		return nil, fmt.Errorf("invalid request: requested pool is a SaversPool")
 	}
 
-	addr, err := common.NewAddress(path[1])
+	addr, err := common.NewAddress(req.Address)
 	if err != nil {
 		ctx.Logger().Error("fail to get parse address", "error", err)
 		return nil, fmt.Errorf("fail to parse address: %w", err)
 	}
-	lp, err := mgr.Keeper().GetLiquidityProvider(ctx, asset, addr)
+	lp, err := qs.mgr.Keeper().GetLiquidityProvider(ctx, asset, addr)
 	if err != nil {
 		ctx.Logger().Error("fail to get liquidity provider", "error", err)
 		return nil, fmt.Errorf("fail to liquidity provider: %w", err)
 	}
 
 	poolAsset := asset
-	if isSavers {
-		poolAsset = asset.GetSyntheticAsset()
-	}
 
-	pool, err := mgr.Keeper().GetPool(ctx, poolAsset)
+	pool, err := qs.mgr.Keeper().GetPool(ctx, poolAsset)
 	if err != nil {
 		ctx.Logger().Error("fail to get pool", "error", err)
 		return nil, fmt.Errorf("fail to get pool: %w", err)
 	}
 
-	if !isSavers {
-		synthSupply := mgr.Keeper().GetTotalSupply(ctx, poolAsset.GetSyntheticAsset())
-		_, runeRedeemValue := lp.GetRuneRedeemValue(pool, synthSupply)
-		_, assetRedeemValue := lp.GetAssetRedeemValue(pool, synthSupply)
-		_, luviDepositValue := lp.GetLuviDepositValue(pool)
-		_, luviRedeemValue := lp.GetLuviRedeemValue(runeRedeemValue, assetRedeemValue)
+	synthSupply := qs.mgr.Keeper().GetTotalSupply(ctx, poolAsset.GetSyntheticAsset())
+	_, runeRedeemValue := lp.GetRuneRedeemValue(pool, synthSupply)
+	_, assetRedeemValue := lp.GetAssetRedeemValue(pool, synthSupply)
+	_, luviDepositValue := lp.GetLuviDepositValue(pool)
+	_, luviRedeemValue := lp.GetLuviRedeemValue(runeRedeemValue, assetRedeemValue)
 
-		lgp := cosmos.NewDec(0)
-		if !luviDepositValue.IsZero() {
-			ldv := cosmos.NewDec(luviDepositValue.BigInt().Int64())
-			lrv := cosmos.NewDec(luviRedeemValue.BigInt().Int64())
-			lgp = lrv.Sub(ldv)
-			lgp = lgp.Quo(ldv)
-		}
-
-		liqp := openapi.LiquidityProvider{
-			Asset:              lp.Asset.GetLayer1Asset().String(),
-			RuneAddress:        wrapString(lp.RuneAddress.String()),
-			AssetAddress:       wrapString(lp.AssetAddress.String()),
-			LastAddHeight:      wrapInt64(lp.LastAddHeight),
-			LastWithdrawHeight: wrapInt64(lp.LastWithdrawHeight),
-			Units:              lp.Units.String(),
-			PendingRune:        lp.PendingRune.String(),
-			PendingAsset:       lp.PendingAsset.String(),
-			PendingTxId:        wrapString(lp.PendingTxID.String()),
-			RuneDepositValue:   lp.RuneDepositValue.String(),
-			AssetDepositValue:  lp.AssetDepositValue.String(),
-			RuneRedeemValue:    wrapString(runeRedeemValue.String()),
-			AssetRedeemValue:   wrapString(assetRedeemValue.String()),
-			LuviDepositValue:   wrapString(luviDepositValue.String()),
-			LuviRedeemValue:    wrapString(luviRedeemValue.String()),
-			LuviGrowthPct:      wrapString(lgp.String()),
-		}
-		return jsonify(ctx, liqp)
-	} else {
-		saver := newSaver(lp, pool)
-		return jsonify(ctx, saver)
+	lgp := cosmos.NewDec(0)
+	if !luviDepositValue.IsZero() {
+		ldv := cosmos.NewDec(luviDepositValue.BigInt().Int64())
+		lrv := cosmos.NewDec(luviRedeemValue.BigInt().Int64())
+		lgp = lrv.Sub(ldv)
+		lgp = lgp.Quo(ldv)
 	}
+
+	liqp := types.QueryLiquidityProviderResponse{
+		Asset:              lp.Asset.GetLayer1Asset().String(),
+		RuneAddress:        lp.RuneAddress.String(),
+		AssetAddress:       lp.AssetAddress.String(),
+		LastAddHeight:      lp.LastAddHeight,
+		LastWithdrawHeight: lp.LastWithdrawHeight,
+		Units:              lp.Units.String(),
+		PendingRune:        lp.PendingRune.String(),
+		PendingAsset:       lp.PendingAsset.String(),
+		PendingTxId:        lp.PendingTxID.String(),
+		RuneDepositValue:   lp.RuneDepositValue.String(),
+		AssetDepositValue:  lp.AssetDepositValue.String(),
+		RuneRedeemValue:    runeRedeemValue.String(),
+		AssetRedeemValue:   assetRedeemValue.String(),
+		LuviDepositValue:   luviDepositValue.String(),
+		LuviRedeemValue:    luviRedeemValue.String(),
+		LuviGrowthPct:      lgp.String(),
+	}
+
+	return &liqp, nil
+}
+
+// querySavers
+func (qs queryServer) querySavers(ctx cosmos.Context, req *types.QuerySaversRequest) (*types.QuerySaversResponse, error) {
+	if len(req.Asset) == 0 {
+		return nil, errors.New("asset not provided")
+	}
+	req.Asset = strings.Replace(req.Asset, ".", "/", 1)
+	asset, err := common.NewAsset(req.Asset)
+	if err != nil {
+		ctx.Logger().Error("fail to get parse asset", "error", err)
+		return nil, fmt.Errorf("fail to parse asset: %w", err)
+	}
+	if asset.IsDerivedAsset() {
+		return nil, fmt.Errorf("must not be a derived asset")
+	}
+	if !asset.IsVaultAsset() {
+		return nil, fmt.Errorf("invalid request: requested pool is not a SaversPool")
+	}
+
+	poolAsset := asset.GetSyntheticAsset()
+
+	pool, err := qs.mgr.Keeper().GetPool(ctx, poolAsset)
+	if err != nil {
+		ctx.Logger().Error("fail to get pool", "error", err)
+		return nil, fmt.Errorf("fail to get pool: %w", err)
+	}
+
+	var savers []*types.QuerySaverResponse
+	iterator := qs.mgr.Keeper().GetLiquidityProviderIterator(ctx, asset)
+	defer iterator.Close()
+	for ; iterator.Valid(); iterator.Next() {
+		var lp LiquidityProvider
+		qs.mgr.Keeper().Cdc().MustUnmarshal(iterator.Value(), &lp)
+		savers = append(savers, newSaver(lp, pool))
+	}
+
+	return &types.QuerySaversResponse{Savers: savers}, nil
+}
+
+// querySaver
+// isSavers is true if request is for the savers of a Savers Pool, if false the request is for an L1 pool
+func (qs queryServer) querySaver(ctx cosmos.Context, req *types.QuerySaverRequest) (*types.QuerySaverResponse, error) {
+	if len(req.Asset) == 0 {
+		return nil, errors.New("asset not provided")
+	}
+	if len(req.Address) == 0 {
+		return nil, errors.New("lp not provided")
+	}
+	req.Asset = strings.Replace(req.Asset, ".", "/", 1)
+	asset, err := common.NewAsset(req.Asset)
+	if err != nil {
+		ctx.Logger().Error("fail to get parse asset", "error", err)
+		return nil, fmt.Errorf("fail to parse asset: %w", err)
+	}
+
+	if asset.IsDerivedAsset() {
+		return nil, fmt.Errorf("must not be a derived asset")
+	}
+
+	if !asset.IsVaultAsset() {
+		return nil, fmt.Errorf("invalid request: requested pool is not a SaversPool")
+	}
+
+	addr, err := common.NewAddress(req.Address)
+	if err != nil {
+		ctx.Logger().Error("fail to get parse address", "error", err)
+		return nil, fmt.Errorf("fail to parse address: %w", err)
+	}
+	lp, err := qs.mgr.Keeper().GetLiquidityProvider(ctx, asset, addr)
+	if err != nil {
+		ctx.Logger().Error("fail to get liquidity provider", "error", err)
+		return nil, fmt.Errorf("fail to liquidity provider: %w", err)
+	}
+
+	poolAsset := asset.GetSyntheticAsset()
+
+	pool, err := qs.mgr.Keeper().GetPool(ctx, poolAsset)
+	if err != nil {
+		ctx.Logger().Error("fail to get pool", "error", err)
+		return nil, fmt.Errorf("fail to get pool: %w", err)
+	}
+
+	saver := newSaver(lp, pool)
+
+	return saver, nil
 }
 
 func newStreamingSwap(streamingSwap StreamingSwap, msgSwap MsgSwap) openapi.StreamingSwap {
@@ -1747,55 +1783,55 @@ func (qs queryServer) queryDerivedPools(ctx cosmos.Context, req *types.QueryDeri
 	return &types.QueryDerivedPoolsResponse{Pools: pools}, nil
 }
 
-func queryTradeUnit(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	if len(path) == 0 {
+func (qs queryServer) queryTradeUnit(ctx cosmos.Context, req *types.QueryTradeUnitRequest) (*types.QueryTradeUnitResponse, error) {
+	if len(req.Asset) == 0 {
 		return nil, errors.New("asset not provided")
 	}
-	asset, err := common.NewAsset(path[0])
+	asset, err := common.NewAsset(req.Asset)
 	if err != nil {
 		ctx.Logger().Error("fail to parse asset", "error", err)
 		return nil, fmt.Errorf("could not parse asset: %w", err)
 	}
 
-	tu, err := mgr.Keeper().GetTradeUnit(ctx, asset)
+	tu, err := qs.mgr.Keeper().GetTradeUnit(ctx, asset)
 	if err != nil {
 		ctx.Logger().Error("fail to get trade unit", "error", err)
 		return nil, fmt.Errorf("could not get trade unit: %w", err)
 	}
-	tuResp := openapi.TradeUnitResponse{
+	tuResp := types.QueryTradeUnitResponse{
 		Asset: tu.Asset.String(),
 		Units: tu.Units.String(),
 		Depth: tu.Depth.String(),
 	}
-	return jsonify(ctx, tuResp)
+	return &tuResp, nil
 }
 
-func queryTradeUnits(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	pools, err := mgr.Keeper().GetPools(ctx)
+func (qs queryServer) queryTradeUnits(ctx cosmos.Context, req *types.QueryTradeUnitsRequest) (*types.QueryTradeUnitsResponse, error) {
+	pools, err := qs.mgr.Keeper().GetPools(ctx)
 	if err != nil {
 		return nil, errors.New("failed to get pools")
 	}
-	units := make([]openapi.TradeUnitResponse, 0)
+	units := make([]*types.QueryTradeUnitResponse, 0)
 	for _, pool := range pools {
 		// skip non-layer1 pools
 		if pool.Asset.GetChain().IsTHORChain() {
 			continue
 		}
 		asset := pool.Asset.GetTradeAsset()
-		tu, err := mgr.Keeper().GetTradeUnit(ctx, asset)
+		tu, err := qs.mgr.Keeper().GetTradeUnit(ctx, asset)
 		if err != nil {
 			ctx.Logger().Error("fail to get trade unit", "error", err)
 			return nil, fmt.Errorf("could not get trade unit: %w", err)
 		}
-		tuResp := openapi.TradeUnitResponse{
+		tuResp := types.QueryTradeUnitResponse{
 			Asset: tu.Asset.String(),
 			Units: tu.Units.String(),
 			Depth: tu.Depth.String(),
 		}
-		units = append(units, tuResp)
+		units = append(units, &tuResp)
 	}
 
-	return jsonify(ctx, units)
+	return &types.QueryTradeUnitsResponse{TradeUnits: units}, nil
 }
 
 func queryTradeAccounts(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {

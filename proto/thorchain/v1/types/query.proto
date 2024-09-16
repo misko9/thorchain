@@ -8,6 +8,10 @@ import "google/api/annotations.proto";
 import "gogoproto/gogo.proto";
 import "types/query_pool.proto";
 import "types/query_derived_pool.proto";
+import "types/query_liquidity_provider.proto";
+import "types/query_saver.proto";
+import "types/query_borrower.proto";
+import "types/query_trade_unit.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -29,5 +33,37 @@ service Query {
 
   rpc DerivedPools(QueryDerivedPoolsRequest) returns (QueryDerivedPoolsResponse) {
     option (google.api.http).get = "/thorchain/dpools";
+  }
+
+  rpc LiquidityProvider(QueryLiquidityProviderRequest) returns (QueryLiquidityProviderResponse) {
+    option (google.api.http).get = "/thorchain/pool/{asset}/liquidity_provider/{address}";
+  }
+
+  rpc LiquidityProviders(QueryLiquidityProvidersRequest) returns (QueryLiquidityProvidersResponse) {
+    option (google.api.http).get = "/thorchain/pool/{asset}/liquidity_providers";
+  }
+
+  rpc Saver(QuerySaverRequest) returns (QuerySaverResponse) {
+    option (google.api.http).get = "/thorchain/pool/{asset}/saver/{address}";
+  }
+
+  rpc Savers(QuerySaversRequest) returns (QuerySaversResponse) {
+    option (google.api.http).get = "/thorchain/pool/{asset}/savers";
+  }
+
+  rpc Borrower(QueryBorrowerRequest) returns (QueryBorrowerResponse) {
+    option (google.api.http).get = "/thorchain/pool/{asset}/borrower/{address}";
+  }
+
+  rpc Borrowers(QueryBorrowersRequest) returns (QueryBorrowersResponse) {
+    option (google.api.http).get = "/thorchain/pool/{asset}/borrowers";
+  }
+
+  rpc TradeUnit(QueryTradeUnitRequest) returns (QueryTradeUnitResponse) {
+    option (google.api.http).get = "/thorchain/trade/unit/{asset}";
+  }
+
+  rpc TradeUnits(QueryTradeUnitsRequest) returns (QueryTradeUnitsResponse) {
+    option (google.api.http).get = "/thorchain/trade/units";
   }
 }

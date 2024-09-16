@@ -35,12 +35,6 @@ func (q Query) Path(args ...string) string {
 var (
 	QueryPoolSlip            = Query{Key: "poolslip", EndpointTemplate: "/%s/slip/{%s}"}
 	QueryPoolSlips           = Query{Key: "poolslips", EndpointTemplate: "/%s/slips"}
-	QueryLiquidityProviders  = Query{Key: "lps", EndpointTemplate: "/%s/pool/{%s}/liquidity_providers"}
-	QueryLiquidityProvider   = Query{Key: "lp", EndpointTemplate: "/%s/pool/{%s}/liquidity_provider/{%s}"}
-	QuerySavers              = Query{Key: "savers", EndpointTemplate: "/%s/pool/{%s}/savers"}
-	QuerySaver               = Query{Key: "saver", EndpointTemplate: "/%s/pool/{%s}/saver/{%s}"}
-	QueryBorrowers           = Query{Key: "borrowers", EndpointTemplate: "/%s/pool/{%s}/borrowers"}
-	QueryBorrower            = Query{Key: "borrower", EndpointTemplate: "/%s/pool/{%s}/borrower/{%s}"}
 	QueryTradeUnit           = Query{Key: "tradeunit", EndpointTemplate: "/%s/trade/unit/{%s}"}
 	QueryTradeUnits          = Query{Key: "tradeunits", EndpointTemplate: "/%s/trade/units"}
 	QueryTradeAccount        = Query{Key: "tradeaccount", EndpointTemplate: "/%s/trade/account/{%s}"}
@@ -106,12 +100,6 @@ var (
 var Queries = []Query{
 	QueryPoolSlip,
 	QueryPoolSlips,
-	QueryLiquidityProviders,
-	QueryLiquidityProvider,
-	QuerySavers,
-	QuerySaver,
-	QueryBorrowers,
-	QueryBorrower,
 	QueryTradeUnit,
 	QueryTradeUnits,
 	QueryTradeAccount,
