@@ -1,0 +1,35 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryStreamingSwapRequest{
+  string tx_id = 1;
+}
+
+message QueryStreamingSwapResponse{
+  string tx_id = 1;
+  int64  interval = 2;
+  int64  quantity = 3;
+  int64  count = 4;
+  int64 last_height = 5;
+  string trade_target = 6;
+  string source_asset = 7;
+  string target_asset = 8;
+  string destination = 9;
+  string deposit = 10;
+  string in = 11;
+  string out = 12;
+  repeated int64 failed_swaps = 13;
+  repeated string failed_swap_reasons = 14;
+}
+
+message QueryStreamingSwapsRequest{}
+
+message QueryStreamingSwapsResponse{
+  repeated QueryStreamingSwapResponse streaming_swaps = 1;
+}

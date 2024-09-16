@@ -137,11 +137,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 		case q.QuerySwapperClout.Key:
 			return querySwapperClout(ctx, path[1:], mgr)
 
-		case q.QueryStreamingSwap.Key:
-			return queryStreamingSwap(ctx, path[1:], mgr)
-		case q.QueryStreamingSwaps.Key:
-			return queryStreamingSwaps(ctx, mgr)
-			
 		case q.QueryTssKeygenMetrics.Key:
 			return queryTssKeygenMetric(ctx, path[1:], req, mgr)
 		case q.QueryTssMetrics.Key:
@@ -1289,7 +1284,7 @@ func (qs queryServer) querySaver(ctx cosmos.Context, req *types.QuerySaverReques
 	return saver, nil
 }
 
-func newStreamingSwap(streamingSwap StreamingSwap, msgSwap MsgSwap) openapi.StreamingSwap {
+func newStreamingSwap(streamingSwap StreamingSwap, msgSwap MsgSwap) *types.QueryStreamingSwapResponse{
 	var sourceAsset common.Asset
 	// Leave the source_asset field empty if there is more than a single input Coin.
 	if len(msgSwap.Tx.Coins) == 1 {
@@ -1305,16 +1300,16 @@ func newStreamingSwap(streamingSwap StreamingSwap, msgSwap MsgSwap) openapi.Stre
 		}
 	}
 
-	return openapi.StreamingSwap{
-		TxId:              wrapString(streamingSwap.TxID.String()),
-		Interval:          wrapInt64(int64(streamingSwap.Interval)),
-		Quantity:          wrapInt64(int64(streamingSwap.Quantity)),
-		Count:             wrapInt64(int64(streamingSwap.Count)),
-		LastHeight:        wrapInt64(streamingSwap.LastHeight),
+	return &types.QueryStreamingSwapResponse{
+		TxId:              streamingSwap.TxID.String(),
+		Interval:          int64(streamingSwap.Interval),
+		Quantity:          int64(streamingSwap.Quantity),
+		Count:             int64(streamingSwap.Count),
+		LastHeight:        streamingSwap.LastHeight,
 		TradeTarget:       streamingSwap.TradeTarget.String(),
-		SourceAsset:       wrapString(sourceAsset.String()),
-		TargetAsset:       wrapString(msgSwap.TargetAsset.String()),
-		Destination:       wrapString(msgSwap.Destination.String()),
+		SourceAsset:       sourceAsset.String(),
+		TargetAsset:       msgSwap.TargetAsset.String(),
+		Destination:       msgSwap.Destination.String(),
 		Deposit:           streamingSwap.Deposit.String(),
 		In:                streamingSwap.In.String(),
 		Out:               streamingSwap.Out.String(),
@@ -1323,18 +1318,18 @@ func newStreamingSwap(streamingSwap StreamingSwap, msgSwap MsgSwap) openapi.Stre
 	}
 }
 
-func queryStreamingSwaps(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
-	var streams []openapi.StreamingSwap
-	iter := mgr.Keeper().GetStreamingSwapIterator(ctx)
+func (qs queryServer) queryStreamingSwaps(ctx cosmos.Context, req *types.QueryStreamingSwapsRequest) (*types.QueryStreamingSwapsResponse, error) {
+	var streams []*types.QueryStreamingSwapResponse
+	iter := qs.mgr.Keeper().GetStreamingSwapIterator(ctx)
 	defer iter.Close()
 	for ; iter.Valid(); iter.Next() {
 		var stream StreamingSwap
-		mgr.Keeper().Cdc().MustUnmarshal(iter.Value(), &stream)
+		qs.mgr.Keeper().Cdc().MustUnmarshal(iter.Value(), &stream)
 
 		var msgSwap MsgSwap
 		// Check up to the first two indices (0 through 1) for the MsgSwap; if not found, leave the fields blank.
 		for i := 0; i <= 1; i++ {
-			swapQueueItem, err := mgr.Keeper().GetSwapQueueItem(ctx, stream.TxID, i)
+			swapQueueItem, err := qs.mgr.Keeper().GetSwapQueueItem(ctx, stream.TxID, i)
 			if err != nil {
 				// GetSwapQueueItem returns an error if there is no MsgSwap set for that index, a normal occurrence here.
 				continue
@@ -1352,7 +1347,7 @@ func queryStreamingSwaps(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 
 		streams = append(streams, newStreamingSwap(stream, msgSwap))
 	}
-	return jsonify(ctx, streams)
+	return &types.QueryStreamingSwapsResponse{StreamingSwaps: streams}, nil
 }
 
 func querySwapperClout(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, error) {
@@ -1374,17 +1369,17 @@ func querySwapperClout(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, er
 	return jsonify(ctx, clout)
 }
 
-func queryStreamingSwap(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, error) {
-	if len(path) == 0 {
+func (qs queryServer) queryStreamingSwap(ctx cosmos.Context, req *types.QueryStreamingSwapRequest) (*types.QueryStreamingSwapResponse, error) {
+	if len(req.TxId) == 0 {
 		return nil, errors.New("tx id not provided")
 	}
-	txid, err := common.NewTxID(path[0])
+	txid, err := common.NewTxID(req.TxId)
 	if err != nil {
 		ctx.Logger().Error("fail to parse txid", "error", err)
 		return nil, fmt.Errorf("could not parse txid: %w", err)
 	}
 
-	streamingSwap, err := mgr.Keeper().GetStreamingSwap(ctx, txid)
+	streamingSwap, err := qs.mgr.Keeper().GetStreamingSwap(ctx, txid)
 	if err != nil {
 		ctx.Logger().Error("fail to get streaming swap", "error", err)
 		return nil, fmt.Errorf("could not get streaming swap: %w", err)
@@ -1393,7 +1388,7 @@ func queryStreamingSwap(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, e
 	var msgSwap MsgSwap
 	// Check up to the first two indices (0 through 1) for the MsgSwap; if not found, leave the fields blank.
 	for i := 0; i <= 1; i++ {
-		swapQueueItem, err := mgr.Keeper().GetSwapQueueItem(ctx, txid, i)
+		swapQueueItem, err := qs.mgr.Keeper().GetSwapQueueItem(ctx, txid, i)
 		if err != nil {
 			// GetSwapQueueItem returns an error if there is no MsgSwap set for that index, a normal occurrence here.
 			continue
@@ -1411,7 +1406,7 @@ func queryStreamingSwap(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, e
 
 	result := newStreamingSwap(streamingSwap, msgSwap)
 
-	return jsonify(ctx, result)
+	return result, nil
 }
 
 func (qs queryServer) queryPool(ctx cosmos.Context, req *types.QueryPoolRequest) (*types.QueryPoolResponse, error) {

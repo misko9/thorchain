@@ -117,3 +117,13 @@ func (s queryServer) OutboundFees(c context.Context, req *types.QueryOutboundFee
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryOutboundFees(ctx, "")
 }
+
+func (s queryServer) StreamingSwap(c context.Context, req *types.QueryStreamingSwapRequest) (*types.QueryStreamingSwapResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryStreamingSwap(ctx, req)
+}
+
+func (s queryServer) StreamingSwaps(c context.Context, req *types.QueryStreamingSwapsRequest) (*types.QueryStreamingSwapsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryStreamingSwaps(ctx, req)
+}

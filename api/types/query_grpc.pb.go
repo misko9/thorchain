@@ -39,6 +39,8 @@ const (
 	Query_PoolSlips_FullMethodName          = "/types.Query/PoolSlips"
 	Query_OutboundFee_FullMethodName        = "/types.Query/OutboundFee"
 	Query_OutboundFees_FullMethodName       = "/types.Query/OutboundFees"
+	Query_StreamingSwap_FullMethodName      = "/types.Query/StreamingSwap"
+	Query_StreamingSwaps_FullMethodName     = "/types.Query/StreamingSwaps"
 )
 
 // QueryClient is the client API for Query service.
@@ -65,8 +67,10 @@ type QueryClient interface {
 	Nodes(ctx context.Context, in *QueryNodesRequest, opts ...grpc.CallOption) (*QueryNodesResponse, error)
 	PoolSlip(ctx context.Context, in *QueryPoolSlipRequest, opts ...grpc.CallOption) (*QueryPoolSlipsResponse, error)
 	PoolSlips(ctx context.Context, in *QueryPoolSlipsRequest, opts ...grpc.CallOption) (*QueryPoolSlipsResponse, error)
-	OutboundFee(ctx context.Context, in *QueryOutboundFeeRequest, opts ...grpc.CallOption) (*QueryOutboundFeeResponse, error)
+	OutboundFee(ctx context.Context, in *QueryOutboundFeeRequest, opts ...grpc.CallOption) (*QueryOutboundFeesResponse, error)
 	OutboundFees(ctx context.Context, in *QueryOutboundFeesRequest, opts ...grpc.CallOption) (*QueryOutboundFeesResponse, error)
+	StreamingSwap(ctx context.Context, in *QueryStreamingSwapRequest, opts ...grpc.CallOption) (*QueryStreamingSwapResponse, error)
+	StreamingSwaps(ctx context.Context, in *QueryStreamingSwapsRequest, opts ...grpc.CallOption) (*QueryStreamingSwapsResponse, error)
 }
 
 type queryClient struct {
@@ -239,8 +243,8 @@ func (c *queryClient) PoolSlips(ctx context.Context, in *QueryPoolSlipsRequest, 
 	return out, nil
 }
 
-func (c *queryClient) OutboundFee(ctx context.Context, in *QueryOutboundFeeRequest, opts ...grpc.CallOption) (*QueryOutboundFeeResponse, error) {
-	out := new(QueryOutboundFeeResponse)
+func (c *queryClient) OutboundFee(ctx context.Context, in *QueryOutboundFeeRequest, opts ...grpc.CallOption) (*QueryOutboundFeesResponse, error) {
+	out := new(QueryOutboundFeesResponse)
 	err := c.cc.Invoke(ctx, Query_OutboundFee_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -251,6 +255,24 @@ func (c *queryClient) OutboundFee(ctx context.Context, in *QueryOutboundFeeReque
 func (c *queryClient) OutboundFees(ctx context.Context, in *QueryOutboundFeesRequest, opts ...grpc.CallOption) (*QueryOutboundFeesResponse, error) {
 	out := new(QueryOutboundFeesResponse)
 	err := c.cc.Invoke(ctx, Query_OutboundFees_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) StreamingSwap(ctx context.Context, in *QueryStreamingSwapRequest, opts ...grpc.CallOption) (*QueryStreamingSwapResponse, error) {
+	out := new(QueryStreamingSwapResponse)
+	err := c.cc.Invoke(ctx, Query_StreamingSwap_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) StreamingSwaps(ctx context.Context, in *QueryStreamingSwapsRequest, opts ...grpc.CallOption) (*QueryStreamingSwapsResponse, error) {
+	out := new(QueryStreamingSwapsResponse)
+	err := c.cc.Invoke(ctx, Query_StreamingSwaps_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -281,8 +303,10 @@ type QueryServer interface {
 	Nodes(context.Context, *QueryNodesRequest) (*QueryNodesResponse, error)
 	PoolSlip(context.Context, *QueryPoolSlipRequest) (*QueryPoolSlipsResponse, error)
 	PoolSlips(context.Context, *QueryPoolSlipsRequest) (*QueryPoolSlipsResponse, error)
-	OutboundFee(context.Context, *QueryOutboundFeeRequest) (*QueryOutboundFeeResponse, error)
+	OutboundFee(context.Context, *QueryOutboundFeeRequest) (*QueryOutboundFeesResponse, error)
 	OutboundFees(context.Context, *QueryOutboundFeesRequest) (*QueryOutboundFeesResponse, error)
+	StreamingSwap(context.Context, *QueryStreamingSwapRequest) (*QueryStreamingSwapResponse, error)
+	StreamingSwaps(context.Context, *QueryStreamingSwapsRequest) (*QueryStreamingSwapsResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -344,11 +368,17 @@ func (UnimplementedQueryServer) PoolSlip(context.Context, *QueryPoolSlipRequest)
 func (UnimplementedQueryServer) PoolSlips(context.Context, *QueryPoolSlipsRequest) (*QueryPoolSlipsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PoolSlips not implemented")
 }
-func (UnimplementedQueryServer) OutboundFee(context.Context, *QueryOutboundFeeRequest) (*QueryOutboundFeeResponse, error) {
+func (UnimplementedQueryServer) OutboundFee(context.Context, *QueryOutboundFeeRequest) (*QueryOutboundFeesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OutboundFee not implemented")
 }
 func (UnimplementedQueryServer) OutboundFees(context.Context, *QueryOutboundFeesRequest) (*QueryOutboundFeesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OutboundFees not implemented")
+}
+func (UnimplementedQueryServer) StreamingSwap(context.Context, *QueryStreamingSwapRequest) (*QueryStreamingSwapResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StreamingSwap not implemented")
+}
+func (UnimplementedQueryServer) StreamingSwaps(context.Context, *QueryStreamingSwapsRequest) (*QueryStreamingSwapsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StreamingSwaps not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -723,6 +753,42 @@ func _Query_OutboundFees_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_StreamingSwap_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryStreamingSwapRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).StreamingSwap(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_StreamingSwap_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).StreamingSwap(ctx, req.(*QueryStreamingSwapRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_StreamingSwaps_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryStreamingSwapsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).StreamingSwaps(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_StreamingSwaps_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).StreamingSwaps(ctx, req.(*QueryStreamingSwapsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -809,6 +875,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "OutboundFees",
 			Handler:    _Query_OutboundFees_Handler,
+		},
+		{
+			MethodName: "StreamingSwap",
+			Handler:    _Query_StreamingSwap_Handler,
+		},
+		{
+			MethodName: "StreamingSwaps",
+			Handler:    _Query_StreamingSwaps_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
