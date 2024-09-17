@@ -106,9 +106,9 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 			return queryPendingOutbound(ctx, mgr)
 		case q.QueryScheduledOutbound.Key:
 			return queryScheduledOutbound(ctx, mgr)
+		
 		case q.QuerySwapQueue.Key:
 			return querySwapQueue(ctx, mgr)
-
 		case q.QuerySwapperClout.Key:
 			return querySwapperClout(ctx, path[1:], mgr)
 
@@ -116,8 +116,7 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 			return queryTssKeygenMetric(ctx, path[1:], req, mgr)
 		case q.QueryTssMetrics.Key:
 			return queryTssMetric(ctx, path[1:], req, mgr)
-		case q.QueryTHORName.Key:
-			return queryTHORName(ctx, path[1:], req, mgr)
+		
 		case q.QueryQuoteSwap.Key:
 			return queryQuoteSwap(ctx, path[1:], req, mgr)
 		case q.QueryQuoteSaverDeposit.Key:
@@ -184,37 +183,37 @@ func queryBalanceModule(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, e
 	return jsonify(ctx, balance)
 }
 
-func queryTHORName(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	name, err := mgr.Keeper().GetTHORName(ctx, path[0])
+func (qs queryServer) queryTHORName(ctx cosmos.Context, req *types.QueryThornameRequest) (*types.QueryThornameResponse, error) {
+	name, err := qs.mgr.Keeper().GetTHORName(ctx, req.Name)
 	if err != nil {
 		return nil, ErrInternal(err, "fail to fetch THORName")
 	}
 
 	affRune := cosmos.ZeroUint()
-	affCol, err := mgr.Keeper().GetAffiliateCollector(ctx, name.Owner)
+	affCol, err := qs.mgr.Keeper().GetAffiliateCollector(ctx, name.Owner)
 	if err == nil {
 		affRune = affCol.RuneAmount
 	}
 
 	// convert to openapi types
-	aliases := []openapi.ThornameAlias{}
+	aliases := []*types.ThornameAlias{}
 	for _, alias := range name.Aliases {
-		aliases = append(aliases, openapi.ThornameAlias{
-			Chain:   wrapString(alias.Chain.String()),
-			Address: wrapString(alias.Address.String()),
+		aliases = append(aliases, &types.ThornameAlias{
+			Chain:   alias.Chain.String(),
+			Address: alias.Address.String(),
 		})
 	}
 
-	resp := openapi.Thorname{
-		Name:                   wrapString(name.Name),
-		ExpireBlockHeight:      wrapInt64(name.ExpireBlockHeight),
-		Owner:                  wrapString(name.Owner.String()),
+	resp := types.QueryThornameResponse{
+		Name:                   name.Name,
+		ExpireBlockHeight:      name.ExpireBlockHeight,
+		Owner:                  name.Owner.String(),
 		PreferredAsset:         name.PreferredAsset.String(),
 		Aliases:                aliases,
-		AffiliateCollectorRune: wrapString(affRune.String()),
+		AffiliateCollectorRune: affRune.String(),
 	}
 
-	return jsonify(ctx, resp)
+	return &resp, nil
 }
 
 func queryVault(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, error) {

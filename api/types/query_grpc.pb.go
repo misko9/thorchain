@@ -54,6 +54,7 @@ const (
 	Query_MimirNodeValues_FullMethodName     = "/types.Query/MimirNodeValues"
 	Query_InboundAddresses_FullMethodName    = "/types.Query/InboundAddresses"
 	Query_Version_FullMethodName             = "/types.Query/Version"
+	Query_Thorname_FullMethodName            = "/types.Query/Thorname"
 )
 
 // QueryClient is the client API for Query service.
@@ -97,6 +98,7 @@ type QueryClient interface {
 	MimirNodeValues(ctx context.Context, in *QueryMimirNodeValuesRequest, opts ...grpc.CallOption) (*QueryMimirNodeValuesResponse, error)
 	InboundAddresses(ctx context.Context, in *QueryInboundAddressesRequest, opts ...grpc.CallOption) (*QueryInboundAddressesResponse, error)
 	Version(ctx context.Context, in *QueryVersionRequest, opts ...grpc.CallOption) (*QueryVersionResponse, error)
+	Thorname(ctx context.Context, in *QueryThornameRequest, opts ...grpc.CallOption) (*QueryThornameResponse, error)
 }
 
 type queryClient struct {
@@ -422,6 +424,15 @@ func (c *queryClient) Version(ctx context.Context, in *QueryVersionRequest, opts
 	return out, nil
 }
 
+func (c *queryClient) Thorname(ctx context.Context, in *QueryThornameRequest, opts ...grpc.CallOption) (*QueryThornameResponse, error) {
+	out := new(QueryThornameResponse)
+	err := c.cc.Invoke(ctx, Query_Thorname_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -463,6 +474,7 @@ type QueryServer interface {
 	MimirNodeValues(context.Context, *QueryMimirNodeValuesRequest) (*QueryMimirNodeValuesResponse, error)
 	InboundAddresses(context.Context, *QueryInboundAddressesRequest) (*QueryInboundAddressesResponse, error)
 	Version(context.Context, *QueryVersionRequest) (*QueryVersionResponse, error)
+	Thorname(context.Context, *QueryThornameRequest) (*QueryThornameResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -574,6 +586,9 @@ func (UnimplementedQueryServer) InboundAddresses(context.Context, *QueryInboundA
 }
 func (UnimplementedQueryServer) Version(context.Context, *QueryVersionRequest) (*QueryVersionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Version not implemented")
+}
+func (UnimplementedQueryServer) Thorname(context.Context, *QueryThornameRequest) (*QueryThornameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Thorname not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -1218,6 +1233,24 @@ func _Query_Version_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_Thorname_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryThornameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Thorname(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Thorname_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Thorname(ctx, req.(*QueryThornameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1364,6 +1397,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Version",
 			Handler:    _Query_Version_Handler,
+		},
+		{
+			MethodName: "Thorname",
+			Handler:    _Query_Thorname_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

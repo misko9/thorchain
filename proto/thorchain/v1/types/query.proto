@@ -25,6 +25,7 @@ import "types/query_rune_provider.proto";
 import "types/query_mimir.proto";
 import "types/query_inbound_address.proto";
 import "types/query_version.proto";
+import "types/query_thorname.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -170,5 +171,9 @@ service Query {
 
   rpc Version(QueryVersionRequest) returns (QueryVersionResponse) {
     option (google.api.http).get = "/thorchain/version";
+  }
+
+  rpc Thorname(QueryThornameRequest) returns (QueryThornameResponse) {
+    option (google.api.http).get = "/thorchain/thorname/{name}";
   }
 }

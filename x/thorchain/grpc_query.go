@@ -192,3 +192,8 @@ func (s queryServer) Version(c context.Context, req *types.QueryVersionRequest) 
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryVersion(ctx, req)
 }
+
+func (s queryServer) Thorname(c context.Context, req *types.QueryThornameRequest) (*types.QueryThornameResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryTHORName(ctx, req)
+}
