@@ -1,0 +1,176 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryQuoteSwapRequest{
+  string from_asset = 1;
+  string to_asset = 2;
+  string amount = 3;
+  string streaming_interval = 4;
+  string streaming_quantity = 5;
+  string destination = 6;
+  string tolerance_bps = 7;
+  string refund_address = 8;
+  string affiliate = 9;
+  string affiliate_bps = 10;
+}
+
+message QueryQuoteSwapResponse{
+  string inbound_address = 1;
+  int64  inbound_confirmation_blocks = 2;
+  int64  inbound_confirmation_seconds = 3;
+  int64  outbound_delay_blocks = 4;
+  int64  outbound_delay_seconds = 5;
+  QuoteFees fees = 6;
+  string router = 7;
+  int64 expiry = 8;
+  string warning = 9;
+  string notes = 10;
+  string dust_threshold = 11;
+  string recommended_min_amount_in = 12;
+  string recommended_gas_rate = 13;
+  string gas_rate_units = 14;
+  string memo = 15;
+  string expected_amount_out = 16;
+  int64 max_streaming_quantity = 17;
+  int64 streaming_swap_blocks = 18;
+  int64 streaming_swap_seconds = 19;
+  int64 total_swap_seconds = 20;
+}
+
+message QueryQuoteSaverDepositRequest{
+  string asset = 1;
+  string amount = 2;
+  string affiliate = 3;
+  string affiliate_bps = 4;
+}
+
+message QueryQuoteSaverDepositResponse{
+  string inbound_address = 1;
+  int64  inbound_confirmation_blocks = 2;
+  int64  inbound_confirmation_seconds = 3;
+  int64  outbound_delay_blocks = 4;
+  int64  outbound_delay_seconds = 5;
+  QuoteFees fees = 6;
+  string router = 7;
+  int64 expiry = 8;
+  string warning = 9;
+  string notes = 10;
+  string dust_threshold = 11;
+  string recommended_min_amount_in = 12;
+  string recommended_gas_rate = 13;
+  string gas_rate_units = 14;
+  string memo = 15;
+  string expected_amount_out = 16;
+  string expected_amount_deposit = 17;
+}
+
+message QueryQuoteSaverWithdrawRequest{
+  string asset = 1;
+  string address = 2;
+  string withdraw_bps = 3;
+}
+
+message QueryQuoteSaverWithdrawResponse{
+  string inbound_address = 1;
+  int64  inbound_confirmation_blocks = 2;
+  int64  inbound_confirmation_seconds = 3;
+  int64  outbound_delay_blocks = 4;
+  int64  outbound_delay_seconds = 5;
+  QuoteFees fees = 6;
+  string router = 7;
+  int64 expiry = 8;
+  string warning = 9;
+  string notes = 10;
+  string dust_threshold = 11;
+  string recommended_min_amount_in = 12;
+  string recommended_gas_rate = 13;
+  string gas_rate_units = 14;
+  string memo = 15;
+  string dust_amount = 16;
+  string expected_amount_out = 17;
+}
+
+message QueryQuoteLoanOpenRequest{
+  string from_asset = 1;
+  string to_asset = 2;
+  string amount = 3;
+  string min_out = 4;
+  string destination = 5;
+  string affiliate = 6;
+  string affiliate_bps = 7;
+}
+
+message QueryQuoteLoanOpenResponse{
+  string inbound_address = 1;
+  int64  inbound_confirmation_blocks = 2;
+  int64  inbound_confirmation_seconds = 3;
+  int64  outbound_delay_blocks = 4;
+  int64  outbound_delay_seconds = 5;
+  QuoteFees fees = 6;
+  string router = 7;
+  int64 expiry = 8;
+  string warning = 9;
+  string notes = 10;
+  string dust_threshold = 11;
+  string recommended_min_amount_in = 12;
+  string recommended_gas_rate = 13;
+  string gas_rate_units = 14;
+  string memo = 15;
+  string expected_amount_out = 16;
+  string expected_collateralization_ratio = 17;
+  string expected_collateral_deposited = 18;
+  string expected_debt_issued = 19;
+  int64 streaming_swap_blocks = 20;
+  int64 streaming_swap_seconds = 21;
+  int64 total_open_loan_seconds = 22;
+}
+
+message QueryQuoteLoanCloseRequest{
+  string from_asset = 1;
+  string to_asset = 2;
+  string min_out = 3;
+  string repay_bps = 4;
+  string loan_owner = 5;
+}
+
+message QueryQuoteLoanCloseResponse{
+  string inbound_address = 1;
+  int64  inbound_confirmation_blocks = 2;
+  int64  inbound_confirmation_seconds = 3;
+  int64  outbound_delay_blocks = 4;
+  int64  outbound_delay_seconds = 5;
+  QuoteFees fees = 6;
+  string router = 7;
+  int64 expiry = 8;
+  string warning = 9;
+  string notes = 10;
+  string dust_threshold = 11;
+  string recommended_min_amount_in = 12;
+  string recommended_gas_rate = 13;
+  string gas_rate_units = 14;
+  string memo = 15;
+  string expected_amount_out = 16;
+  string expected_amount_in = 17;
+  string expected_collateral_withdrawn = 18;
+  string expected_debt_repaid = 19;
+  int64 streaming_swap_blocks = 20;
+  int64 streaming_swap_seconds = 21;
+  int64 total_repay_seconds = 22;
+}
+
+message QuoteFees{
+  string asset = 1;
+  string affiliate = 2;
+  string outbound = 3;
+  string liquidity = 4;
+  string total = 5;
+  int64 slippage_bps = 6;
+  int64 total_bps = 7;
+}

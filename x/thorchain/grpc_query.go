@@ -217,3 +217,28 @@ func (s queryServer) BalanceModule(c context.Context, req *types.QueryBalanceMod
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryBalanceModule(ctx, req)
 }
+
+func (s queryServer) QuoteSwap(c context.Context, req *types.QueryQuoteSwapRequest) (*types.QueryQuoteSwapResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryQuoteSwap(ctx, req)
+}
+
+func (s queryServer) QuoteSaverDeposit(c context.Context, req *types.QueryQuoteSaverDepositRequest) (*types.QueryQuoteSaverDepositResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryQuoteSaverDeposit(ctx, req)
+}
+
+func (s queryServer) QuoteSaverWithdraw(c context.Context, req *types.QueryQuoteSaverWithdrawRequest) (*types.QueryQuoteSaverWithdrawResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryQuoteSaverWithdraw(ctx, req)
+}
+
+func (s queryServer) QuoteLoanOpen(c context.Context, req *types.QueryQuoteLoanOpenRequest) (*types.QueryQuoteLoanOpenResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryQuoteLoanOpen(ctx, req)
+}
+
+func (s queryServer) QuoteLoanClose(c context.Context, req *types.QueryQuoteLoanCloseRequest) (*types.QueryQuoteLoanCloseResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryQuoteLoanClose(ctx, req)
+}

@@ -29,6 +29,7 @@ import "types/query_thorname.proto";
 import "types/query_invariants.proto";
 import "types/query_network.proto";
 import "types/query_balance_module.proto";
+import "types/query_quotes.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -194,5 +195,25 @@ service Query {
 
   rpc BalanceModule(QueryBalanceModuleRequest) returns (QueryBalanceModuleResponse) {
     option (google.api.http).get = "/thorchain/balance/module/{name}";
+  }
+
+  rpc QuoteSwap(QueryQuoteSwapRequest) returns (QueryQuoteSwapResponse) {
+    option (google.api.http).get = "/thorchain/quote/swap";
+  }
+
+  rpc QuoteSaverDeposit(QueryQuoteSaverDepositRequest) returns (QueryQuoteSaverDepositResponse) {
+    option (google.api.http).get = "/thorchain/quote/saver/deposit";
+  }
+
+  rpc QuoteSaverWithdraw(QueryQuoteSaverWithdrawRequest) returns (QueryQuoteSaverWithdrawResponse) {
+    option (google.api.http).get = "/thorchain/quote/saver/withdraw";
+  }
+
+  rpc QuoteLoanOpen(QueryQuoteLoanOpenRequest) returns (QueryQuoteLoanOpenResponse) {
+    option (google.api.http).get = "/thorchain/quote/loan/open";
+  }
+
+  rpc QuoteLoanClose(QueryQuoteLoanCloseRequest) returns (QueryQuoteLoanCloseResponse) {
+    option (google.api.http).get = "/thorchain/quote/loan/close";
   }
 }

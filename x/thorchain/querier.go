@@ -113,16 +113,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 		case q.QueryTssMetrics.Key:
 			return queryTssMetric(ctx, path[1:], req, mgr)
 		
-		case q.QueryQuoteSwap.Key:
-			return queryQuoteSwap(ctx, path[1:], req, mgr)
-		case q.QueryQuoteSaverDeposit.Key:
-			return queryQuoteSaverDeposit(ctx, path[1:], req, mgr)
-		case q.QueryQuoteSaverWithdraw.Key:
-			return queryQuoteSaverWithdraw(ctx, path[1:], req, mgr)
-		case q.QueryQuoteLoanOpen.Key:
-			return queryQuoteLoanOpen(ctx, path[1:], req, mgr)
-		case q.QueryQuoteLoanClose.Key:
-			return queryQuoteLoanClose(ctx, path[1:], req, mgr)
 		case q.QueryBlock.Key:
 			return queryBlock(ctx, mgr)
 		default:
