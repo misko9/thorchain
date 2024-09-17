@@ -105,18 +105,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 			return queryConstantValues(ctx, path[1:], req, mgr)
 		case q.QueryVersion.Key:
 			return queryVersion(ctx, path[1:], req, mgr)
-		case q.QueryMimirValues.Key:
-			return queryMimirValues(ctx, path[1:], req, mgr)
-		case q.QueryMimirWithKey.Key:
-			return queryMimirWithKey(ctx, path[1:], req, mgr)
-		case q.QueryMimirAdminValues.Key:
-			return queryMimirAdminValues(ctx, path[1:], req, mgr)
-		case q.QueryMimirNodesAllValues.Key:
-			return queryMimirNodesAllValues(ctx, path[1:], req, mgr)
-		case q.QueryMimirNodesValues.Key:
-			return queryMimirNodesValues(ctx, path[1:], req, mgr)
-		case q.QueryMimirNodeValues.Key:
-			return queryMimirNodeValues(ctx, path[1:], req, mgr)
 
 		case q.QueryPendingOutbound.Key:
 			return queryPendingOutbound(ctx, mgr)
@@ -2586,23 +2574,27 @@ func queryVersion(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr 
 	return jsonify(ctx, ver)
 }
 
-func queryMimirWithKey(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	if len(path) == 0 && len(path[0]) == 0 {
+func (qs queryServer) queryMimirWithKey(ctx cosmos.Context, req *types.QueryMimirWithKeyRequest) (*types.QueryMimirWithKeyResponse, error) {
+	if len(req.Key) == 0 {
 		return nil, fmt.Errorf("no mimir key")
 	}
 
-	v, err := mgr.Keeper().GetMimir(ctx, path[0])
+	v, err := qs.mgr.Keeper().GetMimir(ctx, req.Key)
 	if err != nil {
-		return nil, fmt.Errorf("fail to get mimir with key:%s, err : %w", path[0], err)
+		return nil, fmt.Errorf("fail to get mimir with key:%s, err : %w", req.Key, err)
 	}
-	return jsonify(ctx, v)
+	return &types.QueryMimirWithKeyResponse{
+		Value: v,
+	}, nil
 }
 
-func queryMimirValues(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	values := map[string]int64{}
+func (qs queryServer) queryMimirValues(ctx cosmos.Context, req *types.QueryMimirValuesRequest) (*types.QueryMimirValuesResponse, error) {
+	resp := types.QueryMimirValuesResponse{
+		Mimirs: make([]*types.Mimir, 0),
+	}
 
 	// collect all keys with set values, not displaying those with votes but no set value
-	keeper := mgr.Keeper()
+	keeper := qs.mgr.Keeper()
 	iter := keeper.GetMimirIterator(ctx)
 	defer iter.Close()
 	for ; iter.Valid(); iter.Next() {
@@ -2616,94 +2608,119 @@ func queryMimirValues(ctx cosmos.Context, path []string, req abci.RequestQuery, 
 			ctx.Logger().Error("negative mimir value set", "key", key, "value", value)
 			continue
 		}
-		values[key] = value
+		resp.Mimirs = append(resp.Mimirs, &types.Mimir{
+			Key: key,
+			Value: value,
+		})
 	}
 
-	return jsonify(ctx, values)
+	return &resp, nil
 }
 
-func queryMimirAdminValues(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	values := make(map[string]int64)
-	iter := mgr.Keeper().GetMimirIterator(ctx)
+func (qs queryServer) queryMimirAdminValues(ctx cosmos.Context, req *types.QueryMimirAdminValuesRequest) (*types.QueryMimirAdminValuesResponse, error) {
+	resp := types.QueryMimirAdminValuesResponse{
+		AdminMimirs: make([]*types.Mimir, 0),
+	}
+	
+	iter := qs.mgr.Keeper().GetMimirIterator(ctx)
 	defer iter.Close()
 	for ; iter.Valid(); iter.Next() {
 		value := types.ProtoInt64{}
-		if err := mgr.Keeper().Cdc().Unmarshal(iter.Value(), &value); err != nil {
+		if err := qs.mgr.Keeper().Cdc().Unmarshal(iter.Value(), &value); err != nil {
 			ctx.Logger().Error("fail to unmarshal mimir value", "error", err)
 			return nil, fmt.Errorf("fail to unmarshal mimir value: %w", err)
 		}
 		k := strings.TrimPrefix(string(iter.Key()), "mimir//")
-		values[k] = value.GetValue()
+		resp.AdminMimirs = append(resp.AdminMimirs, &types.Mimir{
+			Key: k,
+			Value: value.GetValue(),
+		})
+
 	}
-	return jsonify(ctx, values)
+	return &resp, nil
 }
 
-func queryMimirNodesAllValues(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	mimirs := NodeMimirs{}
-	iter := mgr.Keeper().GetNodeMimirIterator(ctx)
+func (qs queryServer) queryMimirNodesAllValues(ctx cosmos.Context, req *types.QueryMimirNodesAllValuesRequest) (*types.QueryMimirNodesAllValuesResponse, error) {
+	resp := types.QueryMimirNodesAllValuesResponse{
+		Mimirs: make([]types.NodeMimir, 0),
+	}
+	
+	iter := qs.mgr.Keeper().GetNodeMimirIterator(ctx)
 	defer iter.Close()
 	for ; iter.Valid(); iter.Next() {
 		m := NodeMimirs{}
-		if err := mgr.Keeper().Cdc().Unmarshal(iter.Value(), &m); err != nil {
+		if err := qs.mgr.Keeper().Cdc().Unmarshal(iter.Value(), &m); err != nil {
 			ctx.Logger().Error("fail to unmarshal node mimir value", "error", err)
 			return nil, fmt.Errorf("fail to unmarshal node mimir value: %w", err)
 		}
-		mimirs.Mimirs = append(mimirs.Mimirs, m.Mimirs...)
+		resp.Mimirs = append(resp.Mimirs, m.Mimirs...)
 	}
 
-	return jsonify(ctx, mimirs)
+	return &resp, nil
 }
 
-func queryMimirNodesValues(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	activeNodes, err := mgr.Keeper().ListActiveValidators(ctx)
+func (qs queryServer) queryMimirNodesValues(ctx cosmos.Context, req *types.QueryMimirNodesValuesRequest) (*types.QueryMimirNodesValuesResponse, error) {
+	activeNodes, err := qs.mgr.Keeper().ListActiveValidators(ctx)
 	if err != nil {
 		ctx.Logger().Error("fail to fetch active node accounts", "error", err)
 		return nil, fmt.Errorf("fail to fetch active node accounts: %w", err)
 	}
 	active := activeNodes.GetNodeAddresses()
 
-	values := make(map[string]int64)
-	iter := mgr.Keeper().GetNodeMimirIterator(ctx)
+	resp := types.QueryMimirNodesValuesResponse{
+		Mimirs: make([]*types.Mimir, 0),
+	}
+	
+	iter := qs.mgr.Keeper().GetNodeMimirIterator(ctx)
 	defer iter.Close()
 	for ; iter.Valid(); iter.Next() {
 		mimirs := NodeMimirs{}
-		if err := mgr.Keeper().Cdc().Unmarshal(iter.Value(), &mimirs); err != nil {
+		if err := qs.mgr.Keeper().Cdc().Unmarshal(iter.Value(), &mimirs); err != nil {
 			ctx.Logger().Error("fail to unmarshal node mimir value", "error", err)
 			return nil, fmt.Errorf("fail to unmarshal node mimir value: %w", err)
 		}
 		k := strings.TrimPrefix(string(iter.Key()), "nodemimir//")
 		if v, ok := mimirs.HasSuperMajority(k, active); ok {
-			values[k] = v
+			resp.Mimirs = append(resp.Mimirs, &types.Mimir{
+				Key: k,
+				Value: v,
+			})
 		}
 	}
 
-	return jsonify(ctx, values)
+	return &resp, nil
 }
 
-func queryMimirNodeValues(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	acc, err := cosmos.AccAddressFromBech32(path[0])
+func (qs queryServer) queryMimirNodeValues(ctx cosmos.Context, req *types.QueryMimirNodeValuesRequest) (*types.QueryMimirNodeValuesResponse, error) {
+	acc, err := cosmos.AccAddressFromBech32(req.Address)
 	if err != nil {
 		ctx.Logger().Error("fail to parse thor address", "error", err)
 		return nil, fmt.Errorf("fail to parse thor address: %w", err)
 	}
 
-	values := make(map[string]int64)
-	iter := mgr.Keeper().GetNodeMimirIterator(ctx)
+	resp := types.QueryMimirNodeValuesResponse{
+		NodeMimirs: make([]*types.Mimir, 0),
+	}
+	
+	iter := qs.mgr.Keeper().GetNodeMimirIterator(ctx)
 	defer iter.Close()
 	for ; iter.Valid(); iter.Next() {
 		mimirs := NodeMimirs{}
-		if err := mgr.Keeper().Cdc().Unmarshal(iter.Value(), &mimirs); err != nil {
+		if err := qs.mgr.Keeper().Cdc().Unmarshal(iter.Value(), &mimirs); err != nil {
 			ctx.Logger().Error("fail to unmarshal node mimir v2 value", "error", err)
 			return nil, fmt.Errorf("fail to unmarshal node mimir value: %w", err)
 		}
 
 		k := strings.TrimPrefix(string(iter.Key()), "nodemimir//")
 		if v, ok := mimirs.Get(k, acc); ok {
-			values[k] = v
+			resp.NodeMimirs = append(resp.NodeMimirs, &types.Mimir{
+				Key: k,
+				Value: v,
+			})
 		}
 	}
 
-	return jsonify(ctx, values)
+	return &resp, nil
 }
 
 func (qs queryServer) queryOutboundFees(ctx cosmos.Context, asset string) (*types.QueryOutboundFeesResponse, error) {

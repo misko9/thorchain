@@ -152,3 +152,33 @@ func (s queryServer) RuneProviders(c context.Context, req *types.QueryRuneProvid
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryRUNEProviders(ctx, req)
 }
+
+func (s queryServer) MimirValues(c context.Context, req *types.QueryMimirValuesRequest) (*types.QueryMimirValuesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryMimirValues(ctx, req)
+}
+
+func (s queryServer) MimirWithKey(c context.Context, req *types.QueryMimirWithKeyRequest) (*types.QueryMimirWithKeyResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryMimirWithKey(ctx, req)
+}
+
+func (s queryServer) MimirAdminValues(c context.Context, req *types.QueryMimirAdminValuesRequest) (*types.QueryMimirAdminValuesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryMimirAdminValues(ctx, req)
+}
+
+func (s queryServer) MimirNodesAllValues(c context.Context, req *types.QueryMimirNodesAllValuesRequest) (*types.QueryMimirNodesAllValuesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryMimirNodesAllValues(ctx, req)
+}
+
+func (s queryServer) MimirNodesValues(c context.Context, req *types.QueryMimirNodesValuesRequest) (*types.QueryMimirNodesValuesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryMimirNodesValues(ctx, req)
+}
+
+func (s queryServer) MimirNodeValues(c context.Context, req *types.QueryMimirNodeValuesRequest) (*types.QueryMimirNodeValuesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryMimirNodeValues(ctx, req)
+}

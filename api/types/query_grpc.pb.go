@@ -19,33 +19,39 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Pool_FullMethodName               = "/types.Query/Pool"
-	Query_Pools_FullMethodName              = "/types.Query/Pools"
-	Query_DerivedPool_FullMethodName        = "/types.Query/DerivedPool"
-	Query_DerivedPools_FullMethodName       = "/types.Query/DerivedPools"
-	Query_LiquidityProvider_FullMethodName  = "/types.Query/LiquidityProvider"
-	Query_LiquidityProviders_FullMethodName = "/types.Query/LiquidityProviders"
-	Query_Saver_FullMethodName              = "/types.Query/Saver"
-	Query_Savers_FullMethodName             = "/types.Query/Savers"
-	Query_Borrower_FullMethodName           = "/types.Query/Borrower"
-	Query_Borrowers_FullMethodName          = "/types.Query/Borrowers"
-	Query_TradeUnit_FullMethodName          = "/types.Query/TradeUnit"
-	Query_TradeUnits_FullMethodName         = "/types.Query/TradeUnits"
-	Query_TradeAccount_FullMethodName       = "/types.Query/TradeAccount"
-	Query_TradeAccounts_FullMethodName      = "/types.Query/TradeAccounts"
-	Query_Node_FullMethodName               = "/types.Query/Node"
-	Query_Nodes_FullMethodName              = "/types.Query/Nodes"
-	Query_PoolSlip_FullMethodName           = "/types.Query/PoolSlip"
-	Query_PoolSlips_FullMethodName          = "/types.Query/PoolSlips"
-	Query_OutboundFee_FullMethodName        = "/types.Query/OutboundFee"
-	Query_OutboundFees_FullMethodName       = "/types.Query/OutboundFees"
-	Query_StreamingSwap_FullMethodName      = "/types.Query/StreamingSwap"
-	Query_StreamingSwaps_FullMethodName     = "/types.Query/StreamingSwaps"
-	Query_Ban_FullMethodName                = "/types.Query/Ban"
-	Query_Ragnarok_FullMethodName           = "/types.Query/Ragnarok"
-	Query_RunePool_FullMethodName           = "/types.Query/RunePool"
-	Query_RuneProvider_FullMethodName       = "/types.Query/RuneProvider"
-	Query_RuneProviders_FullMethodName      = "/types.Query/RuneProviders"
+	Query_Pool_FullMethodName                = "/types.Query/Pool"
+	Query_Pools_FullMethodName               = "/types.Query/Pools"
+	Query_DerivedPool_FullMethodName         = "/types.Query/DerivedPool"
+	Query_DerivedPools_FullMethodName        = "/types.Query/DerivedPools"
+	Query_LiquidityProvider_FullMethodName   = "/types.Query/LiquidityProvider"
+	Query_LiquidityProviders_FullMethodName  = "/types.Query/LiquidityProviders"
+	Query_Saver_FullMethodName               = "/types.Query/Saver"
+	Query_Savers_FullMethodName              = "/types.Query/Savers"
+	Query_Borrower_FullMethodName            = "/types.Query/Borrower"
+	Query_Borrowers_FullMethodName           = "/types.Query/Borrowers"
+	Query_TradeUnit_FullMethodName           = "/types.Query/TradeUnit"
+	Query_TradeUnits_FullMethodName          = "/types.Query/TradeUnits"
+	Query_TradeAccount_FullMethodName        = "/types.Query/TradeAccount"
+	Query_TradeAccounts_FullMethodName       = "/types.Query/TradeAccounts"
+	Query_Node_FullMethodName                = "/types.Query/Node"
+	Query_Nodes_FullMethodName               = "/types.Query/Nodes"
+	Query_PoolSlip_FullMethodName            = "/types.Query/PoolSlip"
+	Query_PoolSlips_FullMethodName           = "/types.Query/PoolSlips"
+	Query_OutboundFee_FullMethodName         = "/types.Query/OutboundFee"
+	Query_OutboundFees_FullMethodName        = "/types.Query/OutboundFees"
+	Query_StreamingSwap_FullMethodName       = "/types.Query/StreamingSwap"
+	Query_StreamingSwaps_FullMethodName      = "/types.Query/StreamingSwaps"
+	Query_Ban_FullMethodName                 = "/types.Query/Ban"
+	Query_Ragnarok_FullMethodName            = "/types.Query/Ragnarok"
+	Query_RunePool_FullMethodName            = "/types.Query/RunePool"
+	Query_RuneProvider_FullMethodName        = "/types.Query/RuneProvider"
+	Query_RuneProviders_FullMethodName       = "/types.Query/RuneProviders"
+	Query_MimirValues_FullMethodName         = "/types.Query/MimirValues"
+	Query_MimirWithKey_FullMethodName        = "/types.Query/MimirWithKey"
+	Query_MimirAdminValues_FullMethodName    = "/types.Query/MimirAdminValues"
+	Query_MimirNodesAllValues_FullMethodName = "/types.Query/MimirNodesAllValues"
+	Query_MimirNodesValues_FullMethodName    = "/types.Query/MimirNodesValues"
+	Query_MimirNodeValues_FullMethodName     = "/types.Query/MimirNodeValues"
 )
 
 // QueryClient is the client API for Query service.
@@ -81,6 +87,12 @@ type QueryClient interface {
 	RunePool(ctx context.Context, in *QueryRunePoolRequest, opts ...grpc.CallOption) (*QueryRunePoolResponse, error)
 	RuneProvider(ctx context.Context, in *QueryRuneProviderRequest, opts ...grpc.CallOption) (*QueryRuneProviderResponse, error)
 	RuneProviders(ctx context.Context, in *QueryRuneProvidersRequest, opts ...grpc.CallOption) (*QueryRuneProvidersResponse, error)
+	MimirValues(ctx context.Context, in *QueryMimirValuesRequest, opts ...grpc.CallOption) (*QueryMimirValuesResponse, error)
+	MimirWithKey(ctx context.Context, in *QueryMimirWithKeyRequest, opts ...grpc.CallOption) (*QueryMimirWithKeyResponse, error)
+	MimirAdminValues(ctx context.Context, in *QueryMimirAdminValuesRequest, opts ...grpc.CallOption) (*QueryMimirAdminValuesResponse, error)
+	MimirNodesAllValues(ctx context.Context, in *QueryMimirNodesAllValuesRequest, opts ...grpc.CallOption) (*QueryMimirNodesAllValuesResponse, error)
+	MimirNodesValues(ctx context.Context, in *QueryMimirNodesValuesRequest, opts ...grpc.CallOption) (*QueryMimirNodesValuesResponse, error)
+	MimirNodeValues(ctx context.Context, in *QueryMimirNodeValuesRequest, opts ...grpc.CallOption) (*QueryMimirNodeValuesResponse, error)
 }
 
 type queryClient struct {
@@ -334,6 +346,60 @@ func (c *queryClient) RuneProviders(ctx context.Context, in *QueryRuneProvidersR
 	return out, nil
 }
 
+func (c *queryClient) MimirValues(ctx context.Context, in *QueryMimirValuesRequest, opts ...grpc.CallOption) (*QueryMimirValuesResponse, error) {
+	out := new(QueryMimirValuesResponse)
+	err := c.cc.Invoke(ctx, Query_MimirValues_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) MimirWithKey(ctx context.Context, in *QueryMimirWithKeyRequest, opts ...grpc.CallOption) (*QueryMimirWithKeyResponse, error) {
+	out := new(QueryMimirWithKeyResponse)
+	err := c.cc.Invoke(ctx, Query_MimirWithKey_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) MimirAdminValues(ctx context.Context, in *QueryMimirAdminValuesRequest, opts ...grpc.CallOption) (*QueryMimirAdminValuesResponse, error) {
+	out := new(QueryMimirAdminValuesResponse)
+	err := c.cc.Invoke(ctx, Query_MimirAdminValues_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) MimirNodesAllValues(ctx context.Context, in *QueryMimirNodesAllValuesRequest, opts ...grpc.CallOption) (*QueryMimirNodesAllValuesResponse, error) {
+	out := new(QueryMimirNodesAllValuesResponse)
+	err := c.cc.Invoke(ctx, Query_MimirNodesAllValues_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) MimirNodesValues(ctx context.Context, in *QueryMimirNodesValuesRequest, opts ...grpc.CallOption) (*QueryMimirNodesValuesResponse, error) {
+	out := new(QueryMimirNodesValuesResponse)
+	err := c.cc.Invoke(ctx, Query_MimirNodesValues_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) MimirNodeValues(ctx context.Context, in *QueryMimirNodeValuesRequest, opts ...grpc.CallOption) (*QueryMimirNodeValuesResponse, error) {
+	out := new(QueryMimirNodeValuesResponse)
+	err := c.cc.Invoke(ctx, Query_MimirNodeValues_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -367,6 +433,12 @@ type QueryServer interface {
 	RunePool(context.Context, *QueryRunePoolRequest) (*QueryRunePoolResponse, error)
 	RuneProvider(context.Context, *QueryRuneProviderRequest) (*QueryRuneProviderResponse, error)
 	RuneProviders(context.Context, *QueryRuneProvidersRequest) (*QueryRuneProvidersResponse, error)
+	MimirValues(context.Context, *QueryMimirValuesRequest) (*QueryMimirValuesResponse, error)
+	MimirWithKey(context.Context, *QueryMimirWithKeyRequest) (*QueryMimirWithKeyResponse, error)
+	MimirAdminValues(context.Context, *QueryMimirAdminValuesRequest) (*QueryMimirAdminValuesResponse, error)
+	MimirNodesAllValues(context.Context, *QueryMimirNodesAllValuesRequest) (*QueryMimirNodesAllValuesResponse, error)
+	MimirNodesValues(context.Context, *QueryMimirNodesValuesRequest) (*QueryMimirNodesValuesResponse, error)
+	MimirNodeValues(context.Context, *QueryMimirNodeValuesRequest) (*QueryMimirNodeValuesResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -454,6 +526,24 @@ func (UnimplementedQueryServer) RuneProvider(context.Context, *QueryRuneProvider
 }
 func (UnimplementedQueryServer) RuneProviders(context.Context, *QueryRuneProvidersRequest) (*QueryRuneProvidersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RuneProviders not implemented")
+}
+func (UnimplementedQueryServer) MimirValues(context.Context, *QueryMimirValuesRequest) (*QueryMimirValuesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MimirValues not implemented")
+}
+func (UnimplementedQueryServer) MimirWithKey(context.Context, *QueryMimirWithKeyRequest) (*QueryMimirWithKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MimirWithKey not implemented")
+}
+func (UnimplementedQueryServer) MimirAdminValues(context.Context, *QueryMimirAdminValuesRequest) (*QueryMimirAdminValuesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MimirAdminValues not implemented")
+}
+func (UnimplementedQueryServer) MimirNodesAllValues(context.Context, *QueryMimirNodesAllValuesRequest) (*QueryMimirNodesAllValuesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MimirNodesAllValues not implemented")
+}
+func (UnimplementedQueryServer) MimirNodesValues(context.Context, *QueryMimirNodesValuesRequest) (*QueryMimirNodesValuesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MimirNodesValues not implemented")
+}
+func (UnimplementedQueryServer) MimirNodeValues(context.Context, *QueryMimirNodeValuesRequest) (*QueryMimirNodeValuesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MimirNodeValues not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -954,6 +1044,114 @@ func _Query_RuneProviders_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_MimirValues_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryMimirValuesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).MimirValues(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_MimirValues_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).MimirValues(ctx, req.(*QueryMimirValuesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_MimirWithKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryMimirWithKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).MimirWithKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_MimirWithKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).MimirWithKey(ctx, req.(*QueryMimirWithKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_MimirAdminValues_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryMimirAdminValuesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).MimirAdminValues(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_MimirAdminValues_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).MimirAdminValues(ctx, req.(*QueryMimirAdminValuesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_MimirNodesAllValues_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryMimirNodesAllValuesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).MimirNodesAllValues(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_MimirNodesAllValues_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).MimirNodesAllValues(ctx, req.(*QueryMimirNodesAllValuesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_MimirNodesValues_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryMimirNodesValuesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).MimirNodesValues(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_MimirNodesValues_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).MimirNodesValues(ctx, req.(*QueryMimirNodesValuesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_MimirNodeValues_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryMimirNodeValuesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).MimirNodeValues(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_MimirNodeValues_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).MimirNodeValues(ctx, req.(*QueryMimirNodeValuesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1068,6 +1266,30 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RuneProviders",
 			Handler:    _Query_RuneProviders_Handler,
+		},
+		{
+			MethodName: "MimirValues",
+			Handler:    _Query_MimirValues_Handler,
+		},
+		{
+			MethodName: "MimirWithKey",
+			Handler:    _Query_MimirWithKey_Handler,
+		},
+		{
+			MethodName: "MimirAdminValues",
+			Handler:    _Query_MimirAdminValues_Handler,
+		},
+		{
+			MethodName: "MimirNodesAllValues",
+			Handler:    _Query_MimirNodesAllValues_Handler,
+		},
+		{
+			MethodName: "MimirNodesValues",
+			Handler:    _Query_MimirNodesValues_Handler,
+		},
+		{
+			MethodName: "MimirNodeValues",
+			Handler:    _Query_MimirNodeValues_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

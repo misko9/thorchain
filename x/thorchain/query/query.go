@@ -53,12 +53,6 @@ var (
 	QueryVaultPubkeys        = Query{Key: "vaultpubkeys", EndpointTemplate: "/%s/vaults/pubkeys"}
 	QueryConstantValues      = Query{Key: "constants", EndpointTemplate: "/%s/constants"}
 	QueryVersion             = Query{Key: "version", EndpointTemplate: "/%s/version"}
-	QueryMimirValues         = Query{Key: "mimirs", EndpointTemplate: "/%s/mimir"}
-	QueryMimirWithKey        = Query{Key: "mimirwithkey", EndpointTemplate: "/%s/mimir/key/{%s}"}
-	QueryMimirAdminValues    = Query{Key: "adminmimirs", EndpointTemplate: "/%s/mimir/admin"}
-	QueryMimirNodesValues    = Query{Key: "nodesmimirs", EndpointTemplate: "/%s/mimir/nodes"}
-	QueryMimirNodesAllValues = Query{Key: "nodesmimirsall", EndpointTemplate: "/%s/mimir/nodes_all"}
-	QueryMimirNodeValues     = Query{Key: "nodemimirs", EndpointTemplate: "/%s/mimir/node/{%s}"}
 	QueryPendingOutbound     = Query{Key: "pendingoutbound", EndpointTemplate: "/%s/queue/outbound"}
 	QueryScheduledOutbound   = Query{Key: "scheduledoutbound", EndpointTemplate: "/%s/queue/scheduled"}
 	QuerySwapperClout        = Query{Key: "swapperclout", EndpointTemplate: "/%s/clout/swap/{%s}"}
@@ -101,12 +95,6 @@ var Queries = []Query{
 	QueryKeygensPubkey,
 	QueryConstantValues,
 	QueryVersion,
-	QueryMimirValues,
-	QueryMimirWithKey,
-	QueryMimirAdminValues,
-	QueryMimirNodesAllValues,
-	QueryMimirNodesValues,
-	QueryMimirNodeValues,
 	QueryPendingOutbound,
 	QueryScheduledOutbound,
 	QuerySwapperClout,

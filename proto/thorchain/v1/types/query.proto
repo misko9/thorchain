@@ -22,6 +22,7 @@ import "types/type_ban_voter.proto";
 import "types/query_ragnarok.proto";
 import "types/query_rune_pool.proto";
 import "types/query_rune_provider.proto";
+import "types/query_mimir.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -135,5 +136,29 @@ service Query {
 
   rpc RuneProviders(QueryRuneProvidersRequest) returns (QueryRuneProvidersResponse) {
     option (google.api.http).get = "/thorchain/rune_providers";
+  }
+
+  rpc MimirValues(QueryMimirValuesRequest) returns (QueryMimirValuesResponse) {
+    option (google.api.http).get = "/thorchain/mimir";
+  }
+
+  rpc MimirWithKey(QueryMimirWithKeyRequest) returns (QueryMimirWithKeyResponse) {
+    option (google.api.http).get = "/thorchain/mimir/key/{key}";
+  }
+
+  rpc MimirAdminValues(QueryMimirAdminValuesRequest) returns (QueryMimirAdminValuesResponse) {
+    option (google.api.http).get = "/thorchain/mimir/admin";
+  }
+
+  rpc MimirNodesAllValues(QueryMimirNodesAllValuesRequest) returns (QueryMimirNodesAllValuesResponse) {
+    option (google.api.http).get = "/thorchain/mimir/nodes_all";
+  }
+
+  rpc MimirNodesValues(QueryMimirNodesValuesRequest) returns (QueryMimirNodesValuesResponse) {
+    option (google.api.http).get = "/thorchain/mimir/nodes";
+  }
+
+  rpc MimirNodeValues(QueryMimirNodeValuesRequest) returns (QueryMimirNodeValuesResponse) {
+    option (google.api.http).get = "/thorchain/mimir/node/{address}";
   }
 }
