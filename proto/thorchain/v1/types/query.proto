@@ -19,6 +19,7 @@ import "types/query_outbound_fee.proto";
 import "types/query_streaming_swap.proto";
 import "types/query_ban.proto";
 import "types/type_ban_voter.proto";
+import "types/query_ragnarok.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -116,5 +117,9 @@ service Query {
 
   rpc Ban(QueryBanRequest) returns (BanVoter) {
     option (google.api.http).get = "/thorchain/ban/{address}";
+  }
+
+  rpc Ragnarok(QueryRagnarokRequest) returns (QueryRagnarokResponse) {
+    option (google.api.http).get = "/thorchain/ragnarok";
   }
 }

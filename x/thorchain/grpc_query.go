@@ -132,3 +132,8 @@ func (s queryServer) Ban(c context.Context, req *types.QueryBanRequest) (*types.
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryBan(ctx, req)
 }
+
+func (s queryServer) Ragnarok(c context.Context, req *types.QueryRagnarokRequest) (*types.QueryRagnarokResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryRagnarok(ctx, req)
+}

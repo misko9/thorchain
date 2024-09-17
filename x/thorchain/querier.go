@@ -118,8 +118,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 		case q.QueryMimirNodeValues.Key:
 			return queryMimirNodeValues(ctx, path[1:], req, mgr)
 
-		case q.QueryRagnarok.Key:
-			return queryRagnarok(ctx, mgr)
 		case q.QueryRUNEPool.Key:
 			return queryRUNEPool(ctx, mgr)
 		case q.QueryRUNEProvider.Key:
@@ -183,9 +181,9 @@ func jsonify(ctx cosmos.Context, r any) ([]byte, error) {
 	return res, nil
 }
 
-func queryRagnarok(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
-	ragnarokInProgress := mgr.Keeper().RagnarokInProgress(ctx)
-	return jsonify(ctx, ragnarokInProgress)
+func (qs queryServer) queryRagnarok(ctx cosmos.Context, req *types.QueryRagnarokRequest) (*types.QueryRagnarokResponse, error) {
+	ragnarokInProgress := qs.mgr.Keeper().RagnarokInProgress(ctx)
+	return &types.QueryRagnarokResponse{InProgress: ragnarokInProgress}, nil
 }
 
 func queryBalanceModule(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, error) {
