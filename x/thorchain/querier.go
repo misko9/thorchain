@@ -101,8 +101,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 			return queryVaultsPubkeys(ctx, mgr)
 		case q.QueryConstantValues.Key:
 			return queryConstantValues(ctx, path[1:], req, mgr)
-		case q.QueryVersion.Key:
-			return queryVersion(ctx, path[1:], req, mgr)
 
 		case q.QueryPendingOutbound.Key:
 			return queryPendingOutbound(ctx, mgr)
@@ -2556,22 +2554,22 @@ func queryConstantValues(ctx cosmos.Context, path []string, req abci.RequestQuer
 	return jsonify(ctx, constAccessor)
 }
 
-func queryVersion(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	v, hasV := mgr.Keeper().GetVersionWithCtx(ctx)
+func (qs queryServer) queryVersion(ctx cosmos.Context, req *types.QueryVersionRequest) (*types.QueryVersionResponse, error) {
+	v, hasV := qs.mgr.Keeper().GetVersionWithCtx(ctx)
 	if !hasV {
 		// re-compute version if not stored
-		v = mgr.Keeper().GetLowestActiveVersion(ctx)
+		v = qs.mgr.Keeper().GetLowestActiveVersion(ctx)
 	}
 
-	minJoinLast, minJoinLastChangedHeight := mgr.Keeper().GetMinJoinLast(ctx)
+	minJoinLast, minJoinLastChangedHeight := qs.mgr.Keeper().GetMinJoinLast(ctx)
 
-	ver := openapi.VersionResponse{
+	ver := types.QueryVersionResponse{
 		Current:         v.String(),
 		Next:            minJoinLast.String(),
-		NextSinceHeight: wrapInt64(minJoinLastChangedHeight), // omitted if 0
+		NextSinceHeight: minJoinLastChangedHeight, // omitted if 0
 		Querier:         constants.SWVersion.String(),
 	}
-	return jsonify(ctx, ver)
+	return &ver, nil
 }
 
 func (qs queryServer) queryMimirWithKey(ctx cosmos.Context, req *types.QueryMimirWithKeyRequest) (*types.QueryMimirWithKeyResponse, error) {

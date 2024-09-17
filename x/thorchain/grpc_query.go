@@ -187,3 +187,8 @@ func (s queryServer) InboundAddresses(c context.Context, req *types.QueryInbound
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryInboundAddresses(ctx, req)
 }
+
+func (s queryServer) Version(c context.Context, req *types.QueryVersionRequest) (*types.QueryVersionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryVersion(ctx, req)
+}

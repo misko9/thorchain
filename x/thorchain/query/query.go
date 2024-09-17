@@ -51,7 +51,6 @@ var (
 	QueryVault               = Query{Key: "vault", EndpointTemplate: "/%s/vault/{%s}"}
 	QueryVaultPubkeys        = Query{Key: "vaultpubkeys", EndpointTemplate: "/%s/vaults/pubkeys"}
 	QueryConstantValues      = Query{Key: "constants", EndpointTemplate: "/%s/constants"}
-	QueryVersion             = Query{Key: "version", EndpointTemplate: "/%s/version"}
 	QueryPendingOutbound     = Query{Key: "pendingoutbound", EndpointTemplate: "/%s/queue/outbound"}
 	QueryScheduledOutbound   = Query{Key: "scheduledoutbound", EndpointTemplate: "/%s/queue/scheduled"}
 	QuerySwapperClout        = Query{Key: "swapperclout", EndpointTemplate: "/%s/clout/swap/{%s}"}
@@ -92,7 +91,6 @@ var Queries = []Query{
 	QueryVault,
 	QueryKeygensPubkey,
 	QueryConstantValues,
-	QueryVersion,
 	QueryPendingOutbound,
 	QueryScheduledOutbound,
 	QuerySwapperClout,
