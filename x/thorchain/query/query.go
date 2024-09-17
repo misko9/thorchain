@@ -44,7 +44,6 @@ var (
 	QueryQueue               = Query{Key: "outqueue", EndpointTemplate: "/%s/queue"}
 	QueryHeights             = Query{Key: "heights", EndpointTemplate: "/%s/lastblock"}
 	QueryChainHeights        = Query{Key: "chainheights", EndpointTemplate: "/%s/lastblock/{%s}"}
-	QueryInboundAddresses    = Query{Key: "inboundaddresses", EndpointTemplate: "/%s/inbound_addresses"}
 	QueryNetwork             = Query{Key: "network", EndpointTemplate: "/%s/network"}
 	QueryPOL                 = Query{Key: "pol", EndpointTemplate: "/%s/pol"}
 	QueryBalanceModule       = Query{Key: "balancemodule", EndpointTemplate: "/%s/balance/module/{%s}"}
@@ -85,7 +84,6 @@ var Queries = []Query{
 	QueryQueue,
 	QueryHeights,
 	QueryChainHeights,
-	QueryInboundAddresses,
 	QueryNetwork,
 	QueryPOL,
 	QueryBalanceModule,

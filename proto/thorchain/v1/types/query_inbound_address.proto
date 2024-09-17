@@ -1,0 +1,30 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryInboundAddressResponse{
+  string chain = 1;
+  string pub_key = 2;
+  string address = 3;
+  string router = 4;
+  bool   halted = 5;
+  bool   global_trading_paused = 6;
+  bool   chain_trading_paused = 7;
+  bool   chain_lp_actions_paused = 8;
+  string gas_rate = 9;
+  string gas_rate_units = 10;
+  string outbound_tx_size = 11;
+  string outbound_fee = 12;
+  string dust_threshold = 13;
+}
+
+message QueryInboundAddressesRequest{}
+
+message QueryInboundAddressesResponse{
+  repeated QueryInboundAddressResponse inbound_addresses = 1;
+}

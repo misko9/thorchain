@@ -182,3 +182,8 @@ func (s queryServer) MimirNodeValues(c context.Context, req *types.QueryMimirNod
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryMimirNodeValues(ctx, req)
 }
+
+func (s queryServer) InboundAddresses(c context.Context, req *types.QueryInboundAddressesRequest) (*types.QueryInboundAddressesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryInboundAddresses(ctx, req)
+}

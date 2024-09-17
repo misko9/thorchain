@@ -89,8 +89,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 		case q.QueryChainHeights.Key:
 			return queryLastBlockHeights(ctx, path[1:], req, mgr)
 
-		case q.QueryInboundAddresses.Key:
-			return queryInboundAddresses(ctx, path[1:], req, mgr)
 		case q.QueryNetwork.Key:
 			return queryNetwork(ctx, mgr)
 		case q.QueryBalanceModule.Key:
@@ -556,22 +554,22 @@ func queryNetwork(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 	return jsonify(ctx, result)
 }
 
-func queryInboundAddresses(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	active, err := mgr.Keeper().GetAsgardVaultsByStatus(ctx, ActiveVault)
+func (qs queryServer) queryInboundAddresses(ctx cosmos.Context, req *types.QueryInboundAddressesRequest) (*types.QueryInboundAddressesResponse, error) {
+	active, err := qs.mgr.Keeper().GetAsgardVaultsByStatus(ctx, ActiveVault)
 	if err != nil {
 		ctx.Logger().Error("fail to get active vaults", "error", err)
 		return nil, fmt.Errorf("fail to get active vaults: %w", err)
 	}
 
-	var resp []openapi.InboundAddress
-	constAccessor := mgr.GetConstants()
+	var resp []*types.QueryInboundAddressResponse
+	constAccessor := qs.mgr.GetConstants()
 	signingTransactionPeriod := constAccessor.GetInt64Value(constants.SigningTransactionPeriod)
-	if mgr.Keeper() == nil {
+	if qs.mgr.Keeper() == nil {
 		ctx.Logger().Error("keeper is nil, can't fulfill query")
 		return nil, errors.New("keeper is nil, can't fulfill query")
 	}
 	// select vault that is most secure
-	vault := mgr.Keeper().GetMostSecure(ctx, active, signingTransactionPeriod)
+	vault := qs.mgr.Keeper().GetMostSecure(ctx, active, signingTransactionPeriod)
 
 	chains := vault.GetChains()
 
@@ -579,7 +577,7 @@ func queryInboundAddresses(ctx cosmos.Context, path []string, req abci.RequestQu
 		chains = common.Chains{common.RuneAsset().Chain}
 	}
 
-	isGlobalTradingPaused := mgr.Keeper().IsGlobalTradingHalted(ctx)
+	isGlobalTradingPaused := qs.mgr.Keeper().IsGlobalTradingHalted(ctx)
 
 	for _, chain := range chains {
 		// tx send to thorchain doesn't need an address , thus here skip it
@@ -587,8 +585,8 @@ func queryInboundAddresses(ctx cosmos.Context, path []string, req abci.RequestQu
 			continue
 		}
 
-		isChainTradingPaused := mgr.Keeper().IsChainTradingHalted(ctx, chain)
-		isChainLpPaused := mgr.Keeper().IsLPPaused(ctx, chain)
+		isChainTradingPaused := qs.mgr.Keeper().IsChainTradingHalted(ctx, chain)
+		isChainLpPaused := qs.mgr.Keeper().IsLPPaused(ctx, chain)
 
 		vaultAddress, err := vault.PubKey.GetAddress(chain)
 		if err != nil {
@@ -596,8 +594,8 @@ func queryInboundAddresses(ctx cosmos.Context, path []string, req abci.RequestQu
 			return nil, fmt.Errorf("fail to get address for chain: %w", err)
 		}
 		cc := vault.GetContract(chain)
-		gasRate := mgr.GasMgr().GetGasRate(ctx, chain)
-		networkFeeInfo, err := mgr.GasMgr().GetNetworkFee(ctx, chain)
+		gasRate := qs.mgr.GasMgr().GetGasRate(ctx, chain)
+		networkFeeInfo, err := qs.mgr.GasMgr().GetNetworkFee(ctx, chain)
 		if err != nil {
 			ctx.Logger().Error("fail to get network fee info", "error", err)
 			return nil, fmt.Errorf("fail to get network fee info: %w", err)
@@ -610,28 +608,30 @@ func queryInboundAddresses(ctx cosmos.Context, path []string, req abci.RequestQu
 		}
 
 		// Retrieve the outbound fee for the chain's gas asset - fee will be zero if no network fee has been posted/the pool doesn't exist
-		outboundFee, _ := mgr.GasMgr().GetAssetOutboundFee(ctx, chain.GetGasAsset(), false)
+		outboundFee, _ := qs.mgr.GasMgr().GetAssetOutboundFee(ctx, chain.GetGasAsset(), false)
 
-		addr := openapi.InboundAddress{
-			Chain:                wrapString(chain.String()),
-			PubKey:               wrapString(vault.PubKey.String()),
-			Address:              wrapString(vaultAddress.String()),
-			Router:               wrapString(cc.Router.String()),
+		addr := types.QueryInboundAddressResponse{
+			Chain:                chain.String(),
+			PubKey:               vault.PubKey.String(),
+			Address:              vaultAddress.String(),
+			Router:               cc.Router.String(),
 			Halted:               isGlobalTradingPaused || isChainTradingPaused,
-			GlobalTradingPaused:  &isGlobalTradingPaused,
-			ChainTradingPaused:   &isChainTradingPaused,
-			ChainLpActionsPaused: &isChainLpPaused,
-			GasRate:              wrapString(gasRate.String()),
-			GasRateUnits:         wrapString(chain.GetGasUnits()),
-			OutboundTxSize:       wrapString(cosmos.NewUint(networkFeeInfo.TransactionSize).String()),
-			OutboundFee:          wrapString(outboundFee.String()),
-			DustThreshold:        wrapString(chain.DustThreshold().String()),
+			GlobalTradingPaused:  isGlobalTradingPaused,
+			ChainTradingPaused:   isChainTradingPaused,
+			ChainLpActionsPaused: isChainLpPaused,
+			GasRate:              gasRate.String(),
+			GasRateUnits:         chain.GetGasUnits(),
+			OutboundTxSize:       cosmos.NewUint(networkFeeInfo.TransactionSize).String(),
+			OutboundFee:          outboundFee.String(),
+			DustThreshold:        chain.DustThreshold().String(),
 		}
 
-		resp = append(resp, addr)
+		resp = append(resp, &addr)
 	}
 
-	return jsonify(ctx, resp)
+	return &types.QueryInboundAddressesResponse{
+		InboundAddresses: resp,
+	}, nil
 }
 
 // queryNode return the Node information related to the request node address

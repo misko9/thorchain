@@ -23,6 +23,7 @@ import "types/query_ragnarok.proto";
 import "types/query_rune_pool.proto";
 import "types/query_rune_provider.proto";
 import "types/query_mimir.proto";
+import "types/query_inbound_address.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -160,5 +161,9 @@ service Query {
 
   rpc MimirNodeValues(QueryMimirNodeValuesRequest) returns (QueryMimirNodeValuesResponse) {
     option (google.api.http).get = "/thorchain/mimir/node/{address}";
+  }
+
+  rpc InboundAddresses(QueryInboundAddressesRequest) returns (QueryInboundAddressesResponse) {
+    option (google.api.http).get = "/thorchain/inbound_addresses";
   }
 }

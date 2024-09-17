@@ -52,6 +52,7 @@ const (
 	Query_MimirNodesAllValues_FullMethodName = "/types.Query/MimirNodesAllValues"
 	Query_MimirNodesValues_FullMethodName    = "/types.Query/MimirNodesValues"
 	Query_MimirNodeValues_FullMethodName     = "/types.Query/MimirNodeValues"
+	Query_InboundAddresses_FullMethodName    = "/types.Query/InboundAddresses"
 )
 
 // QueryClient is the client API for Query service.
@@ -93,6 +94,7 @@ type QueryClient interface {
 	MimirNodesAllValues(ctx context.Context, in *QueryMimirNodesAllValuesRequest, opts ...grpc.CallOption) (*QueryMimirNodesAllValuesResponse, error)
 	MimirNodesValues(ctx context.Context, in *QueryMimirNodesValuesRequest, opts ...grpc.CallOption) (*QueryMimirNodesValuesResponse, error)
 	MimirNodeValues(ctx context.Context, in *QueryMimirNodeValuesRequest, opts ...grpc.CallOption) (*QueryMimirNodeValuesResponse, error)
+	InboundAddresses(ctx context.Context, in *QueryInboundAddressesRequest, opts ...grpc.CallOption) (*QueryInboundAddressesResponse, error)
 }
 
 type queryClient struct {
@@ -400,6 +402,15 @@ func (c *queryClient) MimirNodeValues(ctx context.Context, in *QueryMimirNodeVal
 	return out, nil
 }
 
+func (c *queryClient) InboundAddresses(ctx context.Context, in *QueryInboundAddressesRequest, opts ...grpc.CallOption) (*QueryInboundAddressesResponse, error) {
+	out := new(QueryInboundAddressesResponse)
+	err := c.cc.Invoke(ctx, Query_InboundAddresses_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -439,6 +450,7 @@ type QueryServer interface {
 	MimirNodesAllValues(context.Context, *QueryMimirNodesAllValuesRequest) (*QueryMimirNodesAllValuesResponse, error)
 	MimirNodesValues(context.Context, *QueryMimirNodesValuesRequest) (*QueryMimirNodesValuesResponse, error)
 	MimirNodeValues(context.Context, *QueryMimirNodeValuesRequest) (*QueryMimirNodeValuesResponse, error)
+	InboundAddresses(context.Context, *QueryInboundAddressesRequest) (*QueryInboundAddressesResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -544,6 +556,9 @@ func (UnimplementedQueryServer) MimirNodesValues(context.Context, *QueryMimirNod
 }
 func (UnimplementedQueryServer) MimirNodeValues(context.Context, *QueryMimirNodeValuesRequest) (*QueryMimirNodeValuesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MimirNodeValues not implemented")
+}
+func (UnimplementedQueryServer) InboundAddresses(context.Context, *QueryInboundAddressesRequest) (*QueryInboundAddressesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InboundAddresses not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -1152,6 +1167,24 @@ func _Query_MimirNodeValues_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_InboundAddresses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryInboundAddressesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).InboundAddresses(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_InboundAddresses_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).InboundAddresses(ctx, req.(*QueryInboundAddressesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1290,6 +1323,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "MimirNodeValues",
 			Handler:    _Query_MimirNodeValues_Handler,
+		},
+		{
+			MethodName: "InboundAddresses",
+			Handler:    _Query_InboundAddresses_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
