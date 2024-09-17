@@ -26,6 +26,7 @@ import "types/query_mimir.proto";
 import "types/query_inbound_address.proto";
 import "types/query_version.proto";
 import "types/query_thorname.proto";
+import "types/query_invariants.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -175,5 +176,13 @@ service Query {
 
   rpc Thorname(QueryThornameRequest) returns (QueryThornameResponse) {
     option (google.api.http).get = "/thorchain/thorname/{name}";
+  }
+
+  rpc Invariant(QueryInvariantRequest) returns (QueryInvariantResponse) {
+    option (google.api.http).get = "/thorchain/invariant/{path}";
+  }
+
+  rpc Invariants(QueryInvariantsRequest) returns (QueryInvariantsResponse) {
+    option (google.api.http).get = "/thorchain/invariants";
   }
 }

@@ -127,10 +127,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 			return queryQuoteLoanOpen(ctx, path[1:], req, mgr)
 		case q.QueryQuoteLoanClose.Key:
 			return queryQuoteLoanClose(ctx, path[1:], req, mgr)
-		case q.QueryInvariants.Key:
-			return queryInvariants(ctx, mgr)
-		case q.QueryInvariant.Key:
-			return queryInvariant(ctx, path[1:], mgr)
 		case q.QueryBlock.Key:
 			return queryBlock(ctx, mgr)
 		default:
@@ -2962,30 +2958,30 @@ func queryTssMetric(ctx cosmos.Context, path []string, req abci.RequestQuery, mg
 	return jsonify(ctx, m)
 }
 
-func queryInvariants(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
-	result := openapi.InvariantsResponse{}
-	for _, route := range mgr.Keeper().InvariantRoutes() {
-		result.Invariants = append(result.Invariants, route.Route)
+func (qs queryServer) queryInvariants(ctx cosmos.Context, req *types.QueryInvariantsRequest) (*types.QueryInvariantsResponse, error) {
+	result := types.QueryInvariantsResponse{}
+	for _, route := range qs.mgr.Keeper().InvariantRoutes() {
+		result.InvariantRoutes = append(result.InvariantRoutes, route.Route)
 	}
-	return jsonify(ctx, result)
+	return &result, nil
 }
 
-func queryInvariant(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, error) {
-	if len(path) < 1 {
-		return nil, fmt.Errorf("invalid path: %v", path)
+func (qs queryServer) queryInvariant(ctx cosmos.Context, req *types.QueryInvariantRequest) (*types.QueryInvariantResponse, error) {
+	if len(req.Path) < 1 {
+		return nil, fmt.Errorf("invalid path: %v", req.Path)
 	}
-	for _, route := range mgr.Keeper().InvariantRoutes() {
-		if strings.EqualFold(route.Route, path[0]) {
+	for _, route := range qs.mgr.Keeper().InvariantRoutes() {
+		if strings.EqualFold(route.Route, req.Path) {
 			msg, broken := route.Invariant(ctx)
-			result := openapi.InvariantResponse{
+			result := types.QueryInvariantResponse{
 				Invariant: route.Route,
 				Broken:    broken,
 				Msg:       msg,
 			}
-			return jsonify(ctx, result)
+			return &result, nil
 		}
 	}
-	return nil, fmt.Errorf("invariant not registered: %s", path[0])
+	return nil, fmt.Errorf("invariant not registered: %s", req.Path)
 }
 
 func queryBlock(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {

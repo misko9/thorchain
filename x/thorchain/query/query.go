@@ -62,8 +62,6 @@ var (
 	QueryQuoteSaverWithdraw  = Query{Key: "quotesaverwithdraw", EndpointTemplate: "/%s/quote/saver/withdraw"}
 	QueryQuoteLoanOpen       = Query{Key: "quoteloanopen", EndpointTemplate: "/%s/quote/loan/open"}
 	QueryQuoteLoanClose      = Query{Key: "quoteloanclose", EndpointTemplate: "/%s/quote/loan/close"}
-	QueryInvariants          = Query{Key: "invariants", EndpointTemplate: "/%s/invariants"}
-	QueryInvariant           = Query{Key: "invariant", EndpointTemplate: "/%s/invariant/{%s}"}
 	QueryBlock               = Query{Key: "block", EndpointTemplate: "/%s/block"}
 
 	// queries only available on regtest builds
@@ -101,8 +99,6 @@ var Queries = []Query{
 	QueryQuoteSaverWithdraw,
 	QueryQuoteLoanOpen,
 	QueryQuoteLoanClose,
-	QueryInvariants,
-	QueryInvariant,
 	QueryBlock,
 	QueryExport,
 }

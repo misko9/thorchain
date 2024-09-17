@@ -197,3 +197,13 @@ func (s queryServer) Thorname(c context.Context, req *types.QueryThornameRequest
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryTHORName(ctx, req)
 }
+
+func (s queryServer) Invariant(c context.Context, req *types.QueryInvariantRequest) (*types.QueryInvariantResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryInvariant(ctx, req)
+}
+
+func (s queryServer) Invariants(c context.Context, req *types.QueryInvariantsRequest) (*types.QueryInvariantsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryInvariants(ctx, req)
+}
