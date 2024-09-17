@@ -28,6 +28,7 @@ import "types/query_version.proto";
 import "types/query_thorname.proto";
 import "types/query_invariants.proto";
 import "types/query_network.proto";
+import "types/query_balance_module.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -189,5 +190,9 @@ service Query {
 
   rpc Network(QueryNetworkRequest) returns (QueryNetworkResponse) {
     option (google.api.http).get = "/thorchain/network";
+  }
+
+  rpc BalanceModule(QueryBalanceModuleRequest) returns (QueryBalanceModuleResponse) {
+    option (google.api.http).get = "/thorchain/balance/module/{name}";
   }
 }

@@ -89,8 +89,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 		case q.QueryChainHeights.Key:
 			return queryLastBlockHeights(ctx, path[1:], req, mgr)
 
-		case q.QueryBalanceModule.Key:
-			return queryBalanceModule(ctx, path[1:], mgr)
 		case q.QueryVaultsAsgard.Key:
 			return queryAsgardVaults(ctx, mgr)
 		case q.QueryVault.Key:
@@ -157,24 +155,20 @@ func (qs queryServer) queryRagnarok(ctx cosmos.Context, req *types.QueryRagnarok
 	return &types.QueryRagnarokResponse{InProgress: ragnarokInProgress}, nil
 }
 
-func queryBalanceModule(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, error) {
-	moduleName := path[0]
+func (qs queryServer) queryBalanceModule(ctx cosmos.Context, req *types.QueryBalanceModuleRequest) (*types.QueryBalanceModuleResponse, error) {
+	moduleName := req.Name
 	if len(moduleName) == 0 {
 		moduleName = AsgardName
 	}
 
-	modAddr := mgr.Keeper().GetModuleAccAddress(moduleName)
-	bal := mgr.Keeper().GetBalance(ctx, modAddr)
-	balance := struct {
-		Name    string            `json:"name"`
-		Address cosmos.AccAddress `json:"address"`
-		Coins   sdk.Coins         `json:"coins"`
-	}{
+	modAddr := qs.mgr.Keeper().GetModuleAccAddress(moduleName)
+	bal := qs.mgr.Keeper().GetBalance(ctx, modAddr)
+	balance := types.QueryBalanceModuleResponse{
 		Name:    moduleName,
 		Address: modAddr,
 		Coins:   bal,
 	}
-	return jsonify(ctx, balance)
+	return &balance, nil
 }
 
 func (qs queryServer) queryTHORName(ctx cosmos.Context, req *types.QueryThornameRequest) (*types.QueryThornameResponse, error) {

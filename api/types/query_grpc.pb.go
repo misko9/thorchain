@@ -58,6 +58,7 @@ const (
 	Query_Invariant_FullMethodName           = "/types.Query/Invariant"
 	Query_Invariants_FullMethodName          = "/types.Query/Invariants"
 	Query_Network_FullMethodName             = "/types.Query/Network"
+	Query_BalanceModule_FullMethodName       = "/types.Query/BalanceModule"
 )
 
 // QueryClient is the client API for Query service.
@@ -105,6 +106,7 @@ type QueryClient interface {
 	Invariant(ctx context.Context, in *QueryInvariantRequest, opts ...grpc.CallOption) (*QueryInvariantResponse, error)
 	Invariants(ctx context.Context, in *QueryInvariantsRequest, opts ...grpc.CallOption) (*QueryInvariantsResponse, error)
 	Network(ctx context.Context, in *QueryNetworkRequest, opts ...grpc.CallOption) (*QueryNetworkResponse, error)
+	BalanceModule(ctx context.Context, in *QueryBalanceModuleRequest, opts ...grpc.CallOption) (*QueryBalanceModuleResponse, error)
 }
 
 type queryClient struct {
@@ -466,6 +468,15 @@ func (c *queryClient) Network(ctx context.Context, in *QueryNetworkRequest, opts
 	return out, nil
 }
 
+func (c *queryClient) BalanceModule(ctx context.Context, in *QueryBalanceModuleRequest, opts ...grpc.CallOption) (*QueryBalanceModuleResponse, error) {
+	out := new(QueryBalanceModuleResponse)
+	err := c.cc.Invoke(ctx, Query_BalanceModule_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -511,6 +522,7 @@ type QueryServer interface {
 	Invariant(context.Context, *QueryInvariantRequest) (*QueryInvariantResponse, error)
 	Invariants(context.Context, *QueryInvariantsRequest) (*QueryInvariantsResponse, error)
 	Network(context.Context, *QueryNetworkRequest) (*QueryNetworkResponse, error)
+	BalanceModule(context.Context, *QueryBalanceModuleRequest) (*QueryBalanceModuleResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -634,6 +646,9 @@ func (UnimplementedQueryServer) Invariants(context.Context, *QueryInvariantsRequ
 }
 func (UnimplementedQueryServer) Network(context.Context, *QueryNetworkRequest) (*QueryNetworkResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Network not implemented")
+}
+func (UnimplementedQueryServer) BalanceModule(context.Context, *QueryBalanceModuleRequest) (*QueryBalanceModuleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BalanceModule not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -1350,6 +1365,24 @@ func _Query_Network_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_BalanceModule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryBalanceModuleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).BalanceModule(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_BalanceModule_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).BalanceModule(ctx, req.(*QueryBalanceModuleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1512,6 +1545,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Network",
 			Handler:    _Query_Network_Handler,
+		},
+		{
+			MethodName: "BalanceModule",
+			Handler:    _Query_BalanceModule_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -46,7 +46,6 @@ var (
 	QueryChainHeights        = Query{Key: "chainheights", EndpointTemplate: "/%s/lastblock/{%s}"}
 	QueryNetwork             = Query{Key: "network", EndpointTemplate: "/%s/network"}
 	QueryPOL                 = Query{Key: "pol", EndpointTemplate: "/%s/pol"}
-	QueryBalanceModule       = Query{Key: "balancemodule", EndpointTemplate: "/%s/balance/module/{%s}"}
 	QueryVaultsAsgard        = Query{Key: "vaultsasgard", EndpointTemplate: "/%s/vaults/asgard"}
 	QueryVault               = Query{Key: "vault", EndpointTemplate: "/%s/vault/{%s}"}
 	QueryVaultPubkeys        = Query{Key: "vaultpubkeys", EndpointTemplate: "/%s/vaults/pubkeys"}
@@ -82,7 +81,6 @@ var Queries = []Query{
 	QueryChainHeights,
 	QueryNetwork,
 	QueryPOL,
-	QueryBalanceModule,
 	QueryVaultsAsgard,
 	QueryVaultPubkeys,
 	QueryVault,

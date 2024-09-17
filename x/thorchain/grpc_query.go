@@ -212,3 +212,8 @@ func (s queryServer) Network(c context.Context, req *types.QueryNetworkRequest) 
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryNetwork(ctx, req)
 }
+
+func (s queryServer) BalanceModule(c context.Context, req *types.QueryBalanceModuleRequest) (*types.QueryBalanceModuleResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryBalanceModule(ctx, req)
+}
