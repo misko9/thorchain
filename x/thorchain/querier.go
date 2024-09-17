@@ -117,8 +117,7 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 			return queryMimirNodesValues(ctx, path[1:], req, mgr)
 		case q.QueryMimirNodeValues.Key:
 			return queryMimirNodeValues(ctx, path[1:], req, mgr)
-		case q.QueryBan.Key:
-			return queryBan(ctx, path[1:], req, mgr)
+
 		case q.QueryRagnarok.Key:
 			return queryRagnarok(ctx, mgr)
 		case q.QueryRUNEPool.Key:
@@ -2806,23 +2805,23 @@ func (qs queryServer) queryOutboundFees(ctx cosmos.Context, asset string) (*type
 	return &types.QueryOutboundFeesResponse{OutboundFees: result}, nil
 }
 
-func queryBan(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	if len(path) == 0 {
+func (qs queryServer) queryBan(ctx cosmos.Context, req *types.QueryBanRequest) (*types.BanVoter, error) {
+	if len(req.Address) == 0 {
 		return nil, errors.New("node address not available")
 	}
-	addr, err := cosmos.AccAddressFromBech32(path[0])
+	addr, err := cosmos.AccAddressFromBech32(req.Address)
 	if err != nil {
 		ctx.Logger().Error("invalid node address", "error", err)
 		return nil, fmt.Errorf("invalid node address: %w", err)
 	}
 
-	ban, err := mgr.Keeper().GetBanVoter(ctx, addr)
+	ban, err := qs.mgr.Keeper().GetBanVoter(ctx, addr)
 	if err != nil {
 		ctx.Logger().Error("fail to get ban voter", "error", err)
 		return nil, fmt.Errorf("fail to get ban voter: %w", err)
 	}
 
-	return jsonify(ctx, ban)
+	return &ban, nil
 }
 
 func queryScheduledOutbound(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {

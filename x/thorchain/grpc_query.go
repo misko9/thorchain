@@ -127,3 +127,8 @@ func (s queryServer) StreamingSwaps(c context.Context, req *types.QueryStreaming
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryStreamingSwaps(ctx, req)
 }
+
+func (s queryServer) Ban(c context.Context, req *types.QueryBanRequest) (*types.BanVoter, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryBan(ctx, req)
+}

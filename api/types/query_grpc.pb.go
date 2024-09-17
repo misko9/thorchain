@@ -41,6 +41,7 @@ const (
 	Query_OutboundFees_FullMethodName       = "/types.Query/OutboundFees"
 	Query_StreamingSwap_FullMethodName      = "/types.Query/StreamingSwap"
 	Query_StreamingSwaps_FullMethodName     = "/types.Query/StreamingSwaps"
+	Query_Ban_FullMethodName                = "/types.Query/Ban"
 )
 
 // QueryClient is the client API for Query service.
@@ -71,6 +72,7 @@ type QueryClient interface {
 	OutboundFees(ctx context.Context, in *QueryOutboundFeesRequest, opts ...grpc.CallOption) (*QueryOutboundFeesResponse, error)
 	StreamingSwap(ctx context.Context, in *QueryStreamingSwapRequest, opts ...grpc.CallOption) (*QueryStreamingSwapResponse, error)
 	StreamingSwaps(ctx context.Context, in *QueryStreamingSwapsRequest, opts ...grpc.CallOption) (*QueryStreamingSwapsResponse, error)
+	Ban(ctx context.Context, in *QueryBanRequest, opts ...grpc.CallOption) (*BanVoter, error)
 }
 
 type queryClient struct {
@@ -279,6 +281,15 @@ func (c *queryClient) StreamingSwaps(ctx context.Context, in *QueryStreamingSwap
 	return out, nil
 }
 
+func (c *queryClient) Ban(ctx context.Context, in *QueryBanRequest, opts ...grpc.CallOption) (*BanVoter, error) {
+	out := new(BanVoter)
+	err := c.cc.Invoke(ctx, Query_Ban_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -307,6 +318,7 @@ type QueryServer interface {
 	OutboundFees(context.Context, *QueryOutboundFeesRequest) (*QueryOutboundFeesResponse, error)
 	StreamingSwap(context.Context, *QueryStreamingSwapRequest) (*QueryStreamingSwapResponse, error)
 	StreamingSwaps(context.Context, *QueryStreamingSwapsRequest) (*QueryStreamingSwapsResponse, error)
+	Ban(context.Context, *QueryBanRequest) (*BanVoter, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -379,6 +391,9 @@ func (UnimplementedQueryServer) StreamingSwap(context.Context, *QueryStreamingSw
 }
 func (UnimplementedQueryServer) StreamingSwaps(context.Context, *QueryStreamingSwapsRequest) (*QueryStreamingSwapsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StreamingSwaps not implemented")
+}
+func (UnimplementedQueryServer) Ban(context.Context, *QueryBanRequest) (*BanVoter, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ban not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -789,6 +804,24 @@ func _Query_StreamingSwaps_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_Ban_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryBanRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Ban(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Ban_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Ban(ctx, req.(*QueryBanRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -883,6 +916,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "StreamingSwaps",
 			Handler:    _Query_StreamingSwaps_Handler,
+		},
+		{
+			MethodName: "Ban",
+			Handler:    _Query_Ban_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

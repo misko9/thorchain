@@ -17,6 +17,8 @@ import "types/query_node.proto";
 import "types/query_pool_slip.proto";
 import "types/query_outbound_fee.proto";
 import "types/query_streaming_swap.proto";
+import "types/query_ban.proto";
+import "types/type_ban_voter.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -110,5 +112,9 @@ service Query {
 
   rpc StreamingSwaps(QueryStreamingSwapsRequest) returns (QueryStreamingSwapsResponse) {
     option (google.api.http).get = "/thorchain/swaps/streaming";
+  }
+
+  rpc Ban(QueryBanRequest) returns (BanVoter) {
+    option (google.api.http).get = "/thorchain/ban/{address}";
   }
 }

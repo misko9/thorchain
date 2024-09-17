@@ -59,7 +59,6 @@ var (
 	QueryMimirNodesValues    = Query{Key: "nodesmimirs", EndpointTemplate: "/%s/mimir/nodes"}
 	QueryMimirNodesAllValues = Query{Key: "nodesmimirsall", EndpointTemplate: "/%s/mimir/nodes_all"}
 	QueryMimirNodeValues     = Query{Key: "nodemimirs", EndpointTemplate: "/%s/mimir/node/{%s}"}
-	QueryBan                 = Query{Key: "ban", EndpointTemplate: "/%s/ban/{%s}"}
 	QueryRagnarok            = Query{Key: "ragnarok", EndpointTemplate: "/%s/ragnarok"}
 	QueryRUNEPool            = Query{Key: "runepool", EndpointTemplate: "/%s/runepool"}
 	QueryRUNEProviders       = Query{Key: "runeproviders", EndpointTemplate: "/%s/rune_providers"}
@@ -112,7 +111,6 @@ var Queries = []Query{
 	QueryMimirNodesAllValues,
 	QueryMimirNodesValues,
 	QueryMimirNodeValues,
-	QueryBan,
 	QueryRagnarok,
 	QueryRUNEPool,
 	QueryRUNEProvider,
