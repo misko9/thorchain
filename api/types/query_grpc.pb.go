@@ -43,6 +43,9 @@ const (
 	Query_StreamingSwaps_FullMethodName     = "/types.Query/StreamingSwaps"
 	Query_Ban_FullMethodName                = "/types.Query/Ban"
 	Query_Ragnarok_FullMethodName           = "/types.Query/Ragnarok"
+	Query_RunePool_FullMethodName           = "/types.Query/RunePool"
+	Query_RuneProvider_FullMethodName       = "/types.Query/RuneProvider"
+	Query_RuneProviders_FullMethodName      = "/types.Query/RuneProviders"
 )
 
 // QueryClient is the client API for Query service.
@@ -75,6 +78,9 @@ type QueryClient interface {
 	StreamingSwaps(ctx context.Context, in *QueryStreamingSwapsRequest, opts ...grpc.CallOption) (*QueryStreamingSwapsResponse, error)
 	Ban(ctx context.Context, in *QueryBanRequest, opts ...grpc.CallOption) (*BanVoter, error)
 	Ragnarok(ctx context.Context, in *QueryRagnarokRequest, opts ...grpc.CallOption) (*QueryRagnarokResponse, error)
+	RunePool(ctx context.Context, in *QueryRunePoolRequest, opts ...grpc.CallOption) (*QueryRunePoolResponse, error)
+	RuneProvider(ctx context.Context, in *QueryRuneProviderRequest, opts ...grpc.CallOption) (*QueryRuneProviderResponse, error)
+	RuneProviders(ctx context.Context, in *QueryRuneProvidersRequest, opts ...grpc.CallOption) (*QueryRuneProvidersResponse, error)
 }
 
 type queryClient struct {
@@ -301,6 +307,33 @@ func (c *queryClient) Ragnarok(ctx context.Context, in *QueryRagnarokRequest, op
 	return out, nil
 }
 
+func (c *queryClient) RunePool(ctx context.Context, in *QueryRunePoolRequest, opts ...grpc.CallOption) (*QueryRunePoolResponse, error) {
+	out := new(QueryRunePoolResponse)
+	err := c.cc.Invoke(ctx, Query_RunePool_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) RuneProvider(ctx context.Context, in *QueryRuneProviderRequest, opts ...grpc.CallOption) (*QueryRuneProviderResponse, error) {
+	out := new(QueryRuneProviderResponse)
+	err := c.cc.Invoke(ctx, Query_RuneProvider_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) RuneProviders(ctx context.Context, in *QueryRuneProvidersRequest, opts ...grpc.CallOption) (*QueryRuneProvidersResponse, error) {
+	out := new(QueryRuneProvidersResponse)
+	err := c.cc.Invoke(ctx, Query_RuneProviders_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -331,6 +364,9 @@ type QueryServer interface {
 	StreamingSwaps(context.Context, *QueryStreamingSwapsRequest) (*QueryStreamingSwapsResponse, error)
 	Ban(context.Context, *QueryBanRequest) (*BanVoter, error)
 	Ragnarok(context.Context, *QueryRagnarokRequest) (*QueryRagnarokResponse, error)
+	RunePool(context.Context, *QueryRunePoolRequest) (*QueryRunePoolResponse, error)
+	RuneProvider(context.Context, *QueryRuneProviderRequest) (*QueryRuneProviderResponse, error)
+	RuneProviders(context.Context, *QueryRuneProvidersRequest) (*QueryRuneProvidersResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -409,6 +445,15 @@ func (UnimplementedQueryServer) Ban(context.Context, *QueryBanRequest) (*BanVote
 }
 func (UnimplementedQueryServer) Ragnarok(context.Context, *QueryRagnarokRequest) (*QueryRagnarokResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ragnarok not implemented")
+}
+func (UnimplementedQueryServer) RunePool(context.Context, *QueryRunePoolRequest) (*QueryRunePoolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RunePool not implemented")
+}
+func (UnimplementedQueryServer) RuneProvider(context.Context, *QueryRuneProviderRequest) (*QueryRuneProviderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RuneProvider not implemented")
+}
+func (UnimplementedQueryServer) RuneProviders(context.Context, *QueryRuneProvidersRequest) (*QueryRuneProvidersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RuneProviders not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -855,6 +900,60 @@ func _Query_Ragnarok_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_RunePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRunePoolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).RunePool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_RunePool_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).RunePool(ctx, req.(*QueryRunePoolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_RuneProvider_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRuneProviderRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).RuneProvider(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_RuneProvider_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).RuneProvider(ctx, req.(*QueryRuneProviderRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_RuneProviders_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRuneProvidersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).RuneProviders(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_RuneProviders_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).RuneProviders(ctx, req.(*QueryRuneProvidersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -957,6 +1056,18 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Ragnarok",
 			Handler:    _Query_Ragnarok_Handler,
+		},
+		{
+			MethodName: "RunePool",
+			Handler:    _Query_RunePool_Handler,
+		},
+		{
+			MethodName: "RuneProvider",
+			Handler:    _Query_RuneProvider_Handler,
+		},
+		{
+			MethodName: "RuneProviders",
+			Handler:    _Query_RuneProviders_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -59,9 +59,6 @@ var (
 	QueryMimirNodesValues    = Query{Key: "nodesmimirs", EndpointTemplate: "/%s/mimir/nodes"}
 	QueryMimirNodesAllValues = Query{Key: "nodesmimirsall", EndpointTemplate: "/%s/mimir/nodes_all"}
 	QueryMimirNodeValues     = Query{Key: "nodemimirs", EndpointTemplate: "/%s/mimir/node/{%s}"}
-	QueryRUNEPool            = Query{Key: "runepool", EndpointTemplate: "/%s/runepool"}
-	QueryRUNEProviders       = Query{Key: "runeproviders", EndpointTemplate: "/%s/rune_providers"}
-	QueryRUNEProvider        = Query{Key: "runeprovider", EndpointTemplate: "/%s/rune_provider/{%s}"}
 	QueryPendingOutbound     = Query{Key: "pendingoutbound", EndpointTemplate: "/%s/queue/outbound"}
 	QueryScheduledOutbound   = Query{Key: "scheduledoutbound", EndpointTemplate: "/%s/queue/scheduled"}
 	QuerySwapperClout        = Query{Key: "swapperclout", EndpointTemplate: "/%s/clout/swap/{%s}"}
@@ -110,9 +107,6 @@ var Queries = []Query{
 	QueryMimirNodesAllValues,
 	QueryMimirNodesValues,
 	QueryMimirNodeValues,
-	QueryRUNEPool,
-	QueryRUNEProvider,
-	QueryRUNEProviders,
 	QueryPendingOutbound,
 	QueryScheduledOutbound,
 	QuerySwapperClout,

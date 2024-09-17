@@ -137,3 +137,18 @@ func (s queryServer) Ragnarok(c context.Context, req *types.QueryRagnarokRequest
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryRagnarok(ctx, req)
 }
+
+func (s queryServer) RunePool(c context.Context, req *types.QueryRunePoolRequest) (*types.QueryRunePoolResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryRUNEPool(ctx, req)
+}
+
+func (s queryServer) RuneProvider(c context.Context, req *types.QueryRuneProviderRequest) (*types.QueryRuneProviderResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryRUNEProvider(ctx, req)
+}
+
+func (s queryServer) RuneProviders(c context.Context, req *types.QueryRuneProvidersRequest) (*types.QueryRuneProvidersResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryRUNEProviders(ctx, req)
+}

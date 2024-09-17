@@ -1,0 +1,40 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryRunePoolRequest{}
+
+message QueryRunePoolResponse{
+  POL pol = 1;
+  RunePoolProviders providers = 2;
+  RunePoolReserve reserve = 3;
+}
+
+message POL{
+  string rune_deposited = 1;
+  string rune_withdrawn = 2;
+  string value = 3;
+  string pnl = 4;
+  string current_deposit = 5;
+}
+
+message RunePoolProviders{
+  string units = 1;
+  string pending_units = 2;
+  string pending_rune = 3;
+  string value = 4;
+  string pnl = 5;
+  string current_deposit = 6;
+}
+
+message RunePoolReserve{
+  string units = 1;
+  string value = 2;
+  string pnl = 3;
+  string current_deposit = 4;
+}
