@@ -1,0 +1,27 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryNetworkRequest{}
+
+message QueryNetworkResponse{
+  string bond_reward_rune = 1;
+  string total_bond_units = 2;
+  string effective_security_bond = 3;
+  string total_reserve = 4;
+  bool   vaults_migrating = 5;
+  string gas_spent_rune = 6;
+  string gas_withheld_rune = 7;
+  string outbound_fee_multiplier = 8;
+  string native_outbound_fee_rune = 9;
+  string native_tx_fee_rune = 10;
+  string tns_register_fee_rune = 11;
+  string tns_fee_per_block_rune = 12;
+  string rune_price_in_tor = 13;
+  string tor_price_in_rune = 14;
+}

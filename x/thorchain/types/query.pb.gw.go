@@ -1539,6 +1539,24 @@ func local_request_Query_Invariants_0(ctx context.Context, marshaler runtime.Mar
 
 }
 
+func request_Query_Network_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryNetworkRequest
+	var metadata runtime.ServerMetadata
+
+	msg, err := client.Network(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_Query_Network_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryNetworkRequest
+	var metadata runtime.ServerMetadata
+
+	msg, err := server.Network(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
 // RegisterQueryHandlerServer registers the http handlers for service Query to "mux".
 // UnaryRPC     :call QueryServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
@@ -2419,6 +2437,29 @@ func RegisterQueryHandlerServer(ctx context.Context, mux *runtime.ServeMux, serv
 
 	})
 
+	mux.Handle("GET", pattern_Query_Network_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Query_Network_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Query_Network_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	return nil
 }
 
@@ -3220,6 +3261,26 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 
 	})
 
+	mux.Handle("GET", pattern_Query_Network_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Query_Network_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Query_Network_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	return nil
 }
 
@@ -3299,6 +3360,8 @@ var (
 	pattern_Query_Invariant_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"thorchain", "invariant", "path"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_Invariants_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"thorchain", "invariants"}, "", runtime.AssumeColonVerbOpt(false)))
+
+	pattern_Query_Network_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"thorchain", "network"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (
@@ -3377,4 +3440,6 @@ var (
 	forward_Query_Invariant_0 = runtime.ForwardResponseMessage
 
 	forward_Query_Invariants_0 = runtime.ForwardResponseMessage
+
+	forward_Query_Network_0 = runtime.ForwardResponseMessage
 )

@@ -57,6 +57,7 @@ const (
 	Query_Thorname_FullMethodName            = "/types.Query/Thorname"
 	Query_Invariant_FullMethodName           = "/types.Query/Invariant"
 	Query_Invariants_FullMethodName          = "/types.Query/Invariants"
+	Query_Network_FullMethodName             = "/types.Query/Network"
 )
 
 // QueryClient is the client API for Query service.
@@ -103,6 +104,7 @@ type QueryClient interface {
 	Thorname(ctx context.Context, in *QueryThornameRequest, opts ...grpc.CallOption) (*QueryThornameResponse, error)
 	Invariant(ctx context.Context, in *QueryInvariantRequest, opts ...grpc.CallOption) (*QueryInvariantResponse, error)
 	Invariants(ctx context.Context, in *QueryInvariantsRequest, opts ...grpc.CallOption) (*QueryInvariantsResponse, error)
+	Network(ctx context.Context, in *QueryNetworkRequest, opts ...grpc.CallOption) (*QueryNetworkResponse, error)
 }
 
 type queryClient struct {
@@ -455,6 +457,15 @@ func (c *queryClient) Invariants(ctx context.Context, in *QueryInvariantsRequest
 	return out, nil
 }
 
+func (c *queryClient) Network(ctx context.Context, in *QueryNetworkRequest, opts ...grpc.CallOption) (*QueryNetworkResponse, error) {
+	out := new(QueryNetworkResponse)
+	err := c.cc.Invoke(ctx, Query_Network_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -499,6 +510,7 @@ type QueryServer interface {
 	Thorname(context.Context, *QueryThornameRequest) (*QueryThornameResponse, error)
 	Invariant(context.Context, *QueryInvariantRequest) (*QueryInvariantResponse, error)
 	Invariants(context.Context, *QueryInvariantsRequest) (*QueryInvariantsResponse, error)
+	Network(context.Context, *QueryNetworkRequest) (*QueryNetworkResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -619,6 +631,9 @@ func (UnimplementedQueryServer) Invariant(context.Context, *QueryInvariantReques
 }
 func (UnimplementedQueryServer) Invariants(context.Context, *QueryInvariantsRequest) (*QueryInvariantsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Invariants not implemented")
+}
+func (UnimplementedQueryServer) Network(context.Context, *QueryNetworkRequest) (*QueryNetworkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Network not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -1317,6 +1332,24 @@ func _Query_Invariants_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_Network_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryNetworkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Network(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Network_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Network(ctx, req.(*QueryNetworkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1475,6 +1508,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Invariants",
 			Handler:    _Query_Invariants_Handler,
+		},
+		{
+			MethodName: "Network",
+			Handler:    _Query_Network_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

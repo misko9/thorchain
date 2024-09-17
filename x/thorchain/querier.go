@@ -89,8 +89,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 		case q.QueryChainHeights.Key:
 			return queryLastBlockHeights(ctx, path[1:], req, mgr)
 
-		case q.QueryNetwork.Key:
-			return queryNetwork(ctx, mgr)
 		case q.QueryBalanceModule.Key:
 			return queryBalanceModule(ctx, path[1:], mgr)
 		case q.QueryVaultsAsgard.Key:
@@ -500,51 +498,51 @@ func (qs queryServer) queryRUNEProviders(ctx cosmos.Context, req *types.QueryRun
 	return &types.QueryRuneProvidersResponse{Providers: runeProviders}, nil
 }
 
-func queryNetwork(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
-	data, err := mgr.Keeper().GetNetwork(ctx)
+func (qs queryServer) queryNetwork(ctx cosmos.Context, req *types.QueryNetworkRequest) (*types.QueryNetworkResponse, error) {
+	data, err := qs.mgr.Keeper().GetNetwork(ctx)
 	if err != nil {
 		ctx.Logger().Error("fail to get network", "error", err)
 		return nil, fmt.Errorf("fail to get network: %w", err)
 	}
 
-	vaults, err := mgr.Keeper().GetAsgardVaultsByStatus(ctx, RetiringVault)
+	vaults, err := qs.mgr.Keeper().GetAsgardVaultsByStatus(ctx, RetiringVault)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get retiring vaults: %w", err)
 	}
 	vaultsMigrating := (len(vaults) != 0)
 
-	nodeAccounts, err := mgr.Keeper().ListActiveValidators(ctx)
+	nodeAccounts, err := qs.mgr.Keeper().ListActiveValidators(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get active validators: %w", err)
 	}
 
 	effectiveSecurityBond := getEffectiveSecurityBond(nodeAccounts)
 
-	targetOutboundFeeSurplus := mgr.Keeper().GetConfigInt64(ctx, constants.TargetOutboundFeeSurplusRune)
-	maxMultiplierBasisPoints := mgr.Keeper().GetConfigInt64(ctx, constants.MaxOutboundFeeMultiplierBasisPoints)
-	minMultiplierBasisPoints := mgr.Keeper().GetConfigInt64(ctx, constants.MinOutboundFeeMultiplierBasisPoints)
-	outboundFeeMultiplier := mgr.gasMgr.CalcOutboundFeeMultiplier(ctx, cosmos.NewUint(uint64(targetOutboundFeeSurplus)), cosmos.NewUint(data.OutboundGasSpentRune), cosmos.NewUint(data.OutboundGasWithheldRune), cosmos.NewUint(uint64(maxMultiplierBasisPoints)), cosmos.NewUint(uint64(minMultiplierBasisPoints)))
+	targetOutboundFeeSurplus := qs.mgr.Keeper().GetConfigInt64(ctx, constants.TargetOutboundFeeSurplusRune)
+	maxMultiplierBasisPoints := qs.mgr.Keeper().GetConfigInt64(ctx, constants.MaxOutboundFeeMultiplierBasisPoints)
+	minMultiplierBasisPoints := qs.mgr.Keeper().GetConfigInt64(ctx, constants.MinOutboundFeeMultiplierBasisPoints)
+	outboundFeeMultiplier := qs.mgr.gasMgr.CalcOutboundFeeMultiplier(ctx, cosmos.NewUint(uint64(targetOutboundFeeSurplus)), cosmos.NewUint(data.OutboundGasSpentRune), cosmos.NewUint(data.OutboundGasWithheldRune), cosmos.NewUint(uint64(maxMultiplierBasisPoints)), cosmos.NewUint(uint64(minMultiplierBasisPoints)))
 
-	result := openapi.NetworkResponse{
+	result := types.QueryNetworkResponse{
 		// Due to using openapi. this will be displayed in alphabetical order,
 		// so its schema (and order here) should also be in alphabetical order.
 		BondRewardRune:        data.BondRewardRune.String(),
 		TotalBondUnits:        data.TotalBondUnits.String(),
 		EffectiveSecurityBond: effectiveSecurityBond.String(),
-		TotalReserve:          mgr.Keeper().GetRuneBalanceOfModule(ctx, ReserveName).String(),
+		TotalReserve:          qs.mgr.Keeper().GetRuneBalanceOfModule(ctx, ReserveName).String(),
 		VaultsMigrating:       vaultsMigrating,
 		GasSpentRune:          cosmos.NewUint(data.OutboundGasSpentRune).String(),
 		GasWithheldRune:       cosmos.NewUint(data.OutboundGasWithheldRune).String(),
-		OutboundFeeMultiplier: wrapString(outboundFeeMultiplier.String()),
-		NativeTxFeeRune:       mgr.Keeper().GetNativeTxFee(ctx).String(),
-		NativeOutboundFeeRune: mgr.Keeper().GetOutboundTxFee(ctx).String(),
-		TnsRegisterFeeRune:    mgr.Keeper().GetTHORNameRegisterFee(ctx).String(),
-		TnsFeePerBlockRune:    mgr.Keeper().GetTHORNamePerBlockFee(ctx).String(),
-		RunePriceInTor:        mgr.Keeper().DollarsPerRune(ctx).String(),
-		TorPriceInRune:        mgr.Keeper().RunePerDollar(ctx).String(),
+		OutboundFeeMultiplier: outboundFeeMultiplier.String(),
+		NativeTxFeeRune:       qs.mgr.Keeper().GetNativeTxFee(ctx).String(),
+		NativeOutboundFeeRune: qs.mgr.Keeper().GetOutboundTxFee(ctx).String(),
+		TnsRegisterFeeRune:    qs.mgr.Keeper().GetTHORNameRegisterFee(ctx).String(),
+		TnsFeePerBlockRune:    qs.mgr.Keeper().GetTHORNamePerBlockFee(ctx).String(),
+		RunePriceInTor:        qs.mgr.Keeper().DollarsPerRune(ctx).String(),
+		TorPriceInRune:        qs.mgr.Keeper().RunePerDollar(ctx).String(),
 	}
 
-	return jsonify(ctx, result)
+	return &result, nil
 }
 
 func (qs queryServer) queryInboundAddresses(ctx cosmos.Context, req *types.QueryInboundAddressesRequest) (*types.QueryInboundAddressesResponse, error) {

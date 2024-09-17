@@ -207,3 +207,8 @@ func (s queryServer) Invariants(c context.Context, req *types.QueryInvariantsReq
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryInvariants(ctx, req)
 }
+
+func (s queryServer) Network(c context.Context, req *types.QueryNetworkRequest) (*types.QueryNetworkResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryNetwork(ctx, req)
+}
