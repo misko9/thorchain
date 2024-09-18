@@ -101,8 +101,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 		case q.QueryScheduledOutbound.Key:
 			return queryScheduledOutbound(ctx, mgr)
 		
-		case q.QuerySwapQueue.Key:
-			return querySwapQueue(ctx, mgr)
 		case q.QuerySwapperClout.Key:
 			return querySwapperClout(ctx, path[1:], mgr)
 
@@ -2889,20 +2887,21 @@ func queryPendingOutbound(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 	return jsonify(ctx, result)
 }
 
-func querySwapQueue(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
-	result := make([]openapi.MsgSwap, 0)
+func (qs queryServer) querySwapQueue(ctx cosmos.Context, req *types.QuerySwapQueueRequest) (*types.QuerySwapQueueResponse, error) {
+	result := make([]*MsgSwap, 0)
 
-	iterator := mgr.Keeper().GetSwapQueueIterator(ctx)
+	iterator := qs.mgr.Keeper().GetSwapQueueIterator(ctx)
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
 		var msg MsgSwap
-		if err := mgr.Keeper().Cdc().Unmarshal(iterator.Value(), &msg); err != nil {
+		if err := qs.mgr.Keeper().Cdc().Unmarshal(iterator.Value(), &msg); err != nil {
 			continue
 		}
-		result = append(result, castMsgSwap(msg))
+		// TODO: SAM127 - check to see if always displaying the order type is okay?
+		result = append(result, &msg)
 	}
 
-	return jsonify(ctx, result)
+	return &types.QuerySwapQueueResponse{SwapQueue: result}, nil
 }
 
 func queryTssKeygenMetric(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {

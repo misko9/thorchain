@@ -31,6 +31,7 @@ import "types/query_network.proto";
 import "types/query_balance_module.proto";
 import "types/query_quotes.proto";
 import "types/query_constant_values.proto";
+import "types/query_swap_queue.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -220,5 +221,9 @@ service Query {
 
   rpc ConstantValues(QueryConstantValuesRequest) returns (QueryConstantValuesResponse) {
     option (google.api.http).get = "/thorchain/constants";
+  }
+
+  rpc SwapQueue(QuerySwapQueueRequest) returns (QuerySwapQueueResponse) {
+    option (google.api.http).get = "/thorchain/queue/swap";
   }
 }

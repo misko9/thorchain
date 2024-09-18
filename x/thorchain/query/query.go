@@ -52,7 +52,6 @@ var (
 	QueryPendingOutbound     = Query{Key: "pendingoutbound", EndpointTemplate: "/%s/queue/outbound"}
 	QueryScheduledOutbound   = Query{Key: "scheduledoutbound", EndpointTemplate: "/%s/queue/scheduled"}
 	QuerySwapperClout        = Query{Key: "swapperclout", EndpointTemplate: "/%s/clout/swap/{%s}"}
-	QuerySwapQueue           = Query{Key: "swapqueue", EndpointTemplate: "/%s/queue/swap"}
 	QueryTssKeygenMetrics    = Query{Key: "tss_keygen_metric", EndpointTemplate: "/%s/metric/keygen/{%s}"}
 	QueryTssMetrics          = Query{Key: "tss_metric", EndpointTemplate: "/%s/metrics"}
 	QueryBlock               = Query{Key: "block", EndpointTemplate: "/%s/block"}
@@ -82,7 +81,6 @@ var Queries = []Query{
 	QueryPendingOutbound,
 	QueryScheduledOutbound,
 	QuerySwapperClout,
-	QuerySwapQueue,
 	QueryTssMetrics,
 	QueryTssKeygenMetrics,
 	QueryBlock,

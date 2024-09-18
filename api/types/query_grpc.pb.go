@@ -65,6 +65,7 @@ const (
 	Query_QuoteLoanOpen_FullMethodName       = "/types.Query/QuoteLoanOpen"
 	Query_QuoteLoanClose_FullMethodName      = "/types.Query/QuoteLoanClose"
 	Query_ConstantValues_FullMethodName      = "/types.Query/ConstantValues"
+	Query_SwapQueue_FullMethodName           = "/types.Query/SwapQueue"
 )
 
 // QueryClient is the client API for Query service.
@@ -119,6 +120,7 @@ type QueryClient interface {
 	QuoteLoanOpen(ctx context.Context, in *QueryQuoteLoanOpenRequest, opts ...grpc.CallOption) (*QueryQuoteLoanOpenResponse, error)
 	QuoteLoanClose(ctx context.Context, in *QueryQuoteLoanCloseRequest, opts ...grpc.CallOption) (*QueryQuoteLoanCloseResponse, error)
 	ConstantValues(ctx context.Context, in *QueryConstantValuesRequest, opts ...grpc.CallOption) (*QueryConstantValuesResponse, error)
+	SwapQueue(ctx context.Context, in *QuerySwapQueueRequest, opts ...grpc.CallOption) (*QuerySwapQueueResponse, error)
 }
 
 type queryClient struct {
@@ -543,6 +545,15 @@ func (c *queryClient) ConstantValues(ctx context.Context, in *QueryConstantValue
 	return out, nil
 }
 
+func (c *queryClient) SwapQueue(ctx context.Context, in *QuerySwapQueueRequest, opts ...grpc.CallOption) (*QuerySwapQueueResponse, error) {
+	out := new(QuerySwapQueueResponse)
+	err := c.cc.Invoke(ctx, Query_SwapQueue_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -595,6 +606,7 @@ type QueryServer interface {
 	QuoteLoanOpen(context.Context, *QueryQuoteLoanOpenRequest) (*QueryQuoteLoanOpenResponse, error)
 	QuoteLoanClose(context.Context, *QueryQuoteLoanCloseRequest) (*QueryQuoteLoanCloseResponse, error)
 	ConstantValues(context.Context, *QueryConstantValuesRequest) (*QueryConstantValuesResponse, error)
+	SwapQueue(context.Context, *QuerySwapQueueRequest) (*QuerySwapQueueResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -739,6 +751,9 @@ func (UnimplementedQueryServer) QuoteLoanClose(context.Context, *QueryQuoteLoanC
 }
 func (UnimplementedQueryServer) ConstantValues(context.Context, *QueryConstantValuesRequest) (*QueryConstantValuesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ConstantValues not implemented")
+}
+func (UnimplementedQueryServer) SwapQueue(context.Context, *QuerySwapQueueRequest) (*QuerySwapQueueResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SwapQueue not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -1581,6 +1596,24 @@ func _Query_ConstantValues_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_SwapQueue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuerySwapQueueRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).SwapQueue(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_SwapQueue_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).SwapQueue(ctx, req.(*QuerySwapQueueRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1771,6 +1804,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ConstantValues",
 			Handler:    _Query_ConstantValues_Handler,
+		},
+		{
+			MethodName: "SwapQueue",
+			Handler:    _Query_SwapQueue_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

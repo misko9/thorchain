@@ -247,3 +247,8 @@ func (s queryServer) ConstantValues(c context.Context, req *types.QueryConstantV
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryConstantValues(ctx, req)
 }
+
+func (s queryServer) SwapQueue(c context.Context, req *types.QuerySwapQueueRequest) (*types.QuerySwapQueueResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.querySwapQueue(ctx, req)
+}
