@@ -16,7 +16,7 @@ message QueryVaultRequest{
 message QueryVaultResponse{
   int64 block_height = 1;
   string pub_key = 2;
-  repeated common.Coin coins = 3;
+  repeated common.Coin coins = 3 [(gogoproto.castrepeated) = "gitlab.com/thorchain/thornode/common.Coins", (gogoproto.nullable) = false];
   string type = 4;
   string status = 5;
   int64 status_since = 6;

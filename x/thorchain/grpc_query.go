@@ -312,3 +312,13 @@ func (s queryServer) Queue(c context.Context, req *types.QueryQueueRequest) (*ty
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryQueue(ctx, req)
 }
+
+func (s queryServer) ScheduledOutbound(c context.Context, req *types.QueryScheduledOutboundRequest) (*types.QueryOutboundResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryScheduledOutbound(ctx, req)
+}
+
+func (s queryServer) PendingOutbound(c context.Context, req *types.QueryPendingOutboundRequest) (*types.QueryOutboundResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryPendingOutbound(ctx, req)
+}

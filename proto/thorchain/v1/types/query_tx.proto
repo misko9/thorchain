@@ -7,7 +7,6 @@ import "gogoproto/gogo.proto";
 import "types/query_vault.proto";
 import "types/type_tss_metric.proto";
 import "types/type_observed_tx.proto";
-import "types/type_tx_out.proto";
 import "common/common.proto";
 
 option (gogoproto.marshaler_all) = true;

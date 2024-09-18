@@ -71,11 +71,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 		case q.QueryKeygensPubkey.Key:
 			return queryKeygen(ctx, kbs, path[1:], req, mgr)
 
-		case q.QueryPendingOutbound.Key:
-			return queryPendingOutbound(ctx, mgr)
-		case q.QueryScheduledOutbound.Key:
-			return queryScheduledOutbound(ctx, mgr)
-		
 		case q.QueryTssKeygenMetrics.Key:
 			return queryTssKeygenMetric(ctx, path[1:], req, mgr)
 		case q.QueryTssMetrics.Key:
@@ -181,7 +176,7 @@ func (qs queryServer) queryVault(ctx cosmos.Context, req *types.QueryVaultReques
 	resp := types.QueryVaultResponse{
 		BlockHeight:           v.BlockHeight,
 		PubKey:                v.PubKey.String(),
-		Coins:                 castCoins(v.Coins...),
+		Coins:                 v.Coins,
 		Type:                  v.Type.String(),
 		Status:                v.Status.String(),
 		StatusSince:           v.StatusSince,
@@ -216,7 +211,7 @@ func (qs queryServer) queryAsgardVaults(ctx cosmos.Context, req *types.QueryAsga
 			vaultsWithFunds = append(vaultsWithFunds, &types.QueryVaultResponse{
 				BlockHeight:           vault.BlockHeight,
 				PubKey:                vault.PubKey.String(),
-				Coins:                 castCoins(vault.Coins...),
+				Coins:                 vault.Coins,
 				Type:                  vault.Type.String(),
 				Status:                vault.Status.String(),
 				StatusSince:           vault.StatusSince,
@@ -2122,7 +2117,7 @@ func (qs queryServer) queryTxStatus(ctx cosmos.Context, req *types.QueryTxStatus
 			result.PlannedOutTxs[i] = &types.PlannedOutTx{
 				Chain:     voter.Actions[i].Chain.String(),
 				ToAddress: voter.Actions[i].ToAddress.String(),
-				Coin:      castCoin(voter.Actions[i].Coin),
+				Coin:      &voter.Actions[i].Coin,
 				Refund:    strings.HasPrefix(voter.Actions[i].Memo, "REFUND"),
 			}
 		}
@@ -2750,15 +2745,15 @@ func (qs queryServer) queryBan(ctx cosmos.Context, req *types.QueryBanRequest) (
 	return &ban, nil
 }
 
-func queryScheduledOutbound(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
-	result := make([]openapi.TxOutItem, 0)
-	constAccessor := mgr.GetConstants()
-	maxTxOutOffset, err := mgr.Keeper().GetMimir(ctx, constants.MaxTxOutOffset.String())
+func (qs queryServer) queryScheduledOutbound(ctx cosmos.Context, req *types.QueryScheduledOutboundRequest) (*types.QueryOutboundResponse, error) {
+	result := make([]*types.QueryTxOutItem, 0)
+	constAccessor := qs.mgr.GetConstants()
+	maxTxOutOffset, err := qs.mgr.Keeper().GetMimir(ctx, constants.MaxTxOutOffset.String())
 	if maxTxOutOffset < 0 || err != nil {
 		maxTxOutOffset = constAccessor.GetInt64Value(constants.MaxTxOutOffset)
 	}
 	for height := ctx.BlockHeight() + 1; height <= ctx.BlockHeight()+17280; height++ {
-		txOut, err := mgr.Keeper().GetTxOut(ctx, height)
+		txOut, err := qs.mgr.Keeper().GetTxOut(ctx, height)
 		if err != nil {
 			ctx.Logger().Error("fail to get tx out array from key value store", "error", err)
 			continue
@@ -2773,13 +2768,13 @@ func queryScheduledOutbound(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 		}
 	}
 
-	return jsonify(ctx, result)
+	return &types.QueryOutboundResponse{TxOutItems: result}, nil
 }
 
-func queryPendingOutbound(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
-	constAccessor := mgr.GetConstants()
+func (qs queryServer) queryPendingOutbound(ctx cosmos.Context, req *types.QueryPendingOutboundRequest) (*types.QueryOutboundResponse, error) {
+	constAccessor := qs.mgr.GetConstants()
 	signingTransactionPeriod := constAccessor.GetInt64Value(constants.SigningTransactionPeriod)
-	rescheduleCoalesceBlocks := mgr.Keeper().GetConfigInt64(ctx, constants.RescheduleCoalesceBlocks)
+	rescheduleCoalesceBlocks := qs.mgr.Keeper().GetConfigInt64(ctx, constants.RescheduleCoalesceBlocks)
 	startHeight := ctx.BlockHeight() - signingTransactionPeriod
 	if startHeight < 1 {
 		startHeight = 1
@@ -2794,9 +2789,9 @@ func queryPendingOutbound(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 		}
 	}
 
-	result := make([]openapi.TxOutItem, 0)
+	result := make([]*types.QueryTxOutItem, 0)
 	for height := startHeight; height <= lastOutboundHeight; height++ {
-		txs, err := mgr.Keeper().GetTxOut(ctx, height)
+		txs, err := qs.mgr.Keeper().GetTxOut(ctx, height)
 		if err != nil {
 			ctx.Logger().Error("fail to get tx out array from key value store", "error", err)
 			return nil, fmt.Errorf("fail to get tx out array from key value store: %w", err)
@@ -2808,7 +2803,7 @@ func queryPendingOutbound(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 		}
 	}
 
-	return jsonify(ctx, result)
+	return &types.QueryOutboundResponse{TxOutItems: result}, nil
 }
 
 func (qs queryServer) querySwapQueue(ctx cosmos.Context, req *types.QuerySwapQueueRequest) (*types.QuerySwapQueueResponse, error) {
@@ -3039,40 +3034,19 @@ func wrapUintPtr(uintPtr *cosmos.Uint) *string {
 	return wrapString(uintPtr.String())
 }
 
-func castCoin(sourceCoin common.Coin) *types.Coin {
-	return &types.Coin{
-		Asset:    sourceCoin.Asset.String(),
-		Amount:   sourceCoin.Amount.String(),
-		Decimals: sourceCoin.Decimals,
-	}
-}
-
-func castCoins(sourceCoins ...common.Coin) []*types.Coin {
-	// Leave this nil (null rather than []) if the source is nil.
-	if sourceCoins == nil {
-		return nil
-	}
-
-	coins := make([]*types.Coin, len(sourceCoins))
-	for i := range sourceCoins {
-		coins[i] = castCoin(sourceCoins[i])
-	}
-	return coins
-}
-
-func castTxOutItem(toi TxOutItem, height int64) openapi.TxOutItem {
-	return openapi.TxOutItem{
+func castTxOutItem(toi TxOutItem, height int64) *types.QueryTxOutItem {
+	return &types.QueryTxOutItem{
 		Chain:       toi.Chain.String(),
 		ToAddress:   toi.ToAddress.String(),
-		VaultPubKey: wrapString(toi.VaultPubKey.String()),
-		Coin:        castCoin(toi.Coin),
-		Memo:        wrapString(toi.Memo),
-		MaxGas:      castCoins(toi.MaxGas...),
-		GasRate:     wrapInt64(toi.GasRate),
-		InHash:      wrapString(toi.InHash.String()),
-		OutHash:     wrapString(toi.OutHash.String()),
-		Height:      wrapInt64(height), // Omitted if 0, for use in openapi.TxDetailsResponse
-		CloutSpent:  wrapUintPtr(toi.CloutSpent),
+		VaultPubKey: toi.VaultPubKey.String(),
+		Coin:        &toi.Coin,
+		Memo:        toi.Memo,
+		MaxGas:      toi.MaxGas,
+		GasRate:     toi.GasRate,
+		InHash:      toi.InHash.String(),
+		OutHash:     toi.OutHash.String(),
+		Height:      height, // Omitted if 0, for use in openapi.TxDetailsResponse
+		CloutSpent:  toi.CloutSpent.String(),
 	}
 }
 

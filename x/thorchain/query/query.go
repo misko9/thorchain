@@ -38,8 +38,6 @@ var (
 	QueryKeygensPubkey       = Query{Key: "keygenspubkey", EndpointTemplate: "/%s/keygen/{%s}/{%s}"}
 	QueryNetwork             = Query{Key: "network", EndpointTemplate: "/%s/network"}
 	QueryPOL                 = Query{Key: "pol", EndpointTemplate: "/%s/pol"}
-	QueryPendingOutbound     = Query{Key: "pendingoutbound", EndpointTemplate: "/%s/queue/outbound"}
-	QueryScheduledOutbound   = Query{Key: "scheduledoutbound", EndpointTemplate: "/%s/queue/scheduled"}
 	QueryTssKeygenMetrics    = Query{Key: "tss_keygen_metric", EndpointTemplate: "/%s/metric/keygen/{%s}"}
 	QueryTssMetrics          = Query{Key: "tss_metric", EndpointTemplate: "/%s/metrics"}
 	QueryBlock               = Query{Key: "block", EndpointTemplate: "/%s/block"}
@@ -55,8 +53,6 @@ var Queries = []Query{
 	QueryNetwork,
 	QueryPOL,
 	QueryKeygensPubkey,
-	QueryPendingOutbound,
-	QueryScheduledOutbound,
 	QueryTssMetrics,
 	QueryTssKeygenMetrics,
 	QueryBlock,
