@@ -33,11 +33,6 @@ func (q Query) Path(args ...string) string {
 
 // query endpoints supported by the thorchain Querier
 var (
-	QueryTx                  = Query{Key: "tx", EndpointTemplate: "/%s/tx/{%s}"}
-	QueryTxVoterOld          = Query{Key: "txvoterold", EndpointTemplate: "/%s/tx/{%s}/signers"}
-	QueryTxVoter             = Query{Key: "txvoter", EndpointTemplate: "/%s/tx/details/{%s}"}
-	QueryTxStages            = Query{Key: "txstages", EndpointTemplate: "/%s/tx/stages/{%s}"}
-	QueryTxStatus            = Query{Key: "txstatus", EndpointTemplate: "/%s/tx/status/{%s}"}
 	QueryKeysignArray        = Query{Key: "keysign", EndpointTemplate: "/%s/keysign/{%s}"}
 	QueryKeysignArrayPubkey  = Query{Key: "keysignpubkey", EndpointTemplate: "/%s/keysign/{%s}/{%s}"}
 	QueryKeygensPubkey       = Query{Key: "keygenspubkey", EndpointTemplate: "/%s/keygen/{%s}/{%s}"}
@@ -57,11 +52,6 @@ var (
 
 // Queries all queries
 var Queries = []Query{
-	QueryTxStages,
-	QueryTxStatus,
-	QueryTxVoter,
-	QueryTxVoterOld,
-	QueryTx,
 	QueryKeysignArray,
 	QueryKeysignArrayPubkey,
 	QueryQueue,

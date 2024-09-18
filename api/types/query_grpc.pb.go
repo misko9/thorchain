@@ -71,6 +71,11 @@ const (
 	Query_Vault_FullMethodName               = "/types.Query/Vault"
 	Query_AsgardVaults_FullMethodName        = "/types.Query/AsgardVaults"
 	Query_VaultsPubkeys_FullMethodName       = "/types.Query/VaultsPubkeys"
+	Query_TxStages_FullMethodName            = "/types.Query/TxStages"
+	Query_TxStatus_FullMethodName            = "/types.Query/TxStatus"
+	Query_Tx_FullMethodName                  = "/types.Query/Tx"
+	Query_TxVoters_FullMethodName            = "/types.Query/TxVoters"
+	Query_TxVotersOld_FullMethodName         = "/types.Query/TxVotersOld"
 )
 
 // QueryClient is the client API for Query service.
@@ -131,6 +136,11 @@ type QueryClient interface {
 	Vault(ctx context.Context, in *QueryVaultRequest, opts ...grpc.CallOption) (*QueryVaultResponse, error)
 	AsgardVaults(ctx context.Context, in *QueryAsgardVaultsRequest, opts ...grpc.CallOption) (*QueryAsgardVaultsResponse, error)
 	VaultsPubkeys(ctx context.Context, in *QueryVaultsPubkeysRequest, opts ...grpc.CallOption) (*QueryVaultsPubkeysResponse, error)
+	TxStages(ctx context.Context, in *QueryTxStagesRequest, opts ...grpc.CallOption) (*QueryTxStagesResponse, error)
+	TxStatus(ctx context.Context, in *QueryTxStatusRequest, opts ...grpc.CallOption) (*QueryTxStatusResponse, error)
+	Tx(ctx context.Context, in *QueryTxRequest, opts ...grpc.CallOption) (*QueryTxResponse, error)
+	TxVoters(ctx context.Context, in *QueryTxVotersRequest, opts ...grpc.CallOption) (*ObservedTxVoter, error)
+	TxVotersOld(ctx context.Context, in *QueryTxVotersRequest, opts ...grpc.CallOption) (*ObservedTxVoter, error)
 }
 
 type queryClient struct {
@@ -609,6 +619,51 @@ func (c *queryClient) VaultsPubkeys(ctx context.Context, in *QueryVaultsPubkeysR
 	return out, nil
 }
 
+func (c *queryClient) TxStages(ctx context.Context, in *QueryTxStagesRequest, opts ...grpc.CallOption) (*QueryTxStagesResponse, error) {
+	out := new(QueryTxStagesResponse)
+	err := c.cc.Invoke(ctx, Query_TxStages_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) TxStatus(ctx context.Context, in *QueryTxStatusRequest, opts ...grpc.CallOption) (*QueryTxStatusResponse, error) {
+	out := new(QueryTxStatusResponse)
+	err := c.cc.Invoke(ctx, Query_TxStatus_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Tx(ctx context.Context, in *QueryTxRequest, opts ...grpc.CallOption) (*QueryTxResponse, error) {
+	out := new(QueryTxResponse)
+	err := c.cc.Invoke(ctx, Query_Tx_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) TxVoters(ctx context.Context, in *QueryTxVotersRequest, opts ...grpc.CallOption) (*ObservedTxVoter, error) {
+	out := new(ObservedTxVoter)
+	err := c.cc.Invoke(ctx, Query_TxVoters_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) TxVotersOld(ctx context.Context, in *QueryTxVotersRequest, opts ...grpc.CallOption) (*ObservedTxVoter, error) {
+	out := new(ObservedTxVoter)
+	err := c.cc.Invoke(ctx, Query_TxVotersOld_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -667,6 +722,11 @@ type QueryServer interface {
 	Vault(context.Context, *QueryVaultRequest) (*QueryVaultResponse, error)
 	AsgardVaults(context.Context, *QueryAsgardVaultsRequest) (*QueryAsgardVaultsResponse, error)
 	VaultsPubkeys(context.Context, *QueryVaultsPubkeysRequest) (*QueryVaultsPubkeysResponse, error)
+	TxStages(context.Context, *QueryTxStagesRequest) (*QueryTxStagesResponse, error)
+	TxStatus(context.Context, *QueryTxStatusRequest) (*QueryTxStatusResponse, error)
+	Tx(context.Context, *QueryTxRequest) (*QueryTxResponse, error)
+	TxVoters(context.Context, *QueryTxVotersRequest) (*ObservedTxVoter, error)
+	TxVotersOld(context.Context, *QueryTxVotersRequest) (*ObservedTxVoter, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -829,6 +889,21 @@ func (UnimplementedQueryServer) AsgardVaults(context.Context, *QueryAsgardVaults
 }
 func (UnimplementedQueryServer) VaultsPubkeys(context.Context, *QueryVaultsPubkeysRequest) (*QueryVaultsPubkeysResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VaultsPubkeys not implemented")
+}
+func (UnimplementedQueryServer) TxStages(context.Context, *QueryTxStagesRequest) (*QueryTxStagesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TxStages not implemented")
+}
+func (UnimplementedQueryServer) TxStatus(context.Context, *QueryTxStatusRequest) (*QueryTxStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TxStatus not implemented")
+}
+func (UnimplementedQueryServer) Tx(context.Context, *QueryTxRequest) (*QueryTxResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Tx not implemented")
+}
+func (UnimplementedQueryServer) TxVoters(context.Context, *QueryTxVotersRequest) (*ObservedTxVoter, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TxVoters not implemented")
+}
+func (UnimplementedQueryServer) TxVotersOld(context.Context, *QueryTxVotersRequest) (*ObservedTxVoter, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TxVotersOld not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -1779,6 +1854,96 @@ func _Query_VaultsPubkeys_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_TxStages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTxStagesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).TxStages(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_TxStages_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).TxStages(ctx, req.(*QueryTxStagesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_TxStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTxStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).TxStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_TxStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).TxStatus(ctx, req.(*QueryTxStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Tx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTxRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Tx(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Tx_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Tx(ctx, req.(*QueryTxRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_TxVoters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTxVotersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).TxVoters(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_TxVoters_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).TxVoters(ctx, req.(*QueryTxVotersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_TxVotersOld_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTxVotersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).TxVotersOld(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_TxVotersOld_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).TxVotersOld(ctx, req.(*QueryTxVotersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1993,6 +2158,26 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "VaultsPubkeys",
 			Handler:    _Query_VaultsPubkeys_Handler,
+		},
+		{
+			MethodName: "TxStages",
+			Handler:    _Query_TxStages_Handler,
+		},
+		{
+			MethodName: "TxStatus",
+			Handler:    _Query_TxStatus_Handler,
+		},
+		{
+			MethodName: "Tx",
+			Handler:    _Query_Tx_Handler,
+		},
+		{
+			MethodName: "TxVoters",
+			Handler:    _Query_TxVoters_Handler,
+		},
+		{
+			MethodName: "TxVotersOld",
+			Handler:    _Query_TxVotersOld_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

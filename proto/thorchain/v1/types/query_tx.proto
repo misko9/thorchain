@@ -1,0 +1,108 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+import "types/query_vault.proto";
+import "types/type_tss_metric.proto";
+import "types/type_observed_tx.proto";
+import "types/type_tx_out.proto";
+import "common/common.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryTxStagesRequest{
+  string tx_id = 1;
+}
+
+message QueryTxStagesResponse{
+  InboundObservedStage inbound_observed = 1;
+  InboundConfirmationCountedStage inbound_confirmation_counted = 2;
+  InboundFinalisedStage inbound_finalised = 3;
+  SwapStatus swap_status = 4;
+  SwapFinalisedStage swap_finalised = 5;
+  OutboundDelayStage outbound_delay = 6;
+  OutboundSignedStage outbound_signed = 7;
+}
+
+message QueryTxStatusRequest{
+  string tx_id = 1;
+}
+
+message QueryTxStatusResponse{
+  common.Tx tx = 1;
+  repeated PlannedOutTx planned_out_txs = 2;
+  repeated common.Tx out_txs = 3 [(gogoproto.castrepeated) = "gitlab.com/thorchain/thornode/common.Txs", (gogoproto.nullable) = false];
+  QueryTxStagesResponse stages = 4;
+}
+
+message QueryTxRequest{
+  string tx_id = 1;
+}
+
+message QueryTxResponse{
+  ObservedTx observed_tx = 1;
+  int64 consensus_height = 2;
+  int64 finalised_height = 3;
+  int64 outbound_height = 4;
+  TssKeysignMetric keysign_metric = 5;
+}
+
+message QueryTxVotersRequest{
+  string tx_id = 1;
+}
+
+message PlannedOutTx{
+  string chain = 1;
+  string to_address = 2;
+  common.Coin coin = 3;
+  bool refund = 4;
+}
+
+message InboundObservedStage{
+  bool started = 1;
+  int64 pre_confirmation_count = 2;
+  int64 final_count = 3;
+  bool completed = 4;
+}
+
+message InboundConfirmationCountedStage{
+  int64 counting_start_height = 1;
+  string chain = 2;
+  int64 external_observed_height = 3;
+  int64 external_confirmation_delay_height = 4;
+  int64 remaining_confirmation_seconds = 5;
+  bool completed = 6;
+}
+
+message InboundFinalisedStage{
+  bool completed = 1;
+}
+
+message SwapStatus{
+  bool pending = 1;
+  StreamingStatus streaming = 2;
+}
+
+message StreamingStatus{
+  int64 interval = 1;
+  int64 quantity = 2;
+  int64 count = 3;
+}
+
+message SwapFinalisedStage{
+  bool completed = 1;
+}
+
+message OutboundDelayStage{
+  int64 remaining_delay_blocks = 1;
+  int64 remaining_delay_seconds = 2;
+  bool completed = 3;
+}
+
+message OutboundSignedStage{
+  int64 scheduled_outbound_height = 1;
+  int64 blocks_since_scheduled = 2;
+  bool completed = 3;
+}

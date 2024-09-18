@@ -64,17 +64,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 
 		defer telemetry.MeasureSince(time.Now(), path[0])
 		switch path[0] {
-		case q.QueryTxStages.Key:
-			return queryTxStages(ctx, path[1:], req, mgr)
-		case q.QueryTxStatus.Key:
-			return queryTxStatus(ctx, path[1:], req, mgr)
-		case q.QueryTxVoter.Key:
-			return queryTxVoters(ctx, path[1:], req, mgr)
-		case q.QueryTxVoterOld.Key:
-			return queryTxVoters(ctx, path[1:], req, mgr)
-		case q.QueryTx.Key:
-			return queryTx(ctx, path[1:], req, mgr)
-
 		case q.QueryKeysignArray.Key:
 			return queryKeysign(ctx, kbs, path[1:], req, mgr)
 		case q.QueryKeysignArrayPubkey.Key:
@@ -1856,11 +1845,11 @@ func (qs queryServer) queryTradeAccount(ctx cosmos.Context, req *types.QueryTrad
 	return &types.QueryTradeAccountsResponse{TradeAccounts: accounts}, nil
 }
 
-func extractVoter(ctx cosmos.Context, path []string, mgr *Mgrs) (common.TxID, ObservedTxVoter, error) {
-	if len(path) == 0 {
+func extractVoter(ctx cosmos.Context, tx_id string, mgr *Mgrs) (common.TxID, ObservedTxVoter, error) {
+	if len(tx_id) == 0 {
 		return "", ObservedTxVoter{}, errors.New("tx id not provided")
 	}
-	hash, err := common.NewTxID(path[0])
+	hash, err := common.NewTxID(tx_id)
 	if err != nil {
 		ctx.Logger().Error("fail to parse tx id", "error", err)
 		return "", ObservedTxVoter{}, fmt.Errorf("fail to parse tx id: %w", err)
@@ -1873,14 +1862,14 @@ func extractVoter(ctx cosmos.Context, path []string, mgr *Mgrs) (common.TxID, Ob
 	return hash, voter, nil
 }
 
-func queryTxVoters(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	hash, voter, err := extractVoter(ctx, path, mgr)
+func (qs queryServer) queryTxVoters(ctx cosmos.Context, req *types.QueryTxVotersRequest) (*types.ObservedTxVoter, error) {
+	hash, voter, err := extractVoter(ctx, req.TxId, qs.mgr)
 	if err != nil {
 		return nil, err
 	}
 	// when tx in voter doesn't exist , double check tx out voter
 	if len(voter.Txs) == 0 {
-		voter, err = mgr.Keeper().GetObservedTxOutVoter(ctx, hash)
+		voter, err = qs.mgr.Keeper().GetObservedTxOutVoter(ctx, hash)
 		if err != nil {
 			return nil, fmt.Errorf("fail to get observed tx out voter: %w", err)
 		}
@@ -1889,47 +1878,7 @@ func queryTxVoters(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr
 		}
 	}
 
-	var txs []openapi.ObservedTx
-	// Leave this nil (null rather than []) if the source is nil.
-	if voter.Txs != nil {
-		txs = make([]openapi.ObservedTx, len(voter.Txs))
-		for i := range voter.Txs {
-			txs[i] = castObservedTx(voter.Txs[i])
-		}
-	}
-
-	var actions []openapi.TxOutItem
-	// Leave this nil (null rather than []) if the source is nil.
-	if voter.Actions != nil {
-		actions = make([]openapi.TxOutItem, len(voter.Actions))
-		for i := range voter.Actions {
-			actions[i] = castTxOutItem(voter.Actions[i], 0) // Omitted Height field
-		}
-	}
-
-	var outTxs []openapi.Tx
-	// Leave this nil (null rather than []) if the source is nil.
-	if voter.OutTxs != nil {
-		outTxs = make([]openapi.Tx, len(voter.OutTxs))
-		for i := range voter.OutTxs {
-			outTxs[i] = castTx(voter.OutTxs[i])
-		}
-	}
-
-	result := openapi.TxDetailsResponse{
-		TxId:            wrapString(voter.TxID.String()),
-		Tx:              castObservedTx(voter.Tx),
-		Txs:             txs,
-		Actions:         actions,
-		OutTxs:          outTxs,
-		ConsensusHeight: wrapInt64(voter.Height),
-		FinalisedHeight: wrapInt64(voter.FinalisedHeight),
-		UpdatedVault:    wrapBool(voter.UpdatedVault),
-		Reverted:        wrapBool(voter.Reverted),
-		OutboundHeight:  wrapInt64(voter.OutboundHeight),
-	}
-
-	return jsonify(ctx, result)
+	return &voter, nil
 }
 
 // TODO: Remove isSwap and isPending code when SwapFinalised field deprecated.
@@ -1975,7 +1924,7 @@ func checkPending(ctx cosmos.Context, keeper keeper.Keeper, voter ObservedTxVote
 }
 
 // Get the largest number of signers for a not-final (pre-confirmation-counting) and final Txs respectively.
-func countSigners(voter ObservedTxVoter) (*int64, int64) {
+func countSigners(voter ObservedTxVoter) (int64, int64) {
 	var notFinalCount, finalCount int64
 	for i, refTx := range voter.Txs {
 		signersMap := make(map[string]bool)
@@ -2004,20 +1953,20 @@ func countSigners(voter ObservedTxVoter) (*int64, int64) {
 			notFinalCount = int64(len(signersMap))
 		}
 	}
-	return wrapInt64(notFinalCount), finalCount
+	return notFinalCount, finalCount
 }
 
 // Call newTxStagesResponse from both queryTxStatus (which includes the stages) and queryTxStages.
 // TODO: Remove isSwap and isPending arguments when SwapFinalised deprecated in favour of SwapStatus.
 // TODO: Deprecate InboundObserved.Started field in favour of the observation counting.
-func newTxStagesResponse(ctx cosmos.Context, voter ObservedTxVoter, isSwap, isPending, pending bool, streamingSwap StreamingSwap) (result openapi.TxStagesResponse) {
+func newTxStagesResponse(ctx cosmos.Context, voter ObservedTxVoter, isSwap, isPending, pending bool, streamingSwap StreamingSwap) (result *types.QueryTxStagesResponse) {
 	result.InboundObserved.PreConfirmationCount, result.InboundObserved.FinalCount = countSigners(voter)
 	result.InboundObserved.Completed = !voter.Tx.IsEmpty()
 
 	// If not Completed, fill in Started and do not proceed.
 	if !result.InboundObserved.Completed {
 		obStart := (len(voter.Txs) != 0)
-		result.InboundObserved.Started = &obStart
+		result.InboundObserved.Started = obStart
 		return result
 	}
 
@@ -2026,7 +1975,7 @@ func newTxStagesResponse(ctx cosmos.Context, voter ObservedTxVoter, isSwap, isPe
 
 	// Only fill in InboundConfirmationCounted when confirmation counting took place.
 	if voter.Height != 0 {
-		var confCount openapi.InboundConfirmationCountedStage
+		var confCount types.InboundConfirmationCountedStage
 
 		// Set the Completed state first.
 		extObsHeight := voter.Tx.BlockHeight
@@ -2036,10 +1985,10 @@ func newTxStagesResponse(ctx cosmos.Context, voter ObservedTxVoter, isSwap, isPe
 		// Only fill in other fields if not Completed.
 		if !confCount.Completed {
 			countStartHeight := voter.Height
-			confCount.CountingStartHeight = wrapInt64(countStartHeight)
-			confCount.Chain = wrapString(voter.Tx.Tx.Chain.String())
-			confCount.ExternalObservedHeight = wrapInt64(extObsHeight)
-			confCount.ExternalConfirmationDelayHeight = wrapInt64(extConfDelayHeight)
+			confCount.CountingStartHeight = countStartHeight
+			confCount.Chain = voter.Tx.Tx.Chain.String()
+			confCount.ExternalObservedHeight = extObsHeight
+			confCount.ExternalConfirmationDelayHeight = extConfDelayHeight
 
 			estConfMs := voter.Tx.Tx.Chain.ApproximateBlockMilliseconds() * (extConfDelayHeight - extObsHeight)
 			if currentHeight > countStartHeight {
@@ -2050,21 +1999,21 @@ func newTxStagesResponse(ctx cosmos.Context, voter ObservedTxVoter, isSwap, isPe
 			if estConfSec < 0 {
 				estConfSec = 0
 			}
-			confCount.RemainingConfirmationSeconds = &estConfSec
+			confCount.RemainingConfirmationSeconds = estConfSec
 		}
 
 		result.InboundConfirmationCounted = &confCount
 	}
 
-	var inboundFinalised openapi.InboundFinalisedStage
+	var inboundFinalised types.InboundFinalisedStage
 	inboundFinalised.Completed = (voter.FinalisedHeight != 0)
 	result.InboundFinalised = &inboundFinalised
 
-	var swapStatus openapi.SwapStatus
+	var swapStatus types.SwapStatus
 	swapStatus.Pending = pending
 	// Only display the SwapStatus stage's Streaming field when there's streaming information available.
 	if streamingSwap.Valid() == nil {
-		streaming := openapi.StreamingStatus{
+		streaming := types.StreamingStatus{
 			Interval: int64(streamingSwap.Interval),
 			Quantity: int64(streamingSwap.Quantity),
 			Count:    int64(streamingSwap.Count),
@@ -2075,7 +2024,7 @@ func newTxStagesResponse(ctx cosmos.Context, voter ObservedTxVoter, isSwap, isPe
 
 	// Whether there's an external outbound or not, show the SwapFinalised stage from the start.
 	if isSwap {
-		var swapFinalisedState openapi.SwapFinalisedStage
+		var swapFinalisedState types.SwapFinalisedStage
 
 		swapFinalisedState.Completed = false
 		if !isPending && result.InboundFinalised.Completed {
@@ -2094,7 +2043,7 @@ func newTxStagesResponse(ctx cosmos.Context, voter ObservedTxVoter, isSwap, isPe
 
 	// Only display the OutboundDelay stage when there's a delay.
 	if voter.OutboundHeight > voter.FinalisedHeight {
-		var outDelay openapi.OutboundDelayStage
+		var outDelay types.OutboundDelayStage
 
 		// Set the Completed state first.
 		outDelay.Completed = (currentHeight >= voter.OutboundHeight)
@@ -2102,16 +2051,16 @@ func newTxStagesResponse(ctx cosmos.Context, voter ObservedTxVoter, isSwap, isPe
 		// Only fill in other fields if not Completed.
 		if !outDelay.Completed {
 			remainBlocks := voter.OutboundHeight - currentHeight
-			outDelay.RemainingDelayBlocks = &remainBlocks
+			outDelay.RemainingDelayBlocks = remainBlocks
 
 			remainSec := remainBlocks * common.THORChain.ApproximateBlockMilliseconds() / 1000
-			outDelay.RemainingDelaySeconds = &remainSec
+			outDelay.RemainingDelaySeconds = remainSec
 		}
 
 		result.OutboundDelay = &outDelay
 	}
 
-	var outSigned openapi.OutboundSignedStage
+	var outSigned types.OutboundSignedStage
 
 	// Set the Completed state first.
 	outSigned.Completed = (voter.Tx.Status != types.Status_incomplete)
@@ -2119,12 +2068,12 @@ func newTxStagesResponse(ctx cosmos.Context, voter ObservedTxVoter, isSwap, isPe
 	// Only fill in other fields if not Completed.
 	if !outSigned.Completed {
 		scheduledHeight := voter.OutboundHeight
-		outSigned.ScheduledOutboundHeight = &scheduledHeight
+		outSigned.ScheduledOutboundHeight = scheduledHeight
 
 		// Only fill in BlocksSinceScheduled if the outbound delay is complete.
 		if currentHeight >= scheduledHeight {
 			sinceScheduled := currentHeight - scheduledHeight
-			outSigned.BlocksSinceScheduled = &sinceScheduled
+			outSigned.BlocksSinceScheduled = sinceScheduled
 		}
 	}
 
@@ -2133,25 +2082,25 @@ func newTxStagesResponse(ctx cosmos.Context, voter ObservedTxVoter, isSwap, isPe
 	return result
 }
 
-func queryTxStages(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
+func (qs queryServer) queryTxStages(ctx cosmos.Context, req *types.QueryTxStagesRequest) (*types.QueryTxStagesResponse, error) {
 	// First, get the ObservedTxVoter of interest.
-	_, voter, err := extractVoter(ctx, path, mgr)
+	_, voter, err := extractVoter(ctx, req.TxId, qs.mgr)
 	if err != nil {
 		return nil, err
 	}
 	// when no TxIn voter don't check TxOut voter, as TxOut THORChain observation or not matters little to the user once signed and broadcast
 	// Rather than a "tx: %s doesn't exist" result, allow a response to an existing-but-unobserved hash with Observation.Started 'false'.
 
-	isSwap, isPending, pending, streamingSwap := checkPending(ctx, mgr.Keeper(), voter)
+	isSwap, isPending, pending, streamingSwap := checkPending(ctx, qs.mgr.Keeper(), voter)
 
 	result := newTxStagesResponse(ctx, voter, isSwap, isPending, pending, streamingSwap)
 
-	return jsonify(ctx, result)
+	return result, nil
 }
 
-func queryTxStatus(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
+func (qs queryServer) queryTxStatus(ctx cosmos.Context, req *types.QueryTxStatusRequest) (*types.QueryTxStatusResponse, error) {
 	// First, get the ObservedTxVoter of interest.
-	_, voter, err := extractVoter(ctx, path, mgr)
+	_, voter, err := extractVoter(ctx, req.TxId, qs.mgr)
 	if err != nil {
 		return nil, err
 	}
@@ -2159,26 +2108,24 @@ func queryTxStatus(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr
 	// Rather than a "tx: %s doesn't exist" result, allow a response to an existing-but-unobserved hash with Stages.Observation.Started 'false'.
 
 	// TODO: Remove isSwap and isPending arguments when SwapFinalised deprecated.
-	isSwap, isPending, pending, streamingSwap := checkPending(ctx, mgr.Keeper(), voter)
+	isSwap, isPending, pending, streamingSwap := checkPending(ctx, qs.mgr.Keeper(), voter)
 
-	var result openapi.TxStatusResponse
+	var result types.QueryTxStatusResponse
 
 	// If there's a consensus Tx, display that.
 	// If not, but there's at least one observation, display the first observation's Tx.
 	// If there are no observations yet, don't display a Tx (only showing the 'Observation' stage with 'Started' false).
 	if !voter.Tx.Tx.IsEmpty() {
-		tx := castTx(voter.Tx.Tx)
-		result.Tx = &tx
+		result.Tx = &voter.Tx.Tx
 	} else if len(voter.Txs) > 0 {
-		tx := castTx(voter.Txs[0].Tx)
-		result.Tx = &tx
+		result.Tx = &voter.Txs[0].Tx
 	}
 
 	// Leave this nil (null rather than []) if the source is nil.
 	if voter.Actions != nil {
-		result.PlannedOutTxs = make([]openapi.PlannedOutTx, len(voter.Actions))
+		result.PlannedOutTxs = make([]*types.PlannedOutTx, len(voter.Actions))
 		for i := range voter.Actions {
-			result.PlannedOutTxs[i] = openapi.PlannedOutTx{
+			result.PlannedOutTxs[i] = &types.PlannedOutTx{
 				Chain:     voter.Actions[i].Chain.String(),
 				ToAddress: voter.Actions[i].ToAddress.String(),
 				Coin:      castCoin(voter.Actions[i].Coin),
@@ -2189,24 +2136,21 @@ func queryTxStatus(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr
 
 	// Leave this nil (null rather than []) if the source is nil.
 	if voter.OutTxs != nil {
-		result.OutTxs = make([]openapi.Tx, len(voter.OutTxs))
-		for i := range voter.OutTxs {
-			result.OutTxs[i] = castTx(voter.OutTxs[i])
-		}
+		result.OutTxs = voter.OutTxs
 	}
 
 	result.Stages = newTxStagesResponse(ctx, voter, isSwap, isPending, pending, streamingSwap)
 
-	return jsonify(ctx, result)
+	return &result, nil
 }
 
-func queryTx(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	hash, voter, err := extractVoter(ctx, path, mgr)
+func (qs queryServer) queryTx(ctx cosmos.Context, req *types.QueryTxRequest) (*types.QueryTxResponse, error) {
+	hash, voter, err := extractVoter(ctx, req.TxId, qs.mgr)
 	if err != nil {
 		return nil, err
 	}
 	if len(voter.Txs) == 0 {
-		voter, err = mgr.Keeper().GetObservedTxOutVoter(ctx, hash)
+		voter, err = qs.mgr.Keeper().GetObservedTxOutVoter(ctx, hash)
 		if err != nil {
 			return nil, fmt.Errorf("fail to get observed tx out voter: %w", err)
 		}
@@ -2215,28 +2159,25 @@ func queryTx(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs
 		}
 	}
 
-	nodeAccounts, err := mgr.Keeper().ListActiveValidators(ctx)
+	nodeAccounts, err := qs.mgr.Keeper().ListActiveValidators(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get node accounts: %w", err)
 	}
-	keysignMetric, err := mgr.Keeper().GetTssKeysignMetric(ctx, hash)
+	keysignMetric, err := qs.mgr.Keeper().GetTssKeysignMetric(ctx, hash)
 	if err != nil {
 		ctx.Logger().Error("fail to get keysign metrics", "error", err)
 	}
-	result := struct {
-		ObservedTx      openapi.ObservedTx     `json:"observed_tx"`
-		ConsensusHeight int64                  `json:"consensus_height,omitempty"`
-		FinalisedHeight int64                  `json:"finalised_height,omitempty"`
-		OutboundHeight  int64                  `json:"outbound_height,omitempty"`
-		KeysignMetrics  types.TssKeysignMetric `json:"keysign_metric"`
-	}{
-		ObservedTx:      castObservedTx(voter.GetTx(nodeAccounts)),
+
+	observedTx := voter.GetTx(nodeAccounts)
+	result := types.QueryTxResponse{
+		ObservedTx: &observedTx,
 		ConsensusHeight: voter.Height,
 		FinalisedHeight: voter.FinalisedHeight,
 		OutboundHeight:  voter.OutboundHeight,
-		KeysignMetrics:  *keysignMetric,
+		KeysignMetric:  keysignMetric,
 	}
-	return jsonify(ctx, result)
+	
+	return &result, nil
 }
 
 func extractBlockHeight(ctx cosmos.Context, path []string) (int64, error) {
@@ -3138,66 +3079,6 @@ func castTxOutItem(toi TxOutItem, height int64) openapi.TxOutItem {
 		OutHash:     wrapString(toi.OutHash.String()),
 		Height:      wrapInt64(height), // Omitted if 0, for use in openapi.TxDetailsResponse
 		CloutSpent:  wrapUintPtr(toi.CloutSpent),
-	}
-}
-
-func castTx(tx common.Tx) openapi.Tx {
-	return openapi.Tx{
-		Id:          wrapString(tx.ID.String()),
-		Chain:       wrapString(tx.Chain.String()),
-		FromAddress: wrapString(tx.FromAddress.String()),
-		ToAddress:   wrapString(tx.ToAddress.String()),
-		Coins:       castCoins(tx.Coins...),
-		Gas:         castCoins(tx.Gas...),
-		Memo:        wrapString(tx.Memo),
-	}
-}
-
-func castObservedTx(observedTx ObservedTx) openapi.ObservedTx {
-	// Only display the Status if it is "done", not if "incomplete".
-	var status *string
-	if observedTx.Status != types.Status_incomplete {
-		status = wrapString(observedTx.Status.String())
-	}
-
-	return openapi.ObservedTx{
-		Tx:                              castTx(observedTx.Tx),
-		ObservedPubKey:                  wrapString(observedTx.ObservedPubKey.String()),
-		ExternalObservedHeight:          wrapInt64(observedTx.BlockHeight),
-		ExternalConfirmationDelayHeight: wrapInt64(observedTx.FinaliseHeight),
-		Aggregator:                      wrapString(observedTx.Aggregator),
-		AggregatorTarget:                wrapString(observedTx.AggregatorTarget),
-		AggregatorTargetLimit:           wrapUintPtr(observedTx.AggregatorTargetLimit),
-		Signers:                         observedTx.Signers,
-		KeysignMs:                       wrapInt64(observedTx.KeysignMs),
-		OutHashes:                       observedTx.OutHashes,
-		Status:                          status,
-	}
-}
-
-func castMsgSwap(msg MsgSwap) openapi.MsgSwap {
-	// Only display the OrderType if it is "limit", not if "market".
-	var orderType *string
-	if msg.OrderType != types.OrderType_market {
-		orderType = wrapString(msg.OrderType.String())
-	}
-	// TODO: After order books implementation,
-	// always display the OrderType?
-
-	return openapi.MsgSwap{
-		Tx:                      castTx(msg.Tx),
-		TargetAsset:             msg.TargetAsset.String(),
-		Destination:             wrapString(msg.Destination.String()),
-		TradeTarget:             msg.TradeTarget.String(),
-		AffiliateAddress:        wrapString(msg.AffiliateAddress.String()),
-		AffiliateBasisPoints:    msg.AffiliateBasisPoints.String(),
-		Signer:                  wrapString(msg.Signer.String()),
-		Aggregator:              wrapString(msg.Aggregator),
-		AggregatorTargetAddress: wrapString(msg.AggregatorTargetAddress),
-		AggregatorTargetLimit:   wrapUintPtr(msg.AggregatorTargetLimit),
-		OrderType:               orderType,
-		StreamQuantity:          wrapInt64(int64(msg.StreamQuantity)),
-		StreamInterval:          wrapInt64(int64(msg.StreamInterval)),
 	}
 }
 

@@ -16,8 +16,8 @@ import (
 
 // ObservedTx struct for ObservedTx
 type ObservedTx struct {
-	Tx Tx `json:"tx"`
-	ObservedPubKey *string `json:"observed_pub_key,omitempty"`
+	//Tx Tx `json:"tx"`
+	//ObservedPubKey *string `json:"observed_pub_key,omitempty"`
 	// the block height on the external source chain when the transaction was observed, not provided if chain is THOR
 	ExternalObservedHeight *int64 `json:"external_observed_height,omitempty"`
 	// the block height on the external source chain when confirmation counting will be complete, not provided if chain is THOR
@@ -28,10 +28,10 @@ type ObservedTx struct {
 	AggregatorTarget *string `json:"aggregator_target,omitempty"`
 	// the aggregator target asset limit provided to transferOutAndCall
 	AggregatorTargetLimit *string `json:"aggregator_target_limit,omitempty"`
-	Signers []string `json:"signers,omitempty"`
-	KeysignMs *int64 `json:"keysign_ms,omitempty"`
-	OutHashes []string `json:"out_hashes,omitempty"`
-	Status *string `json:"status,omitempty"`
+	//Signers []string `json:"signers,omitempty"`
+	//KeysignMs *int64 `json:"keysign_ms,omitempty"`
+	//OutHashes []string `json:"out_hashes,omitempty"`
+	//Status *string `json:"status,omitempty"`
 }
 
 // NewObservedTx instantiates a new ObservedTx object

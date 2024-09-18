@@ -277,3 +277,28 @@ func (s queryServer) VaultsPubkeys(c context.Context, req *types.QueryVaultsPubk
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryVaultsPubkeys(ctx, req)
 }
+
+func (s queryServer) TxStages(c context.Context, req *types.QueryTxStagesRequest) (*types.QueryTxStagesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryTxStages(ctx, req)
+}
+
+func (s queryServer) TxStatus(c context.Context, req *types.QueryTxStatusRequest) (*types.QueryTxStatusResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryTxStatus(ctx, req)
+}
+
+func (s queryServer) TxVoters(c context.Context, req *types.QueryTxVotersRequest) (*types.ObservedTxVoter, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryTxVoters(ctx, req)
+}
+
+func (s queryServer) TxVotersOld(c context.Context, req *types.QueryTxVotersRequest) (*types.ObservedTxVoter, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryTxVoters(ctx, req)
+}
+
+func (s queryServer) Tx(c context.Context, req *types.QueryTxRequest) (*types.QueryTxResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryTx(ctx, req)
+}
