@@ -33,6 +33,7 @@ import "types/query_quotes.proto";
 import "types/query_constant_values.proto";
 import "types/query_swap_queue.proto";
 import "types/query_last_block.proto";
+import "types/query_vault.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -234,5 +235,17 @@ service Query {
 
   rpc ChainsLastBlock(QueryChainsLastBlockRequest) returns (QueryLastBlocksResponse) {
     option (google.api.http).get = "/thorchain/lastblock/{chain}";
+  }
+
+  rpc Vault(QueryVaultRequest) returns (QueryVaultResponse) {
+    option (google.api.http).get = "/thorchain/vault/{pub_key}";
+  }
+
+  rpc AsgardVaults(QueryAsgardVaultsRequest) returns (QueryAsgardVaultsResponse) {
+    option (google.api.http).get = "/thorchain/vaults/asgard";
+  }
+
+  rpc VaultsPubkeys(QueryVaultsPubkeysRequest) returns (QueryVaultsPubkeysResponse) {
+    option (google.api.http).get = "/thorchain/vaults/pubkeys";
   }
 }

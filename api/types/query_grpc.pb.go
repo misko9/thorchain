@@ -68,6 +68,9 @@ const (
 	Query_SwapQueue_FullMethodName           = "/types.Query/SwapQueue"
 	Query_LastBlocks_FullMethodName          = "/types.Query/LastBlocks"
 	Query_ChainsLastBlock_FullMethodName     = "/types.Query/ChainsLastBlock"
+	Query_Vault_FullMethodName               = "/types.Query/Vault"
+	Query_AsgardVaults_FullMethodName        = "/types.Query/AsgardVaults"
+	Query_VaultsPubkeys_FullMethodName       = "/types.Query/VaultsPubkeys"
 )
 
 // QueryClient is the client API for Query service.
@@ -125,6 +128,9 @@ type QueryClient interface {
 	SwapQueue(ctx context.Context, in *QuerySwapQueueRequest, opts ...grpc.CallOption) (*QuerySwapQueueResponse, error)
 	LastBlocks(ctx context.Context, in *QueryLastBlocksRequest, opts ...grpc.CallOption) (*QueryLastBlocksResponse, error)
 	ChainsLastBlock(ctx context.Context, in *QueryChainsLastBlockRequest, opts ...grpc.CallOption) (*QueryLastBlocksResponse, error)
+	Vault(ctx context.Context, in *QueryVaultRequest, opts ...grpc.CallOption) (*QueryVaultResponse, error)
+	AsgardVaults(ctx context.Context, in *QueryAsgardVaultsRequest, opts ...grpc.CallOption) (*QueryAsgardVaultsResponse, error)
+	VaultsPubkeys(ctx context.Context, in *QueryVaultsPubkeysRequest, opts ...grpc.CallOption) (*QueryVaultsPubkeysResponse, error)
 }
 
 type queryClient struct {
@@ -576,6 +582,33 @@ func (c *queryClient) ChainsLastBlock(ctx context.Context, in *QueryChainsLastBl
 	return out, nil
 }
 
+func (c *queryClient) Vault(ctx context.Context, in *QueryVaultRequest, opts ...grpc.CallOption) (*QueryVaultResponse, error) {
+	out := new(QueryVaultResponse)
+	err := c.cc.Invoke(ctx, Query_Vault_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) AsgardVaults(ctx context.Context, in *QueryAsgardVaultsRequest, opts ...grpc.CallOption) (*QueryAsgardVaultsResponse, error) {
+	out := new(QueryAsgardVaultsResponse)
+	err := c.cc.Invoke(ctx, Query_AsgardVaults_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) VaultsPubkeys(ctx context.Context, in *QueryVaultsPubkeysRequest, opts ...grpc.CallOption) (*QueryVaultsPubkeysResponse, error) {
+	out := new(QueryVaultsPubkeysResponse)
+	err := c.cc.Invoke(ctx, Query_VaultsPubkeys_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -631,6 +664,9 @@ type QueryServer interface {
 	SwapQueue(context.Context, *QuerySwapQueueRequest) (*QuerySwapQueueResponse, error)
 	LastBlocks(context.Context, *QueryLastBlocksRequest) (*QueryLastBlocksResponse, error)
 	ChainsLastBlock(context.Context, *QueryChainsLastBlockRequest) (*QueryLastBlocksResponse, error)
+	Vault(context.Context, *QueryVaultRequest) (*QueryVaultResponse, error)
+	AsgardVaults(context.Context, *QueryAsgardVaultsRequest) (*QueryAsgardVaultsResponse, error)
+	VaultsPubkeys(context.Context, *QueryVaultsPubkeysRequest) (*QueryVaultsPubkeysResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -784,6 +820,15 @@ func (UnimplementedQueryServer) LastBlocks(context.Context, *QueryLastBlocksRequ
 }
 func (UnimplementedQueryServer) ChainsLastBlock(context.Context, *QueryChainsLastBlockRequest) (*QueryLastBlocksResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ChainsLastBlock not implemented")
+}
+func (UnimplementedQueryServer) Vault(context.Context, *QueryVaultRequest) (*QueryVaultResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Vault not implemented")
+}
+func (UnimplementedQueryServer) AsgardVaults(context.Context, *QueryAsgardVaultsRequest) (*QueryAsgardVaultsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AsgardVaults not implemented")
+}
+func (UnimplementedQueryServer) VaultsPubkeys(context.Context, *QueryVaultsPubkeysRequest) (*QueryVaultsPubkeysResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VaultsPubkeys not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -1680,6 +1725,60 @@ func _Query_ChainsLastBlock_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_Vault_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryVaultRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Vault(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Vault_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Vault(ctx, req.(*QueryVaultRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_AsgardVaults_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAsgardVaultsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).AsgardVaults(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_AsgardVaults_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).AsgardVaults(ctx, req.(*QueryAsgardVaultsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_VaultsPubkeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryVaultsPubkeysRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).VaultsPubkeys(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_VaultsPubkeys_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).VaultsPubkeys(ctx, req.(*QueryVaultsPubkeysRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1882,6 +1981,18 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ChainsLastBlock",
 			Handler:    _Query_ChainsLastBlock_Handler,
+		},
+		{
+			MethodName: "Vault",
+			Handler:    _Query_Vault_Handler,
+		},
+		{
+			MethodName: "AsgardVaults",
+			Handler:    _Query_AsgardVaults_Handler,
+		},
+		{
+			MethodName: "VaultsPubkeys",
+			Handler:    _Query_VaultsPubkeys_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -85,13 +85,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 		case q.QueryQueue.Key:
 			return queryQueue(ctx, path[1:], req, mgr)
 
-		case q.QueryVaultsAsgard.Key:
-			return queryAsgardVaults(ctx, mgr)
-		case q.QueryVault.Key:
-			return queryVault(ctx, path[1:], mgr)
-		case q.QueryVaultPubkeys.Key:
-			return queryVaultsPubkeys(ctx, mgr)
-
 		case q.QueryPendingOutbound.Key:
 			return queryPendingOutbound(ctx, mgr)
 		case q.QueryScheduledOutbound.Key:
@@ -186,15 +179,15 @@ func (qs queryServer) queryTHORName(ctx cosmos.Context, req *types.QueryThorname
 	return &resp, nil
 }
 
-func queryVault(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, error) {
-	if len(path) < 1 {
-		return nil, errors.New("not enough parameters")
+func (qs queryServer) queryVault(ctx cosmos.Context, req *types.QueryVaultRequest) (*types.QueryVaultResponse, error) {
+	if len(req.PubKey) < 1 {
+		return nil, errors.New("missing vault pub_key parameter")
 	}
-	pubkey, err := common.NewPubKey(path[0])
+	pubkey, err := common.NewPubKey(req.PubKey)
 	if err != nil {
-		return nil, fmt.Errorf("%s is invalid pubkey", path[0])
+		return nil, fmt.Errorf("%s is invalid pubkey", req.PubKey)
 	}
-	v, err := mgr.Keeper().GetVault(ctx, pubkey)
+	v, err := qs.mgr.Keeper().GetVault(ctx, pubkey)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get vault with pubkey(%s),err:%w", pubkey, err)
 	}
@@ -202,32 +195,32 @@ func queryVault(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, error) {
 		return nil, errors.New("vault not found")
 	}
 
-	resp := openapi.Vault{
-		BlockHeight:           wrapInt64(v.BlockHeight),
-		PubKey:                wrapString(v.PubKey.String()),
+	resp := types.QueryVaultResponse{
+		BlockHeight:           v.BlockHeight,
+		PubKey:                v.PubKey.String(),
 		Coins:                 castCoins(v.Coins...),
-		Type:                  wrapString(v.Type.String()),
+		Type:                  v.Type.String(),
 		Status:                v.Status.String(),
-		StatusSince:           wrapInt64(v.StatusSince),
+		StatusSince:           v.StatusSince,
 		Membership:            v.Membership,
 		Chains:                v.Chains,
-		InboundTxCount:        wrapInt64(v.InboundTxCount),
-		OutboundTxCount:       wrapInt64(v.OutboundTxCount),
+		InboundTxCount:        v.InboundTxCount,
+		OutboundTxCount:       v.OutboundTxCount,
 		PendingTxBlockHeights: v.PendingTxBlockHeights,
 		Routers:               castVaultRouters(v.Routers),
 		Addresses:             getVaultChainAddresses(ctx, v),
 		Frozen:                v.Frozen,
 	}
-	return jsonify(ctx, resp)
+	return &resp, nil
 }
 
-func queryAsgardVaults(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
-	vaults, err := mgr.Keeper().GetAsgardVaults(ctx)
+func (qs queryServer) queryAsgardVaults(ctx cosmos.Context, req *types.QueryAsgardVaultsRequest) (*types.QueryAsgardVaultsResponse, error) {
+	vaults, err := qs.mgr.Keeper().GetAsgardVaults(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get asgard vaults: %w", err)
 	}
 
-	var vaultsWithFunds []openapi.Vault
+	var vaultsWithFunds []*types.QueryVaultResponse
 	for _, vault := range vaults {
 		if vault.Status == InactiveVault {
 			continue
@@ -237,17 +230,17 @@ func queryAsgardVaults(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 		}
 		// Being in a RetiringVault blocks a node from unbonding, so display them even if having no funds.
 		if vault.HasFunds() || vault.Status == ActiveVault || vault.Status == RetiringVault {
-			vaultsWithFunds = append(vaultsWithFunds, openapi.Vault{
-				BlockHeight:           wrapInt64(vault.BlockHeight),
-				PubKey:                wrapString(vault.PubKey.String()),
+			vaultsWithFunds = append(vaultsWithFunds, &types.QueryVaultResponse{
+				BlockHeight:           vault.BlockHeight,
+				PubKey:                vault.PubKey.String(),
 				Coins:                 castCoins(vault.Coins...),
-				Type:                  wrapString(vault.Type.String()),
+				Type:                  vault.Type.String(),
 				Status:                vault.Status.String(),
-				StatusSince:           wrapInt64(vault.StatusSince),
+				StatusSince:           vault.StatusSince,
 				Membership:            vault.Membership,
 				Chains:                vault.Chains,
-				InboundTxCount:        wrapInt64(vault.InboundTxCount),
-				OutboundTxCount:       wrapInt64(vault.OutboundTxCount),
+				InboundTxCount:        vault.InboundTxCount,
+				OutboundTxCount:       vault.OutboundTxCount,
 				PendingTxBlockHeights: vault.PendingTxBlockHeights,
 				Routers:               castVaultRouters(vault.Routers),
 				Frozen:                vault.Frozen,
@@ -256,11 +249,11 @@ func queryAsgardVaults(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 		}
 	}
 
-	return jsonify(ctx, vaultsWithFunds)
+	return &types.QueryAsgardVaultsResponse{AsgardVaults: vaultsWithFunds}, nil
 }
 
-func getVaultChainAddresses(ctx cosmos.Context, vault Vault) []openapi.VaultAddress {
-	var result []openapi.VaultAddress
+func getVaultChainAddresses(ctx cosmos.Context, vault Vault) []*types.VaultAddress {
+	var result []*types.VaultAddress
 	allChains := append(vault.GetChains(), common.THORChain)
 	for _, c := range allChains.Distinct() {
 		addr, err := vault.PubKey.GetAddress(c)
@@ -269,7 +262,7 @@ func getVaultChainAddresses(ctx cosmos.Context, vault Vault) []openapi.VaultAddr
 			continue
 		}
 		result = append(result,
-			openapi.VaultAddress{
+			&types.VaultAddress{
 				Chain:   c.String(),
 				Address: addr.String(),
 			})
@@ -277,13 +270,13 @@ func getVaultChainAddresses(ctx cosmos.Context, vault Vault) []openapi.VaultAddr
 	return result
 }
 
-func queryVaultsPubkeys(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
-	var resp openapi.VaultPubkeysResponse
-	resp.Asgard = make([]openapi.VaultInfo, 0)
-	resp.Inactive = make([]openapi.VaultInfo, 0)
-	iter := mgr.Keeper().GetVaultIterator(ctx)
+func (qs queryServer) queryVaultsPubkeys(ctx cosmos.Context, req *types.QueryVaultsPubkeysRequest) (*types.QueryVaultsPubkeysResponse, error) {
+	var resp types.QueryVaultsPubkeysResponse
+	resp.Asgard = make([]*types.VaultInfo, 0)
+	resp.Inactive = make([]*types.VaultInfo, 0)
+	iter := qs.mgr.Keeper().GetVaultIterator(ctx)
 
-	active, err := mgr.Keeper().ListActiveValidators(ctx)
+	active, err := qs.mgr.Keeper().ListActiveValidators(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -291,14 +284,14 @@ func queryVaultsPubkeys(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 	defer iter.Close()
 	for ; iter.Valid(); iter.Next() {
 		var vault Vault
-		if err := mgr.Keeper().Cdc().Unmarshal(iter.Value(), &vault); err != nil {
+		if err := qs.mgr.Keeper().Cdc().Unmarshal(iter.Value(), &vault); err != nil {
 			ctx.Logger().Error("fail to unmarshal vault", "error", err)
 			return nil, fmt.Errorf("fail to unmarshal vault: %w", err)
 		}
 		if vault.IsAsgard() {
 			switch vault.Status {
 			case ActiveVault, RetiringVault:
-				resp.Asgard = append(resp.Asgard, openapi.VaultInfo{
+				resp.Asgard = append(resp.Asgard, &types.VaultInfo{
 					PubKey:  vault.PubKey.String(),
 					Routers: castVaultRouters(vault.Routers),
 				})
@@ -320,7 +313,7 @@ func queryVaultsPubkeys(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 				}
 				allMembers := vault.Membership
 				if HasSuperMajority(len(activeMembers), len(allMembers)) {
-					resp.Inactive = append(resp.Inactive, openapi.VaultInfo{
+					resp.Inactive = append(resp.Inactive, &types.VaultInfo{
 						PubKey:  vault.PubKey.String(),
 						Routers: castVaultRouters(vault.Routers),
 					})
@@ -328,7 +321,7 @@ func queryVaultsPubkeys(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 			}
 		}
 	}
-	return jsonify(ctx, resp)
+	return &resp, nil
 }
 
 func (qs queryServer) queryRUNEPool(ctx cosmos.Context, req *types.QueryRunePoolRequest) (*types.QueryRunePoolResponse, error) {
@@ -3111,21 +3104,21 @@ func wrapUintPtr(uintPtr *cosmos.Uint) *string {
 	return wrapString(uintPtr.String())
 }
 
-func castCoin(sourceCoin common.Coin) openapi.Coin {
-	return openapi.Coin{
+func castCoin(sourceCoin common.Coin) *types.Coin {
+	return &types.Coin{
 		Asset:    sourceCoin.Asset.String(),
 		Amount:   sourceCoin.Amount.String(),
-		Decimals: wrapInt64(sourceCoin.Decimals),
+		Decimals: sourceCoin.Decimals,
 	}
 }
 
-func castCoins(sourceCoins ...common.Coin) []openapi.Coin {
+func castCoins(sourceCoins ...common.Coin) []*types.Coin {
 	// Leave this nil (null rather than []) if the source is nil.
 	if sourceCoins == nil {
 		return nil
 	}
 
-	coins := make([]openapi.Coin, len(sourceCoins))
+	coins := make([]*types.Coin, len(sourceCoins))
 	for i := range sourceCoins {
 		coins[i] = castCoin(sourceCoins[i])
 	}
@@ -3208,17 +3201,17 @@ func castMsgSwap(msg MsgSwap) openapi.MsgSwap {
 	}
 }
 
-func castVaultRouters(chainContracts []ChainContract) []openapi.VaultRouter {
+func castVaultRouters(chainContracts []ChainContract) []*types.VaultRouter {
 	// Leave this nil (null rather than []) if the source is nil.
 	if chainContracts == nil {
 		return nil
 	}
 
-	routers := make([]openapi.VaultRouter, len(chainContracts))
+	routers := make([]*types.VaultRouter, len(chainContracts))
 	for i := range chainContracts {
-		routers[i] = openapi.VaultRouter{
-			Chain:  wrapString(chainContracts[i].Chain.String()),
-			Router: wrapString(chainContracts[i].Router.String()),
+		routers[i] = &types.VaultRouter{
+			Chain:  chainContracts[i].Chain.String(),
+			Router: chainContracts[i].Router.String(),
 		}
 	}
 	return routers

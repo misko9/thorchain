@@ -262,3 +262,18 @@ func (s queryServer) ChainsLastBlock(c context.Context, req *types.QueryChainsLa
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryLastBlockHeights(ctx, req.Chain)
 }
+
+func (s queryServer) Vault(c context.Context, req *types.QueryVaultRequest) (*types.QueryVaultResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryVault(ctx, req)
+}
+
+func (s queryServer) AsgardVaults(c context.Context, req *types.QueryAsgardVaultsRequest) (*types.QueryAsgardVaultsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryAsgardVaults(ctx, req)
+}
+
+func (s queryServer) VaultsPubkeys(c context.Context, req *types.QueryVaultsPubkeysRequest) (*types.QueryVaultsPubkeysResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryVaultsPubkeys(ctx, req)
+}

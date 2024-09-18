@@ -44,9 +44,6 @@ var (
 	QueryQueue               = Query{Key: "outqueue", EndpointTemplate: "/%s/queue"}
 	QueryNetwork             = Query{Key: "network", EndpointTemplate: "/%s/network"}
 	QueryPOL                 = Query{Key: "pol", EndpointTemplate: "/%s/pol"}
-	QueryVaultsAsgard        = Query{Key: "vaultsasgard", EndpointTemplate: "/%s/vaults/asgard"}
-	QueryVault               = Query{Key: "vault", EndpointTemplate: "/%s/vault/{%s}"}
-	QueryVaultPubkeys        = Query{Key: "vaultpubkeys", EndpointTemplate: "/%s/vaults/pubkeys"}
 	QueryPendingOutbound     = Query{Key: "pendingoutbound", EndpointTemplate: "/%s/queue/outbound"}
 	QueryScheduledOutbound   = Query{Key: "scheduledoutbound", EndpointTemplate: "/%s/queue/scheduled"}
 	QuerySwapperClout        = Query{Key: "swapperclout", EndpointTemplate: "/%s/clout/swap/{%s}"}
@@ -70,9 +67,6 @@ var Queries = []Query{
 	QueryQueue,
 	QueryNetwork,
 	QueryPOL,
-	QueryVaultsAsgard,
-	QueryVaultPubkeys,
-	QueryVault,
 	QueryKeygensPubkey,
 	QueryPendingOutbound,
 	QueryScheduledOutbound,
