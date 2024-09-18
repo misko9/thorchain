@@ -242,3 +242,8 @@ func (s queryServer) QuoteLoanClose(c context.Context, req *types.QueryQuoteLoan
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryQuoteLoanClose(ctx, req)
 }
+
+func (s queryServer) ConstantValues(c context.Context, req *types.QueryConstantValuesRequest) (*types.QueryConstantValuesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryConstantValues(ctx, req)
+}

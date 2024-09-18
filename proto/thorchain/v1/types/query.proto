@@ -30,6 +30,7 @@ import "types/query_invariants.proto";
 import "types/query_network.proto";
 import "types/query_balance_module.proto";
 import "types/query_quotes.proto";
+import "types/query_constant_values.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -215,5 +216,9 @@ service Query {
 
   rpc QuoteLoanClose(QueryQuoteLoanCloseRequest) returns (QueryQuoteLoanCloseResponse) {
     option (google.api.http).get = "/thorchain/quote/loan/close";
+  }
+
+  rpc ConstantValues(QueryConstantValuesRequest) returns (QueryConstantValuesResponse) {
+    option (google.api.http).get = "/thorchain/constants";
   }
 }

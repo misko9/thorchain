@@ -95,8 +95,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 			return queryVault(ctx, path[1:], mgr)
 		case q.QueryVaultPubkeys.Key:
 			return queryVaultsPubkeys(ctx, mgr)
-		case q.QueryConstantValues.Key:
-			return queryConstantValues(ctx, path[1:], req, mgr)
 
 		case q.QueryPendingOutbound.Key:
 			return queryPendingOutbound(ctx, mgr)
@@ -2526,9 +2524,31 @@ func queryLastBlockHeights(ctx cosmos.Context, path []string, req abci.RequestQu
 	return jsonify(ctx, result)
 }
 
-func queryConstantValues(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	constAccessor := mgr.GetConstants()
-	return jsonify(ctx, constAccessor)
+func (qs queryServer) queryConstantValues(ctx cosmos.Context, req *types.QueryConstantValuesRequest) (*types.QueryConstantValuesResponse, error) {
+	constAccessor := qs.mgr.GetConstants()
+	cv := constAccessor.GetConstantValByKeyname()
+	
+	proto := types.QueryConstantValuesResponse{}
+	for k, v := range cv.Int64Values {
+		proto.Int_64Values = append(proto.Int_64Values, &types.Int64Constants{
+			Name: k,
+			Value: v,
+		})
+	}
+	for k, v := range cv.BoolValues {
+		proto.BoolValues = append(proto.BoolValues, &types.BoolConstants{
+			Name: k,
+			Value: v,
+		})
+	}
+	for k, v := range cv.StringValues {
+		proto.StringValues = append(proto.StringValues, &types.StringConstants{
+			Name: k,
+			Value: v,
+		})
+	}
+
+	return &proto, nil
 }
 
 func (qs queryServer) queryVersion(ctx cosmos.Context, req *types.QueryVersionRequest) (*types.QueryVersionResponse, error) {
