@@ -43,6 +43,7 @@ import "types/query_outbound.proto";
 import "types/query_block.proto";
 import "types/query_tss.proto";
 import "types/type_tss_metric.proto";
+import "types/query_keystore.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -298,11 +299,19 @@ service Query {
     option (google.api.http).get = "/thorchain/block";
   }
 
-  rpc TssKeygenMetricQuery(QueryTssKeygenMetricRequest) returns (QueryTssKeygenMetricResponse) {
+  rpc TssKeygenMetric(QueryTssKeygenMetricRequest) returns (QueryTssKeygenMetricResponse) {
     option (google.api.http).get = "/thorchain/metric/keygen/{pub_key}";
   }
 
   rpc TssMetric(QueryTssMetricRequest) returns (QueryTssMetricResponse) {
     option (google.api.http).get = "/thorchain/metric";
+  }
+
+  rpc Keysign(QueryKeysignRequest) returns (QueryKeysignResponse) {
+    option (google.api.http).get = "/thorchain/keysign/{height}";
+  }
+
+  rpc KeysignPubkey(QueryKeysignPubkeyRequest) returns (QueryKeysignResponse) {
+    option (google.api.http).get = "/thorchain/keysign/{height}/{pub_key}";
   }
 }

@@ -5,17 +5,19 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"gitlab.com/thorchain/thornode/common/cosmos"
 	"gitlab.com/thorchain/thornode/x/thorchain/types"
 )
 
 type queryServer struct {
 	mgr *Mgrs
+	kbs cosmos.KeybaseStore
 }
 
 var _ types.QueryServer = queryServer{}
 
-func NewQueryServerImpl(mgr *Mgrs) types.QueryServer {
-	return queryServer{mgr: mgr}
+func NewQueryServerImpl(mgr *Mgrs, kbs cosmos.KeybaseStore) types.QueryServer {
+	return queryServer{mgr: mgr, kbs: kbs}
 }
 
 func (s queryServer) Pool(c context.Context, req *types.QueryPoolRequest) (*types.QueryPoolResponse, error) {
@@ -328,7 +330,7 @@ func (s queryServer) Block(c context.Context, req *types.QueryBlockRequest) (*ty
 	return s.queryBlock(ctx, req)
 }
 
-func (s queryServer) TssKeygenMetricQuery(c context.Context, req *types.QueryTssKeygenMetricRequest) (*types.QueryTssKeygenMetricResponse, error) {
+func (s queryServer) TssKeygenMetric(c context.Context, req *types.QueryTssKeygenMetricRequest) (*types.QueryTssKeygenMetricResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryTssKeygenMetric(ctx, req)
 }
@@ -336,4 +338,14 @@ func (s queryServer) TssKeygenMetricQuery(c context.Context, req *types.QueryTss
 func (s queryServer) TssMetric(c context.Context, req *types.QueryTssMetricRequest) (*types.QueryTssMetricResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryTssMetric(ctx, req)
+}
+
+func (s queryServer) Keysign(c context.Context, req *types.QueryKeysignRequest) (*types.QueryKeysignResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryKeysign(ctx, req.Height, "")
+}
+
+func (s queryServer) KeysignPubkey(c context.Context, req *types.QueryKeysignPubkeyRequest) (*types.QueryKeysignResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryKeysign(ctx, req.Height, req.PubKey)
 }

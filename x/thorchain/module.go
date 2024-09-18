@@ -128,7 +128,7 @@ func NewAppModule(k keeper.Keeper, cdc codec.Codec, coinKeeper bankkeeper.Keeper
 		keybaseStore:     kb,
 		telemetryEnabled: telemetryEnabled,
 		msgServer:        NewMsgServerImpl(mgr),
-		queryServer:      NewQueryServerImpl(mgr),
+		queryServer:      NewQueryServerImpl(mgr, kb),
 	}
 }
 

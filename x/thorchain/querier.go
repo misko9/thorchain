@@ -69,10 +69,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 
 		defer telemetry.MeasureSince(time.Now(), path[0])
 		switch path[0] {
-		case q.QueryKeysignArray.Key:
-			return queryKeysign(ctx, kbs, path[1:], req, mgr)
-		case q.QueryKeysignArrayPubkey.Key:
-			return queryKeysign(ctx, kbs, path[1:], req, mgr)
 		case q.QueryKeygensPubkey.Key:
 			return queryKeygen(ctx, kbs, path[1:], req, mgr)
 
@@ -2167,11 +2163,11 @@ func (qs queryServer) queryTx(ctx cosmos.Context, req *types.QueryTxRequest) (*t
 	return &result, nil
 }
 
-func extractBlockHeight(ctx cosmos.Context, path []string) (int64, error) {
-	if len(path) == 0 {
+func extractBlockHeight(ctx cosmos.Context, heightStr string) (int64, error) {
+	if len(heightStr) == 0 {
 		return -1, errors.New("block height not provided")
 	}
-	height, err := strconv.ParseInt(path[0], 0, 64)
+	height, err := strconv.ParseInt(heightStr, 0, 64)
 	if err != nil {
 		ctx.Logger().Error("fail to parse block height", "error", err)
 		return -1, fmt.Errorf("fail to parse block height: %w", err)
@@ -2249,22 +2245,22 @@ func queryKeygen(ctx cosmos.Context, kbs cosmos.KeybaseStore, path []string, req
 	return jsonify(ctx, query)
 }
 
-func queryKeysign(ctx cosmos.Context, kbs cosmos.KeybaseStore, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	height, err := extractBlockHeight(ctx, path)
+func (qs queryServer) queryKeysign(ctx cosmos.Context, heightStr string, pubKey string) (*types.QueryKeysignResponse, error) {
+	height, err := extractBlockHeight(ctx, heightStr)
 	if err != nil {
 		return nil, err
 	}
 
 	pk := common.EmptyPubKey
-	if len(path) > 1 {
-		pk, err = common.NewPubKey(path[1])
+	if len(pubKey) > 0 {
+		pk, err = common.NewPubKey(pubKey)
 		if err != nil {
 			ctx.Logger().Error("fail to parse pubkey", "error", err)
 			return nil, fmt.Errorf("fail to parse pubkey: %w", err)
 		}
 	}
 
-	txs, err := mgr.Keeper().GetTxOut(ctx, height)
+	txs, err := qs.mgr.Keeper().GetTxOut(ctx, height)
 	if err != nil {
 		ctx.Logger().Error("fail to get tx out array from key value store", "error", err)
 		return nil, fmt.Errorf("fail to get tx out array from key value store: %w", err)
@@ -2295,24 +2291,16 @@ func queryKeysign(ctx cosmos.Context, kbs cosmos.KeybaseStore, path []string, re
 	// Not applicable if ledger devices will never be used.
 	// SIGN_MODE_LEGACY_AMINO_JSON will be removed in the future for SIGN_MODE_TEXTUAL
 	signingMode := signing.SignMode_SIGN_MODE_LEGACY_AMINO_JSON
-	sig, _, err := kbs.Keybase.Sign("thorchain", buf, signingMode)
+	sig, _, err := qs.kbs.Keybase.Sign("thorchain", buf, signingMode)
 	if err != nil {
 		ctx.Logger().Error("fail to sign keysign", "error", err)
 		return nil, fmt.Errorf("fail to sign keysign: %w", err)
 	}
 
-	// TODO: use openapi type after Bifrost uses the same so signatures match.
-	type QueryKeysign struct {
-		Keysign   TxOut  `json:"keysign"`
-		Signature string `json:"signature"`
-	}
-
-	query := QueryKeysign{
-		Keysign:   *txs,
+	return &types.QueryKeysignResponse{
+		Keysign: txs,
 		Signature: base64.StdEncoding.EncodeToString(sig),
-	}
-
-	return jsonify(ctx, query)
+	}, nil
 }
 
 // queryOutQueue - iterates over txout, counting how many transactions are waiting to be sent

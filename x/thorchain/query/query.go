@@ -33,15 +33,11 @@ func (q Query) Path(args ...string) string {
 
 // query endpoints supported by the thorchain Querier
 var (
-	QueryKeysignArray        = Query{Key: "keysign", EndpointTemplate: "/%s/keysign/{%s}"}
-	QueryKeysignArrayPubkey  = Query{Key: "keysignpubkey", EndpointTemplate: "/%s/keysign/{%s}/{%s}"}
 	QueryKeygensPubkey       = Query{Key: "keygenspubkey", EndpointTemplate: "/%s/keygen/{%s}/{%s}"}
 
 )
 
 // Queries all queries
 var Queries = []Query{
-	QueryKeysignArray,
-	QueryKeysignArrayPubkey,
 	QueryKeygensPubkey,
 }
