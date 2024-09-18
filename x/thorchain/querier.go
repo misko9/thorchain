@@ -13,13 +13,11 @@ import (
 
 	"github.com/blang/semver"
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	sdkmath "cosmossdk.io/math"
 	"github.com/rs/zerolog/log"
-	abci "github.com/cometbft/cometbft/abci/types"
 	tmhttp "github.com/cometbft/cometbft/rpc/client/http"
 	"gitlab.com/thorchain/thornode/bifrost/tss/go-tss/conversion"
 
@@ -28,7 +26,6 @@ import (
 	"gitlab.com/thorchain/thornode/config"
 	"gitlab.com/thorchain/thornode/constants"
 	"gitlab.com/thorchain/thornode/x/thorchain/keeper"
-	q "gitlab.com/thorchain/thornode/x/thorchain/query"
 	"gitlab.com/thorchain/thornode/x/thorchain/types"
 )
 
@@ -38,12 +35,7 @@ import (
 // QueryExport = Query{Key: "export", EndpointTemplate: "/%s/export"}
 
 var (
-	initManager   = func(mgr *Mgrs, ctx cosmos.Context) {}
-	optionalQuery = func(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-		return nil, cosmos.ErrUnknownRequest(
-			fmt.Sprintf("unknown thorchain query endpoint: %s", path[0]),
-		)
-	}
+	//initManager   = func(mgr *Mgrs, ctx cosmos.Context) {}
 	tendermintClient   *tmhttp.HTTP
 	initTendermintOnce = sync.Once{}
 )
@@ -61,19 +53,6 @@ func initTendermint() {
 	}
 }
 
-// NewQuerier is the module level router for state queries
-func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
-	return func(ctx cosmos.Context, path []string, req abci.RequestQuery) (res []byte, err error) {
-		initManager(mgr, ctx) // NOOP except regtest
-
-		defer telemetry.MeasureSince(time.Now(), path[0])
-		switch path[0] {
-		default:
-			return optionalQuery(ctx, path, req, mgr)
-		}
-	}
-}
-
 func getPeerIDFromPubKey(pubkey common.PubKey) string {
 	peerID, err := conversion.GetPeerIDFromPubKey(pubkey.String())
 	if err != nil {
@@ -84,6 +63,7 @@ func getPeerIDFromPubKey(pubkey common.PubKey) string {
 	return peerID.String()
 }
 
+// Use this for json marshalling of query types
 func jsonify(ctx cosmos.Context, r any) ([]byte, error) {
 	res, err := json.MarshalIndent(r, "", "  ")
 	if err != nil {
