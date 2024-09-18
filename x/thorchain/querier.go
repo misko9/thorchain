@@ -84,10 +84,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 
 		case q.QueryQueue.Key:
 			return queryQueue(ctx, path[1:], req, mgr)
-		case q.QueryHeights.Key:
-			return queryLastBlockHeights(ctx, path[1:], req, mgr)
-		case q.QueryChainHeights.Key:
-			return queryLastBlockHeights(ctx, path[1:], req, mgr)
 
 		case q.QueryVaultsAsgard.Key:
 			return queryAsgardVaults(ctx, mgr)
@@ -2477,18 +2473,18 @@ func queryQueue(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *M
 	return jsonify(ctx, query)
 }
 
-func queryLastBlockHeights(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
+func (qs queryServer) queryLastBlockHeights(ctx cosmos.Context, chain string) (*types.QueryLastBlocksResponse, error) {
 	var chains common.Chains
-	if len(path) > 0 && len(path[0]) > 0 {
+	if len(chain) > 0 {
 		var err error
-		chain, err := common.NewChain(path[0])
+		chain, err := common.NewChain(chain)
 		if err != nil {
-			ctx.Logger().Error("fail to parse chain", "error", err, "chain", path[0])
+			ctx.Logger().Error("fail to parse chain", "error", err, "chain", chain)
 			return nil, fmt.Errorf("fail to retrieve chain: %w", err)
 		}
 		chains = append(chains, chain)
 	} else {
-		asgards, err := mgr.Keeper().GetAsgardVaultsByStatus(ctx, ActiveVault)
+		asgards, err := qs.mgr.Keeper().GetAsgardVaultsByStatus(ctx, ActiveVault)
 		if err != nil {
 			return nil, fmt.Errorf("fail to get active asgard: %w", err)
 		}
@@ -2497,21 +2493,21 @@ func queryLastBlockHeights(ctx cosmos.Context, path []string, req abci.RequestQu
 			break
 		}
 	}
-	var result []openapi.LastBlock
+	var result []*types.ChainsLastBlock
 	for _, c := range chains {
 		if c == common.THORChain {
 			continue
 		}
-		chainHeight, err := mgr.Keeper().GetLastChainHeight(ctx, c)
+		chainHeight, err := qs.mgr.Keeper().GetLastChainHeight(ctx, c)
 		if err != nil {
 			return nil, fmt.Errorf("fail to get last chain height: %w", err)
 		}
 
-		signed, err := mgr.Keeper().GetLastSignedHeight(ctx)
+		signed, err := qs.mgr.Keeper().GetLastSignedHeight(ctx)
 		if err != nil {
 			return nil, fmt.Errorf("fail to get last sign height: %w", err)
 		}
-		result = append(result, openapi.LastBlock{
+		result = append(result, &types.ChainsLastBlock{
 			Chain:          c.String(),
 			LastObservedIn: chainHeight,
 			LastSignedOut:  signed,
@@ -2519,7 +2515,7 @@ func queryLastBlockHeights(ctx cosmos.Context, path []string, req abci.RequestQu
 		})
 	}
 
-	return jsonify(ctx, result)
+	return &types.QueryLastBlocksResponse{LastBlocks: result}, nil
 }
 
 func (qs queryServer) queryConstantValues(ctx cosmos.Context, req *types.QueryConstantValuesRequest) (*types.QueryConstantValuesResponse, error) {

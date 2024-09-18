@@ -252,3 +252,13 @@ func (s queryServer) SwapQueue(c context.Context, req *types.QuerySwapQueueReque
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.querySwapQueue(ctx, req)
 }
+
+func (s queryServer) LastBlocks(c context.Context, req *types.QueryLastBlocksRequest) (*types.QueryLastBlocksResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryLastBlockHeights(ctx, "")
+}
+
+func (s queryServer) ChainsLastBlock(c context.Context, req *types.QueryChainsLastBlockRequest) (*types.QueryLastBlocksResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryLastBlockHeights(ctx, req.Chain)
+}

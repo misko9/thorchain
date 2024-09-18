@@ -66,6 +66,8 @@ const (
 	Query_QuoteLoanClose_FullMethodName      = "/types.Query/QuoteLoanClose"
 	Query_ConstantValues_FullMethodName      = "/types.Query/ConstantValues"
 	Query_SwapQueue_FullMethodName           = "/types.Query/SwapQueue"
+	Query_LastBlocks_FullMethodName          = "/types.Query/LastBlocks"
+	Query_ChainsLastBlock_FullMethodName     = "/types.Query/ChainsLastBlock"
 )
 
 // QueryClient is the client API for Query service.
@@ -121,6 +123,8 @@ type QueryClient interface {
 	QuoteLoanClose(ctx context.Context, in *QueryQuoteLoanCloseRequest, opts ...grpc.CallOption) (*QueryQuoteLoanCloseResponse, error)
 	ConstantValues(ctx context.Context, in *QueryConstantValuesRequest, opts ...grpc.CallOption) (*QueryConstantValuesResponse, error)
 	SwapQueue(ctx context.Context, in *QuerySwapQueueRequest, opts ...grpc.CallOption) (*QuerySwapQueueResponse, error)
+	LastBlocks(ctx context.Context, in *QueryLastBlocksRequest, opts ...grpc.CallOption) (*QueryLastBlocksResponse, error)
+	ChainsLastBlock(ctx context.Context, in *QueryChainsLastBlockRequest, opts ...grpc.CallOption) (*QueryLastBlocksResponse, error)
 }
 
 type queryClient struct {
@@ -554,6 +558,24 @@ func (c *queryClient) SwapQueue(ctx context.Context, in *QuerySwapQueueRequest, 
 	return out, nil
 }
 
+func (c *queryClient) LastBlocks(ctx context.Context, in *QueryLastBlocksRequest, opts ...grpc.CallOption) (*QueryLastBlocksResponse, error) {
+	out := new(QueryLastBlocksResponse)
+	err := c.cc.Invoke(ctx, Query_LastBlocks_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) ChainsLastBlock(ctx context.Context, in *QueryChainsLastBlockRequest, opts ...grpc.CallOption) (*QueryLastBlocksResponse, error) {
+	out := new(QueryLastBlocksResponse)
+	err := c.cc.Invoke(ctx, Query_ChainsLastBlock_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -607,6 +629,8 @@ type QueryServer interface {
 	QuoteLoanClose(context.Context, *QueryQuoteLoanCloseRequest) (*QueryQuoteLoanCloseResponse, error)
 	ConstantValues(context.Context, *QueryConstantValuesRequest) (*QueryConstantValuesResponse, error)
 	SwapQueue(context.Context, *QuerySwapQueueRequest) (*QuerySwapQueueResponse, error)
+	LastBlocks(context.Context, *QueryLastBlocksRequest) (*QueryLastBlocksResponse, error)
+	ChainsLastBlock(context.Context, *QueryChainsLastBlockRequest) (*QueryLastBlocksResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -754,6 +778,12 @@ func (UnimplementedQueryServer) ConstantValues(context.Context, *QueryConstantVa
 }
 func (UnimplementedQueryServer) SwapQueue(context.Context, *QuerySwapQueueRequest) (*QuerySwapQueueResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SwapQueue not implemented")
+}
+func (UnimplementedQueryServer) LastBlocks(context.Context, *QueryLastBlocksRequest) (*QueryLastBlocksResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LastBlocks not implemented")
+}
+func (UnimplementedQueryServer) ChainsLastBlock(context.Context, *QueryChainsLastBlockRequest) (*QueryLastBlocksResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChainsLastBlock not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -1614,6 +1644,42 @@ func _Query_SwapQueue_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_LastBlocks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryLastBlocksRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).LastBlocks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_LastBlocks_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).LastBlocks(ctx, req.(*QueryLastBlocksRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ChainsLastBlock_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryChainsLastBlockRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ChainsLastBlock(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ChainsLastBlock_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ChainsLastBlock(ctx, req.(*QueryChainsLastBlockRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1808,6 +1874,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SwapQueue",
 			Handler:    _Query_SwapQueue_Handler,
+		},
+		{
+			MethodName: "LastBlocks",
+			Handler:    _Query_LastBlocks_Handler,
+		},
+		{
+			MethodName: "ChainsLastBlock",
+			Handler:    _Query_ChainsLastBlock_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

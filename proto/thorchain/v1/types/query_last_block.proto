@@ -1,0 +1,25 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryLastBlocksRequest{}
+
+message QueryChainsLastBlockRequest{
+  string chain = 1;
+}
+
+message QueryLastBlocksResponse{
+  repeated ChainsLastBlock last_blocks = 1;
+}
+
+message ChainsLastBlock{
+  string chain = 1;
+  int64 last_observed_in = 2;
+  int64 last_signed_out = 3;
+  int64 thorchain = 4;
+}
