@@ -36,7 +36,6 @@ var (
 	QueryKeysignArray        = Query{Key: "keysign", EndpointTemplate: "/%s/keysign/{%s}"}
 	QueryKeysignArrayPubkey  = Query{Key: "keysignpubkey", EndpointTemplate: "/%s/keysign/{%s}/{%s}"}
 	QueryKeygensPubkey       = Query{Key: "keygenspubkey", EndpointTemplate: "/%s/keygen/{%s}/{%s}"}
-	QueryQueue               = Query{Key: "outqueue", EndpointTemplate: "/%s/queue"}
 	QueryNetwork             = Query{Key: "network", EndpointTemplate: "/%s/network"}
 	QueryPOL                 = Query{Key: "pol", EndpointTemplate: "/%s/pol"}
 	QueryPendingOutbound     = Query{Key: "pendingoutbound", EndpointTemplate: "/%s/queue/outbound"}
@@ -53,7 +52,6 @@ var (
 var Queries = []Query{
 	QueryKeysignArray,
 	QueryKeysignArrayPubkey,
-	QueryQueue,
 	QueryNetwork,
 	QueryPOL,
 	QueryKeygensPubkey,

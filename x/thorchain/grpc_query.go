@@ -305,5 +305,10 @@ func (s queryServer) Tx(c context.Context, req *types.QueryTxRequest) (*types.Qu
 
 func (s queryServer) Clout(c context.Context, req *types.QuerySwapperCloutRequest) (*types.SwapperClout, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return s.queryTx(ctx, req)
+	return s.querySwapperClout(ctx, req)
+}
+
+func (s queryServer) Queue(c context.Context, req *types.QueryQueueRequest) (*types.QueryQueueResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryQueue(ctx, req)
 }

@@ -71,9 +71,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 		case q.QueryKeygensPubkey.Key:
 			return queryKeygen(ctx, kbs, path[1:], req, mgr)
 
-		case q.QueryQueue.Key:
-			return queryQueue(ctx, path[1:], req, mgr)
-
 		case q.QueryPendingOutbound.Key:
 			return queryPendingOutbound(ctx, mgr)
 		case q.QueryScheduledOutbound.Key:
@@ -2326,29 +2323,29 @@ func queryKeysign(ctx cosmos.Context, kbs cosmos.KeybaseStore, path []string, re
 }
 
 // queryOutQueue - iterates over txout, counting how many transactions are waiting to be sent
-func queryQueue(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	constAccessor := mgr.GetConstants()
+func (qs queryServer) queryQueue(ctx cosmos.Context, req *types.QueryQueueRequest) (*types.QueryQueueResponse, error) {
+	constAccessor := qs.mgr.GetConstants()
 	signingTransactionPeriod := constAccessor.GetInt64Value(constants.SigningTransactionPeriod)
 	startHeight := ctx.BlockHeight() - signingTransactionPeriod
-	var query openapi.QueueResponse
+	var query types.QueryQueueResponse
 	scheduledOutboundValue := cosmos.ZeroUint()
 	scheduledOutboundClout := cosmos.ZeroUint()
 
-	iterator := mgr.Keeper().GetSwapQueueIterator(ctx)
+	iterator := qs.mgr.Keeper().GetSwapQueueIterator(ctx)
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
 		var msg MsgSwap
-		if err := mgr.Keeper().Cdc().Unmarshal(iterator.Value(), &msg); err != nil {
+		if err := qs.mgr.Keeper().Cdc().Unmarshal(iterator.Value(), &msg); err != nil {
 			continue
 		}
 		query.Swap++
 	}
 
-	iter2 := mgr.Keeper().GetOrderBookItemIterator(ctx)
+	iter2 := qs.mgr.Keeper().GetOrderBookItemIterator(ctx)
 	defer iter2.Close()
 	for ; iter2.Valid(); iter2.Next() {
 		var msg MsgSwap
-		if err := mgr.Keeper().Cdc().Unmarshal(iterator.Value(), &msg); err != nil {
+		if err := qs.mgr.Keeper().Cdc().Unmarshal(iterator.Value(), &msg); err != nil {
 			ctx.Logger().Error("failed to load MsgSwap", "error", err)
 			continue
 		}
@@ -2356,14 +2353,14 @@ func queryQueue(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *M
 	}
 
 	for height := startHeight; height <= ctx.BlockHeight(); height++ {
-		txs, err := mgr.Keeper().GetTxOut(ctx, height)
+		txs, err := qs.mgr.Keeper().GetTxOut(ctx, height)
 		if err != nil {
 			ctx.Logger().Error("fail to get tx out array from key value store", "error", err)
 			return nil, fmt.Errorf("fail to get tx out array from key value store: %w", err)
 		}
 		for _, tx := range txs.TxArray {
 			if tx.OutHash.IsEmpty() {
-				memo, _ := ParseMemoWithTHORNames(ctx, mgr.Keeper(), tx.Memo)
+				memo, _ := ParseMemoWithTHORNames(ctx, qs.mgr.Keeper(), tx.Memo)
 				if memo.IsInternal() {
 					query.Internal++
 				} else if memo.IsOutbound() {
@@ -2374,17 +2371,17 @@ func queryQueue(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *M
 	}
 
 	// sum outbound value
-	maxTxOutOffset, err := mgr.Keeper().GetMimir(ctx, constants.MaxTxOutOffset.String())
+	maxTxOutOffset, err := qs.mgr.Keeper().GetMimir(ctx, constants.MaxTxOutOffset.String())
 	if maxTxOutOffset < 0 || err != nil {
 		maxTxOutOffset = constAccessor.GetInt64Value(constants.MaxTxOutOffset)
 	}
-	txOutDelayMax, err := mgr.Keeper().GetMimir(ctx, constants.TxOutDelayMax.String())
+	txOutDelayMax, err := qs.mgr.Keeper().GetMimir(ctx, constants.TxOutDelayMax.String())
 	if txOutDelayMax <= 0 || err != nil {
 		txOutDelayMax = constAccessor.GetInt64Value(constants.TxOutDelayMax)
 	}
 
 	for height := ctx.BlockHeight() + 1; height <= ctx.BlockHeight()+txOutDelayMax; height++ {
-		value, clout, err := mgr.Keeper().GetTxOutValue(ctx, height)
+		value, clout, err := qs.mgr.Keeper().GetTxOutValue(ctx, height)
 		if err != nil {
 			ctx.Logger().Error("fail to get tx out array from key value store", "error", err)
 			continue
@@ -2401,7 +2398,7 @@ func queryQueue(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *M
 	query.ScheduledOutboundValue = scheduledOutboundValue.String()
 	query.ScheduledOutboundClout = scheduledOutboundClout.String()
 
-	return jsonify(ctx, query)
+	return &query, nil
 }
 
 func (qs queryServer) queryLastBlockHeights(ctx cosmos.Context, chain string) (*types.QueryLastBlocksResponse, error) {

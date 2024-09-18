@@ -38,6 +38,7 @@ import "types/query_tx.proto";
 import "types/type_observed_tx.proto";
 import "types/query_swapper_clout.proto";
 import "types/type_clout.proto";
+import "types/query_queue.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -275,5 +276,9 @@ service Query {
 
   rpc Clout(QuerySwapperCloutRequest) returns (SwapperClout) {
     option (google.api.http).get = "/thorchain/clout/swap/{address}";
+  }
+
+  rpc Queue(QueryQueueRequest) returns (QueryQueueResponse) {
+    option (google.api.http).get = "/thorchain/queue";
   }
 }

@@ -77,6 +77,7 @@ const (
 	Query_TxVoters_FullMethodName            = "/types.Query/TxVoters"
 	Query_TxVotersOld_FullMethodName         = "/types.Query/TxVotersOld"
 	Query_Clout_FullMethodName               = "/types.Query/Clout"
+	Query_Queue_FullMethodName               = "/types.Query/Queue"
 )
 
 // QueryClient is the client API for Query service.
@@ -143,6 +144,7 @@ type QueryClient interface {
 	TxVoters(ctx context.Context, in *QueryTxVotersRequest, opts ...grpc.CallOption) (*ObservedTxVoter, error)
 	TxVotersOld(ctx context.Context, in *QueryTxVotersRequest, opts ...grpc.CallOption) (*ObservedTxVoter, error)
 	Clout(ctx context.Context, in *QuerySwapperCloutRequest, opts ...grpc.CallOption) (*SwapperClout, error)
+	Queue(ctx context.Context, in *QueryQueueRequest, opts ...grpc.CallOption) (*QueryQueueResponse, error)
 }
 
 type queryClient struct {
@@ -675,6 +677,15 @@ func (c *queryClient) Clout(ctx context.Context, in *QuerySwapperCloutRequest, o
 	return out, nil
 }
 
+func (c *queryClient) Queue(ctx context.Context, in *QueryQueueRequest, opts ...grpc.CallOption) (*QueryQueueResponse, error) {
+	out := new(QueryQueueResponse)
+	err := c.cc.Invoke(ctx, Query_Queue_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -739,6 +750,7 @@ type QueryServer interface {
 	TxVoters(context.Context, *QueryTxVotersRequest) (*ObservedTxVoter, error)
 	TxVotersOld(context.Context, *QueryTxVotersRequest) (*ObservedTxVoter, error)
 	Clout(context.Context, *QuerySwapperCloutRequest) (*SwapperClout, error)
+	Queue(context.Context, *QueryQueueRequest) (*QueryQueueResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -919,6 +931,9 @@ func (UnimplementedQueryServer) TxVotersOld(context.Context, *QueryTxVotersReque
 }
 func (UnimplementedQueryServer) Clout(context.Context, *QuerySwapperCloutRequest) (*SwapperClout, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Clout not implemented")
+}
+func (UnimplementedQueryServer) Queue(context.Context, *QueryQueueRequest) (*QueryQueueResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Queue not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -1977,6 +1992,24 @@ func _Query_Clout_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_Queue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryQueueRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Queue(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Queue_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Queue(ctx, req.(*QueryQueueRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -2215,6 +2248,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Clout",
 			Handler:    _Query_Clout_Handler,
+		},
+		{
+			MethodName: "Queue",
+			Handler:    _Query_Queue_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
