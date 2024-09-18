@@ -36,6 +36,8 @@ import "types/query_last_block.proto";
 import "types/query_vault.proto";
 import "types/query_tx.proto";
 import "types/type_observed_tx.proto";
+import "types/query_swapper_clout.proto";
+import "types/type_clout.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -269,5 +271,9 @@ service Query {
 
   rpc TxVotersOld(QueryTxVotersRequest) returns (ObservedTxVoter) {
     option (google.api.http).get = "/thorchain/tx/{tx_id}/signers";
+  }
+
+  rpc Clout(QuerySwapperCloutRequest) returns (SwapperClout) {
+    option (google.api.http).get = "/thorchain/clout/swap/{address}";
   }
 }

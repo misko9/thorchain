@@ -79,9 +79,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 		case q.QueryScheduledOutbound.Key:
 			return queryScheduledOutbound(ctx, mgr)
 		
-		case q.QuerySwapperClout.Key:
-			return querySwapperClout(ctx, path[1:], mgr)
-
 		case q.QueryTssKeygenMetrics.Key:
 			return queryTssKeygenMetric(ctx, path[1:], req, mgr)
 		case q.QueryTssMetrics.Key:
@@ -1278,23 +1275,23 @@ func (qs queryServer) queryStreamingSwaps(ctx cosmos.Context, req *types.QuerySt
 	return &types.QueryStreamingSwapsResponse{StreamingSwaps: streams}, nil
 }
 
-func querySwapperClout(ctx cosmos.Context, path []string, mgr *Mgrs) ([]byte, error) {
-	if len(path) == 0 {
+func (qs queryServer) querySwapperClout(ctx cosmos.Context, req *types.QuerySwapperCloutRequest) (*types.SwapperClout, error) {
+	if len(req.Address) == 0 {
 		return nil, errors.New("address not provided")
 	}
-	addr, err := common.NewAddress(path[0])
+	addr, err := common.NewAddress(req.Address)
 	if err != nil {
 		ctx.Logger().Error("fail to parse address", "error", err)
 		return nil, fmt.Errorf("could not parse address: %w", err)
 	}
 
-	clout, err := mgr.Keeper().GetSwapperClout(ctx, addr)
+	clout, err := qs.mgr.Keeper().GetSwapperClout(ctx, addr)
 	if err != nil {
 		ctx.Logger().Error("fail to get swapper clout", "error", err)
 		return nil, fmt.Errorf("could not get swapper clout: %w", err)
 	}
 
-	return jsonify(ctx, clout)
+	return &clout, nil
 }
 
 func (qs queryServer) queryStreamingSwap(ctx cosmos.Context, req *types.QueryStreamingSwapRequest) (*types.QueryStreamingSwapResponse, error) {
