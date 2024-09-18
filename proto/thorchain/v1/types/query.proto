@@ -40,6 +40,7 @@ import "types/query_swapper_clout.proto";
 import "types/type_clout.proto";
 import "types/query_queue.proto";
 import "types/query_outbound.proto";
+import "types/query_block.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -289,5 +290,9 @@ service Query {
 
   rpc PendingOutbound(QueryPendingOutboundRequest) returns (QueryOutboundResponse) {
     option (google.api.http).get = "/thorchain/queue/outbound";
+  }
+
+  rpc Block(QueryBlockRequest) returns (QueryBlockResponse) {
+    option (google.api.http).get = "/thorchain/block";
   }
 }

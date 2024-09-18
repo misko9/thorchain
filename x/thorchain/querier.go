@@ -33,6 +33,11 @@ import (
 	"gitlab.com/thorchain/thornode/x/thorchain/types"
 )
 
+// TODO: Does/should this query exist? 
+// QueryPOL = Query{Key: "pol", EndpointTemplate: "/%s/pol"}
+	// queries only available on regtest builds
+// QueryExport = Query{Key: "export", EndpointTemplate: "/%s/export"}
+
 var (
 	initManager   = func(mgr *Mgrs, ctx cosmos.Context) {}
 	optionalQuery = func(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
@@ -76,8 +81,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 		case q.QueryTssMetrics.Key:
 			return queryTssMetric(ctx, path[1:], req, mgr)
 		
-		case q.QueryBlock.Key:
-			return queryBlock(ctx, mgr)
 		default:
 			return optionalQuery(ctx, path, req, mgr)
 		}
@@ -2904,7 +2907,7 @@ func (qs queryServer) queryInvariant(ctx cosmos.Context, req *types.QueryInvaria
 	return nil, fmt.Errorf("invariant not registered: %s", req.Path)
 }
 
-func queryBlock(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
+func (qs queryServer) queryBlock(ctx cosmos.Context, req *types.QueryBlockRequest) (*types.QueryBlockResponse, error) {
 	initTendermintOnce.Do(initTendermint)
 	height := ctx.BlockHeight()
 
@@ -2919,54 +2922,50 @@ func queryBlock(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 	}
 
 	res := types.QueryBlockResponse{
-		BlockResponse: openapi.BlockResponse{
-			Id: openapi.BlockResponseId{
-				Hash: block.BlockID.Hash.String(),
-				Parts: openapi.BlockResponseIdParts{
-					Total: int64(block.BlockID.PartSetHeader.Total),
-					Hash:  block.BlockID.PartSetHeader.Hash.String(),
-				},
+		Id: &types.BlockResponseId{
+			Hash: block.BlockID.Hash.String(),
+			Parts: &types.BlockResponseIdParts{
+				Total: int64(block.BlockID.PartSetHeader.Total),
+				Hash:  block.BlockID.PartSetHeader.Hash.String(),
 			},
-			Header: openapi.BlockResponseHeader{
-				Version: openapi.BlockResponseHeaderVersion{
-					Block: strconv.FormatUint(block.Block.Header.Version.Block, 10),
-					App:   strconv.FormatUint(block.Block.Header.Version.App, 10),
-				},
-				ChainId: block.Block.Header.ChainID,
-				Height:  block.Block.Header.Height,
-				Time:    block.Block.Header.Time.Format(time.RFC3339Nano),
-				LastBlockId: openapi.BlockResponseId{
-					Hash: block.Block.Header.LastBlockID.Hash.String(),
-					Parts: openapi.BlockResponseIdParts{
-						Total: int64(block.Block.Header.LastBlockID.PartSetHeader.Total),
-						Hash:  block.Block.Header.LastBlockID.PartSetHeader.Hash.String(),
-					},
-				},
-				LastCommitHash:     block.Block.Header.LastCommitHash.String(),
-				DataHash:           block.Block.Header.DataHash.String(),
-				ValidatorsHash:     block.Block.Header.ValidatorsHash.String(),
-				NextValidatorsHash: block.Block.Header.NextValidatorsHash.String(),
-				ConsensusHash:      block.Block.Header.ConsensusHash.String(),
-				AppHash:            block.Block.Header.AppHash.String(),
-				LastResultsHash:    block.Block.Header.LastResultsHash.String(),
-				EvidenceHash:       block.Block.Header.EvidenceHash.String(),
-				ProposerAddress:    block.Block.Header.ProposerAddress.String(),
-			},
-			BeginBlockEvents: []map[string]string{},
-			EndBlockEvents:   []map[string]string{},
 		},
-		Txs: make([]types.QueryBlockTx, len(block.Block.Txs)),
+		Header: &types.BlockResponseHeader{
+			Version: &types.BlockResponseHeaderVersion{
+				Block: strconv.FormatUint(block.Block.Header.Version.Block, 10),
+				App:   strconv.FormatUint(block.Block.Header.Version.App, 10),
+			},
+			ChainId: block.Block.Header.ChainID,
+			Height:  block.Block.Header.Height,
+			Time:    block.Block.Header.Time.Format(time.RFC3339Nano),
+			LastBlockId: &types.BlockResponseId{
+				Hash: block.Block.Header.LastBlockID.Hash.String(),
+				Parts: &types.BlockResponseIdParts{
+					Total: int64(block.Block.Header.LastBlockID.PartSetHeader.Total),
+					Hash:  block.Block.Header.LastBlockID.PartSetHeader.Hash.String(),
+				},
+			},
+			LastCommitHash:     block.Block.Header.LastCommitHash.String(),
+			DataHash:           block.Block.Header.DataHash.String(),
+			ValidatorsHash:     block.Block.Header.ValidatorsHash.String(),
+			NextValidatorsHash: block.Block.Header.NextValidatorsHash.String(),
+			ConsensusHash:      block.Block.Header.ConsensusHash.String(),
+			AppHash:            block.Block.Header.AppHash.String(),
+			LastResultsHash:    block.Block.Header.LastResultsHash.String(),
+			EvidenceHash:       block.Block.Header.EvidenceHash.String(),
+			ProposerAddress:    block.Block.Header.ProposerAddress.String(),
+		},
+		Txs: make([]*types.QueryBlockTx, len(block.Block.Txs)),
 	}
 
 	// parse the events
 	for _, event := range results.FinalizeBlockEvents{
 		for _, attr := range event.Attributes {
-			if attr.Key == "block" {
-				if attr.Value == "begin_block" {
-					res.BeginBlockEvents = append(res.BeginBlockEvents, eventMap(sdk.Event(event)))
+			if attr.Key == "mode" {
+				if attr.Value == "BeginBlock" {
+					res.BeginBlockEvents = append(res.BeginBlockEvents, blockEvents(sdk.Event(event)))
 				}
-				if attr.Value == "end_block" {
-					res.EndBlockEvents = append(res.EndBlockEvents, eventMap(sdk.Event(event)))
+				if attr.Value == "EndBlock" {
+					res.EndBlockEvents = append(res.EndBlockEvents, blockEvents(sdk.Event(event)))
 				}
 				continue
 			}
@@ -2976,30 +2975,29 @@ func queryBlock(ctx cosmos.Context, mgr *Mgrs) ([]byte, error) {
 		res.Txs[i].Hash = strings.ToUpper(hex.EncodeToString(tx.Hash()))
 
 		// decode the protobuf and encode to json
-		dtx, err := authtx.DefaultTxDecoder(mgr.cdc.(*codec.ProtoCodec))(tx)
+		dtx, err := authtx.DefaultTxDecoder(qs.mgr.cdc.(*codec.ProtoCodec))(tx)
 		if err != nil {
 			return nil, fmt.Errorf("fail to decode tx: %w", err)
 		}
-		res.Txs[i].Tx, err = authtx.DefaultJSONTxEncoder(mgr.cdc.(*codec.ProtoCodec))(dtx)
+		res.Txs[i].Tx, err = authtx.DefaultJSONTxEncoder(qs.mgr.cdc.(*codec.ProtoCodec))(dtx)
 		if err != nil {
 			return nil, fmt.Errorf("fail to encode tx: %w", err)
 		}
 
 		// parse the tx events
 		code := int64(results.TxsResults[i].Code)
-		res.Txs[i].Result.Code = &code
-		res.Txs[i].Result.Data = wrapString(string(results.TxsResults[i].Data))
-		res.Txs[i].Result.Log = wrapString(results.TxsResults[i].Log)
-		res.Txs[i].Result.Info = wrapString(results.TxsResults[i].Info)
-		res.Txs[i].Result.GasWanted = wrapString(strconv.FormatInt(results.TxsResults[i].GasWanted, 10))
-		res.Txs[i].Result.GasUsed = wrapString(strconv.FormatInt(results.TxsResults[i].GasUsed, 10))
-		res.Txs[i].Result.Events = []map[string]string{}
+		res.Txs[i].Result.Code = code
+		res.Txs[i].Result.Data = string(results.TxsResults[i].Data)
+		res.Txs[i].Result.Log = results.TxsResults[i].Log
+		res.Txs[i].Result.Info = results.TxsResults[i].Info
+		res.Txs[i].Result.GasWanted = strconv.FormatInt(results.TxsResults[i].GasWanted, 10)
+		res.Txs[i].Result.GasUsed = strconv.FormatInt(results.TxsResults[i].GasUsed, 10)
 		for _, event := range results.TxsResults[i].Events {
-			res.Txs[i].Result.Events = append(res.Txs[i].Result.Events, eventMap(sdk.Event(event)))
+			res.Txs[i].Result.Events = blockEvents(sdk.Event(event))
 		}
 	}
 
-	return jsonify(ctx, res)
+	return &res, nil
 }
 
 // -------------------------------------------------------------------------------------
@@ -3087,13 +3085,20 @@ func simulateInternal(ctx cosmos.Context, mgr *Mgrs, msg sdk.Msg) (sdk.Events, e
 	return em.Events(), err
 }
 
-func eventMap(e sdk.Event) map[string]string {
-	m := map[string]string{}
-	m["type"] = e.Type
+func blockEvents(e sdk.Event) *types.BlockEvents {
+	events := types.BlockEvents{}
+	events.BlockEvents = append(events.BlockEvents, &types.BlockEvent{
+		Key: "type",
+		Value: e.Type,
+	})
+
 	for _, a := range e.Attributes {
-		m[string(a.Key)] = string(a.Value)
+		events.BlockEvents = append(events.BlockEvents, &types.BlockEvent{
+			Key: a.Key,
+			Value: a.Value,
+		})
 	}
-	return m
+	return &events
 }
 
 func simulate(ctx cosmos.Context, mgr Manager, msg sdk.Msg) (sdk.Events, error) {

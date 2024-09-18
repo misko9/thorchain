@@ -322,3 +322,8 @@ func (s queryServer) PendingOutbound(c context.Context, req *types.QueryPendingO
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryPendingOutbound(ctx, req)
 }
+
+func (s queryServer) Block(c context.Context, req *types.QueryBlockRequest) (*types.QueryBlockResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryBlock(ctx, req)
+}
