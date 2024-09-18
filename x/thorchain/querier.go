@@ -27,7 +27,6 @@ import (
 	"gitlab.com/thorchain/thornode/common/cosmos"
 	"gitlab.com/thorchain/thornode/config"
 	"gitlab.com/thorchain/thornode/constants"
-	openapi "gitlab.com/thorchain/thornode/openapi/gen"
 	"gitlab.com/thorchain/thornode/x/thorchain/keeper"
 	q "gitlab.com/thorchain/thornode/x/thorchain/query"
 	"gitlab.com/thorchain/thornode/x/thorchain/types"
@@ -69,9 +68,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 
 		defer telemetry.MeasureSince(time.Now(), path[0])
 		switch path[0] {
-		case q.QueryKeygensPubkey.Key:
-			return queryKeygen(ctx, kbs, path[1:], req, mgr)
-
 		default:
 			return optionalQuery(ctx, path, req, mgr)
 		}
@@ -2178,20 +2174,20 @@ func extractBlockHeight(ctx cosmos.Context, heightStr string) (int64, error) {
 	return height, nil
 }
 
-func queryKeygen(ctx cosmos.Context, kbs cosmos.KeybaseStore, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	height, err := extractBlockHeight(ctx, path)
+func (qs queryServer) queryKeygen(ctx cosmos.Context, req *types.QueryKeygenRequest) (*types.QueryKeygenResponse, error) {
+	height, err := extractBlockHeight(ctx, req.Height)
 	if err != nil {
 		return nil, err
 	}
 
-	keygenBlock, err := mgr.Keeper().GetKeygenBlock(ctx, height)
+	keygenBlock, err := qs.mgr.Keeper().GetKeygenBlock(ctx, height)
 	if err != nil {
 		ctx.Logger().Error("fail to get keygen block", "error", err)
 		return nil, fmt.Errorf("fail to get keygen block: %w", err)
 	}
 
-	if len(path) > 1 {
-		pk, err := common.NewPubKey(path[1])
+	if len(req.PubKey) > 0 {
+		pk, err := common.NewPubKey(req.PubKey)
 		if err != nil {
 			ctx.Logger().Error("fail to parse pubkey", "error", err)
 			return nil, fmt.Errorf("fail to parse pubkey: %w", err)
@@ -2215,34 +2211,16 @@ func queryKeygen(ctx cosmos.Context, kbs cosmos.KeybaseStore, path []string, req
 	// Not applicable if ledger devices will never be used.
 	// SIGN_MODE_LEGACY_AMINO_JSON will be removed in the future for SIGN_MODE_TEXTUAL
 	signingMode := signing.SignMode_SIGN_MODE_LEGACY_AMINO_JSON
-	sig, _, err := kbs.Keybase.Sign("thorchain", buf, signingMode)
+	sig, _, err := qs.kbs.Keybase.Sign("thorchain", buf, signingMode)
 	if err != nil {
 		ctx.Logger().Error("fail to sign keygen", "error", err)
 		return nil, fmt.Errorf("fail to sign keygen: %w", err)
 	}
 
-	var keygens []openapi.Keygen
-	// Leave this nil (null rather than []) if the source is nil.
-	if keygenBlock.Keygens != nil {
-		keygens = make([]openapi.Keygen, len(keygenBlock.Keygens))
-		for i := range keygenBlock.Keygens {
-			keygens[i] = openapi.Keygen{
-				Id:      wrapString(keygenBlock.Keygens[i].ID.String()),
-				Type:    wrapString(keygenBlock.Keygens[i].Type.String()),
-				Members: keygenBlock.Keygens[i].Members,
-			}
-		}
-	}
-
-	query := openapi.KeygenResponse{
-		KeygenBlock: openapi.KeygenBlock{
-			Height:  wrapInt64(keygenBlock.Height),
-			Keygens: keygens,
-		},
+	return &types.QueryKeygenResponse{
+		KeygenBlock: &keygenBlock,
 		Signature: base64.StdEncoding.EncodeToString(sig),
-	}
-
-	return jsonify(ctx, query)
+	}, nil
 }
 
 func (qs queryServer) queryKeysign(ctx cosmos.Context, heightStr string, pubKey string) (*types.QueryKeysignResponse, error) {

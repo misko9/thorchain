@@ -314,4 +314,8 @@ service Query {
   rpc KeysignPubkey(QueryKeysignPubkeyRequest) returns (QueryKeysignResponse) {
     option (google.api.http).get = "/thorchain/keysign/{height}/{pub_key}";
   }
+
+  rpc Keygen(QueryKeygenRequest) returns (QueryKeygenResponse) {
+    option (google.api.http).get = "/thorchain/keygen/{height}/{pub_key}";
+  }
 }

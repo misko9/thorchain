@@ -349,3 +349,8 @@ func (s queryServer) KeysignPubkey(c context.Context, req *types.QueryKeysignPub
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryKeysign(ctx, req.Height, req.PubKey)
 }
+
+func (s queryServer) Keygen(c context.Context, req *types.QueryKeygenRequest) (*types.QueryKeygenResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryKeysign(ctx, req.Height, req.PubKey)
+}

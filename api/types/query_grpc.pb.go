@@ -85,6 +85,7 @@ const (
 	Query_TssMetric_FullMethodName           = "/types.Query/TssMetric"
 	Query_Keysign_FullMethodName             = "/types.Query/Keysign"
 	Query_KeysignPubkey_FullMethodName       = "/types.Query/KeysignPubkey"
+	Query_Keygen_FullMethodName              = "/types.Query/Keygen"
 )
 
 // QueryClient is the client API for Query service.
@@ -159,6 +160,7 @@ type QueryClient interface {
 	TssMetric(ctx context.Context, in *QueryTssMetricRequest, opts ...grpc.CallOption) (*QueryTssMetricResponse, error)
 	Keysign(ctx context.Context, in *QueryKeysignRequest, opts ...grpc.CallOption) (*QueryKeysignResponse, error)
 	KeysignPubkey(ctx context.Context, in *QueryKeysignPubkeyRequest, opts ...grpc.CallOption) (*QueryKeysignResponse, error)
+	Keygen(ctx context.Context, in *QueryKeygenRequest, opts ...grpc.CallOption) (*QueryKeygenResponse, error)
 }
 
 type queryClient struct {
@@ -763,6 +765,15 @@ func (c *queryClient) KeysignPubkey(ctx context.Context, in *QueryKeysignPubkeyR
 	return out, nil
 }
 
+func (c *queryClient) Keygen(ctx context.Context, in *QueryKeygenRequest, opts ...grpc.CallOption) (*QueryKeygenResponse, error) {
+	out := new(QueryKeygenResponse)
+	err := c.cc.Invoke(ctx, Query_Keygen_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -835,6 +846,7 @@ type QueryServer interface {
 	TssMetric(context.Context, *QueryTssMetricRequest) (*QueryTssMetricResponse, error)
 	Keysign(context.Context, *QueryKeysignRequest) (*QueryKeysignResponse, error)
 	KeysignPubkey(context.Context, *QueryKeysignPubkeyRequest) (*QueryKeysignResponse, error)
+	Keygen(context.Context, *QueryKeygenRequest) (*QueryKeygenResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -1039,6 +1051,9 @@ func (UnimplementedQueryServer) Keysign(context.Context, *QueryKeysignRequest) (
 }
 func (UnimplementedQueryServer) KeysignPubkey(context.Context, *QueryKeysignPubkeyRequest) (*QueryKeysignResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method KeysignPubkey not implemented")
+}
+func (UnimplementedQueryServer) Keygen(context.Context, *QueryKeygenRequest) (*QueryKeygenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Keygen not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -2241,6 +2256,24 @@ func _Query_KeysignPubkey_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_Keygen_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryKeygenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Keygen(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Keygen_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Keygen(ctx, req.(*QueryKeygenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -2511,6 +2544,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "KeysignPubkey",
 			Handler:    _Query_KeysignPubkey_Handler,
+		},
+		{
+			MethodName: "Keygen",
+			Handler:    _Query_Keygen_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

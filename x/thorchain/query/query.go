@@ -31,13 +31,6 @@ func (q Query) Path(args ...string) string {
 	return fmt.Sprintf("custom/%s", strings.Join(args, "/"))
 }
 
-// query endpoints supported by the thorchain Querier
-var (
-	QueryKeygensPubkey       = Query{Key: "keygenspubkey", EndpointTemplate: "/%s/keygen/{%s}/{%s}"}
-
-)
-
 // Queries all queries
 var Queries = []Query{
-	QueryKeygensPubkey,
 }
