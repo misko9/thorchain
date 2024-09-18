@@ -19,68 +19,70 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Pool_FullMethodName                = "/types.Query/Pool"
-	Query_Pools_FullMethodName               = "/types.Query/Pools"
-	Query_DerivedPool_FullMethodName         = "/types.Query/DerivedPool"
-	Query_DerivedPools_FullMethodName        = "/types.Query/DerivedPools"
-	Query_LiquidityProvider_FullMethodName   = "/types.Query/LiquidityProvider"
-	Query_LiquidityProviders_FullMethodName  = "/types.Query/LiquidityProviders"
-	Query_Saver_FullMethodName               = "/types.Query/Saver"
-	Query_Savers_FullMethodName              = "/types.Query/Savers"
-	Query_Borrower_FullMethodName            = "/types.Query/Borrower"
-	Query_Borrowers_FullMethodName           = "/types.Query/Borrowers"
-	Query_TradeUnit_FullMethodName           = "/types.Query/TradeUnit"
-	Query_TradeUnits_FullMethodName          = "/types.Query/TradeUnits"
-	Query_TradeAccount_FullMethodName        = "/types.Query/TradeAccount"
-	Query_TradeAccounts_FullMethodName       = "/types.Query/TradeAccounts"
-	Query_Node_FullMethodName                = "/types.Query/Node"
-	Query_Nodes_FullMethodName               = "/types.Query/Nodes"
-	Query_PoolSlip_FullMethodName            = "/types.Query/PoolSlip"
-	Query_PoolSlips_FullMethodName           = "/types.Query/PoolSlips"
-	Query_OutboundFee_FullMethodName         = "/types.Query/OutboundFee"
-	Query_OutboundFees_FullMethodName        = "/types.Query/OutboundFees"
-	Query_StreamingSwap_FullMethodName       = "/types.Query/StreamingSwap"
-	Query_StreamingSwaps_FullMethodName      = "/types.Query/StreamingSwaps"
-	Query_Ban_FullMethodName                 = "/types.Query/Ban"
-	Query_Ragnarok_FullMethodName            = "/types.Query/Ragnarok"
-	Query_RunePool_FullMethodName            = "/types.Query/RunePool"
-	Query_RuneProvider_FullMethodName        = "/types.Query/RuneProvider"
-	Query_RuneProviders_FullMethodName       = "/types.Query/RuneProviders"
-	Query_MimirValues_FullMethodName         = "/types.Query/MimirValues"
-	Query_MimirWithKey_FullMethodName        = "/types.Query/MimirWithKey"
-	Query_MimirAdminValues_FullMethodName    = "/types.Query/MimirAdminValues"
-	Query_MimirNodesAllValues_FullMethodName = "/types.Query/MimirNodesAllValues"
-	Query_MimirNodesValues_FullMethodName    = "/types.Query/MimirNodesValues"
-	Query_MimirNodeValues_FullMethodName     = "/types.Query/MimirNodeValues"
-	Query_InboundAddresses_FullMethodName    = "/types.Query/InboundAddresses"
-	Query_Version_FullMethodName             = "/types.Query/Version"
-	Query_Thorname_FullMethodName            = "/types.Query/Thorname"
-	Query_Invariant_FullMethodName           = "/types.Query/Invariant"
-	Query_Invariants_FullMethodName          = "/types.Query/Invariants"
-	Query_Network_FullMethodName             = "/types.Query/Network"
-	Query_BalanceModule_FullMethodName       = "/types.Query/BalanceModule"
-	Query_QuoteSwap_FullMethodName           = "/types.Query/QuoteSwap"
-	Query_QuoteSaverDeposit_FullMethodName   = "/types.Query/QuoteSaverDeposit"
-	Query_QuoteSaverWithdraw_FullMethodName  = "/types.Query/QuoteSaverWithdraw"
-	Query_QuoteLoanOpen_FullMethodName       = "/types.Query/QuoteLoanOpen"
-	Query_QuoteLoanClose_FullMethodName      = "/types.Query/QuoteLoanClose"
-	Query_ConstantValues_FullMethodName      = "/types.Query/ConstantValues"
-	Query_SwapQueue_FullMethodName           = "/types.Query/SwapQueue"
-	Query_LastBlocks_FullMethodName          = "/types.Query/LastBlocks"
-	Query_ChainsLastBlock_FullMethodName     = "/types.Query/ChainsLastBlock"
-	Query_Vault_FullMethodName               = "/types.Query/Vault"
-	Query_AsgardVaults_FullMethodName        = "/types.Query/AsgardVaults"
-	Query_VaultsPubkeys_FullMethodName       = "/types.Query/VaultsPubkeys"
-	Query_TxStages_FullMethodName            = "/types.Query/TxStages"
-	Query_TxStatus_FullMethodName            = "/types.Query/TxStatus"
-	Query_Tx_FullMethodName                  = "/types.Query/Tx"
-	Query_TxVoters_FullMethodName            = "/types.Query/TxVoters"
-	Query_TxVotersOld_FullMethodName         = "/types.Query/TxVotersOld"
-	Query_Clout_FullMethodName               = "/types.Query/Clout"
-	Query_Queue_FullMethodName               = "/types.Query/Queue"
-	Query_ScheduledOutbound_FullMethodName   = "/types.Query/ScheduledOutbound"
-	Query_PendingOutbound_FullMethodName     = "/types.Query/PendingOutbound"
-	Query_Block_FullMethodName               = "/types.Query/Block"
+	Query_Pool_FullMethodName                 = "/types.Query/Pool"
+	Query_Pools_FullMethodName                = "/types.Query/Pools"
+	Query_DerivedPool_FullMethodName          = "/types.Query/DerivedPool"
+	Query_DerivedPools_FullMethodName         = "/types.Query/DerivedPools"
+	Query_LiquidityProvider_FullMethodName    = "/types.Query/LiquidityProvider"
+	Query_LiquidityProviders_FullMethodName   = "/types.Query/LiquidityProviders"
+	Query_Saver_FullMethodName                = "/types.Query/Saver"
+	Query_Savers_FullMethodName               = "/types.Query/Savers"
+	Query_Borrower_FullMethodName             = "/types.Query/Borrower"
+	Query_Borrowers_FullMethodName            = "/types.Query/Borrowers"
+	Query_TradeUnit_FullMethodName            = "/types.Query/TradeUnit"
+	Query_TradeUnits_FullMethodName           = "/types.Query/TradeUnits"
+	Query_TradeAccount_FullMethodName         = "/types.Query/TradeAccount"
+	Query_TradeAccounts_FullMethodName        = "/types.Query/TradeAccounts"
+	Query_Node_FullMethodName                 = "/types.Query/Node"
+	Query_Nodes_FullMethodName                = "/types.Query/Nodes"
+	Query_PoolSlip_FullMethodName             = "/types.Query/PoolSlip"
+	Query_PoolSlips_FullMethodName            = "/types.Query/PoolSlips"
+	Query_OutboundFee_FullMethodName          = "/types.Query/OutboundFee"
+	Query_OutboundFees_FullMethodName         = "/types.Query/OutboundFees"
+	Query_StreamingSwap_FullMethodName        = "/types.Query/StreamingSwap"
+	Query_StreamingSwaps_FullMethodName       = "/types.Query/StreamingSwaps"
+	Query_Ban_FullMethodName                  = "/types.Query/Ban"
+	Query_Ragnarok_FullMethodName             = "/types.Query/Ragnarok"
+	Query_RunePool_FullMethodName             = "/types.Query/RunePool"
+	Query_RuneProvider_FullMethodName         = "/types.Query/RuneProvider"
+	Query_RuneProviders_FullMethodName        = "/types.Query/RuneProviders"
+	Query_MimirValues_FullMethodName          = "/types.Query/MimirValues"
+	Query_MimirWithKey_FullMethodName         = "/types.Query/MimirWithKey"
+	Query_MimirAdminValues_FullMethodName     = "/types.Query/MimirAdminValues"
+	Query_MimirNodesAllValues_FullMethodName  = "/types.Query/MimirNodesAllValues"
+	Query_MimirNodesValues_FullMethodName     = "/types.Query/MimirNodesValues"
+	Query_MimirNodeValues_FullMethodName      = "/types.Query/MimirNodeValues"
+	Query_InboundAddresses_FullMethodName     = "/types.Query/InboundAddresses"
+	Query_Version_FullMethodName              = "/types.Query/Version"
+	Query_Thorname_FullMethodName             = "/types.Query/Thorname"
+	Query_Invariant_FullMethodName            = "/types.Query/Invariant"
+	Query_Invariants_FullMethodName           = "/types.Query/Invariants"
+	Query_Network_FullMethodName              = "/types.Query/Network"
+	Query_BalanceModule_FullMethodName        = "/types.Query/BalanceModule"
+	Query_QuoteSwap_FullMethodName            = "/types.Query/QuoteSwap"
+	Query_QuoteSaverDeposit_FullMethodName    = "/types.Query/QuoteSaverDeposit"
+	Query_QuoteSaverWithdraw_FullMethodName   = "/types.Query/QuoteSaverWithdraw"
+	Query_QuoteLoanOpen_FullMethodName        = "/types.Query/QuoteLoanOpen"
+	Query_QuoteLoanClose_FullMethodName       = "/types.Query/QuoteLoanClose"
+	Query_ConstantValues_FullMethodName       = "/types.Query/ConstantValues"
+	Query_SwapQueue_FullMethodName            = "/types.Query/SwapQueue"
+	Query_LastBlocks_FullMethodName           = "/types.Query/LastBlocks"
+	Query_ChainsLastBlock_FullMethodName      = "/types.Query/ChainsLastBlock"
+	Query_Vault_FullMethodName                = "/types.Query/Vault"
+	Query_AsgardVaults_FullMethodName         = "/types.Query/AsgardVaults"
+	Query_VaultsPubkeys_FullMethodName        = "/types.Query/VaultsPubkeys"
+	Query_TxStages_FullMethodName             = "/types.Query/TxStages"
+	Query_TxStatus_FullMethodName             = "/types.Query/TxStatus"
+	Query_Tx_FullMethodName                   = "/types.Query/Tx"
+	Query_TxVoters_FullMethodName             = "/types.Query/TxVoters"
+	Query_TxVotersOld_FullMethodName          = "/types.Query/TxVotersOld"
+	Query_Clout_FullMethodName                = "/types.Query/Clout"
+	Query_Queue_FullMethodName                = "/types.Query/Queue"
+	Query_ScheduledOutbound_FullMethodName    = "/types.Query/ScheduledOutbound"
+	Query_PendingOutbound_FullMethodName      = "/types.Query/PendingOutbound"
+	Query_Block_FullMethodName                = "/types.Query/Block"
+	Query_TssKeygenMetricQuery_FullMethodName = "/types.Query/TssKeygenMetricQuery"
+	Query_TssMetric_FullMethodName            = "/types.Query/TssMetric"
 )
 
 // QueryClient is the client API for Query service.
@@ -151,6 +153,8 @@ type QueryClient interface {
 	ScheduledOutbound(ctx context.Context, in *QueryScheduledOutboundRequest, opts ...grpc.CallOption) (*QueryOutboundResponse, error)
 	PendingOutbound(ctx context.Context, in *QueryPendingOutboundRequest, opts ...grpc.CallOption) (*QueryOutboundResponse, error)
 	Block(ctx context.Context, in *QueryBlockRequest, opts ...grpc.CallOption) (*QueryBlockResponse, error)
+	TssKeygenMetricQuery(ctx context.Context, in *QueryTssKeygenMetricRequest, opts ...grpc.CallOption) (*QueryTssKeygenMetricResponse, error)
+	TssMetric(ctx context.Context, in *QueryTssMetricRequest, opts ...grpc.CallOption) (*QueryTssMetricResponse, error)
 }
 
 type queryClient struct {
@@ -719,6 +723,24 @@ func (c *queryClient) Block(ctx context.Context, in *QueryBlockRequest, opts ...
 	return out, nil
 }
 
+func (c *queryClient) TssKeygenMetricQuery(ctx context.Context, in *QueryTssKeygenMetricRequest, opts ...grpc.CallOption) (*QueryTssKeygenMetricResponse, error) {
+	out := new(QueryTssKeygenMetricResponse)
+	err := c.cc.Invoke(ctx, Query_TssKeygenMetricQuery_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) TssMetric(ctx context.Context, in *QueryTssMetricRequest, opts ...grpc.CallOption) (*QueryTssMetricResponse, error) {
+	out := new(QueryTssMetricResponse)
+	err := c.cc.Invoke(ctx, Query_TssMetric_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -787,6 +809,8 @@ type QueryServer interface {
 	ScheduledOutbound(context.Context, *QueryScheduledOutboundRequest) (*QueryOutboundResponse, error)
 	PendingOutbound(context.Context, *QueryPendingOutboundRequest) (*QueryOutboundResponse, error)
 	Block(context.Context, *QueryBlockRequest) (*QueryBlockResponse, error)
+	TssKeygenMetricQuery(context.Context, *QueryTssKeygenMetricRequest) (*QueryTssKeygenMetricResponse, error)
+	TssMetric(context.Context, *QueryTssMetricRequest) (*QueryTssMetricResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -979,6 +1003,12 @@ func (UnimplementedQueryServer) PendingOutbound(context.Context, *QueryPendingOu
 }
 func (UnimplementedQueryServer) Block(context.Context, *QueryBlockRequest) (*QueryBlockResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Block not implemented")
+}
+func (UnimplementedQueryServer) TssKeygenMetricQuery(context.Context, *QueryTssKeygenMetricRequest) (*QueryTssKeygenMetricResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TssKeygenMetricQuery not implemented")
+}
+func (UnimplementedQueryServer) TssMetric(context.Context, *QueryTssMetricRequest) (*QueryTssMetricResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TssMetric not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -2109,6 +2139,42 @@ func _Query_Block_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_TssKeygenMetricQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTssKeygenMetricRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).TssKeygenMetricQuery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_TssKeygenMetricQuery_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).TssKeygenMetricQuery(ctx, req.(*QueryTssKeygenMetricRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_TssMetric_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTssMetricRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).TssMetric(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_TssMetric_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).TssMetric(ctx, req.(*QueryTssMetricRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -2363,6 +2429,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Block",
 			Handler:    _Query_Block_Handler,
+		},
+		{
+			MethodName: "TssKeygenMetricQuery",
+			Handler:    _Query_TssKeygenMetricQuery_Handler,
+		},
+		{
+			MethodName: "TssMetric",
+			Handler:    _Query_TssMetric_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

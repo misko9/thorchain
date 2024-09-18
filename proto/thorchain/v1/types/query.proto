@@ -41,6 +41,8 @@ import "types/type_clout.proto";
 import "types/query_queue.proto";
 import "types/query_outbound.proto";
 import "types/query_block.proto";
+import "types/query_tss.proto";
+import "types/type_tss_metric.proto";
 
 option (gogoproto.marshaler_all) = true;
 
@@ -294,5 +296,13 @@ service Query {
 
   rpc Block(QueryBlockRequest) returns (QueryBlockResponse) {
     option (google.api.http).get = "/thorchain/block";
+  }
+
+  rpc TssKeygenMetricQuery(QueryTssKeygenMetricRequest) returns (QueryTssKeygenMetricResponse) {
+    option (google.api.http).get = "/thorchain/metric/keygen/{pub_key}";
+  }
+
+  rpc TssMetric(QueryTssMetricRequest) returns (QueryTssMetricResponse) {
+    option (google.api.http).get = "/thorchain/metric";
   }
 }

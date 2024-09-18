@@ -1,0 +1,24 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+import "types/type_tss_metric.proto";
+
+option (gogoproto.marshaler_all) = true;
+
+message QueryTssKeygenMetricRequest{
+  string pub_key = 1;
+}
+
+message QueryTssKeygenMetricResponse{
+  repeated TssKeygenMetric metrics = 1;
+}
+
+message QueryTssMetricRequest{}
+
+message QueryTssMetricResponse{
+  repeated TssKeygenMetric keygen = 1;
+  TssKeysignMetric keysign = 2;
+}

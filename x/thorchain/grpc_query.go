@@ -327,3 +327,13 @@ func (s queryServer) Block(c context.Context, req *types.QueryBlockRequest) (*ty
 	ctx := sdk.UnwrapSDKContext(c)
 	return s.queryBlock(ctx, req)
 }
+
+func (s queryServer) TssKeygenMetricQuery(c context.Context, req *types.QueryTssKeygenMetricRequest) (*types.QueryTssKeygenMetricResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryTssKeygenMetric(ctx, req)
+}
+
+func (s queryServer) TssMetric(c context.Context, req *types.QueryTssMetricRequest) (*types.QueryTssMetricResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return s.queryTssMetric(ctx, req)
+}

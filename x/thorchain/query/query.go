@@ -36,9 +36,6 @@ var (
 	QueryKeysignArray        = Query{Key: "keysign", EndpointTemplate: "/%s/keysign/{%s}"}
 	QueryKeysignArrayPubkey  = Query{Key: "keysignpubkey", EndpointTemplate: "/%s/keysign/{%s}/{%s}"}
 	QueryKeygensPubkey       = Query{Key: "keygenspubkey", EndpointTemplate: "/%s/keygen/{%s}/{%s}"}
-	QueryTssKeygenMetrics    = Query{Key: "tss_keygen_metric", EndpointTemplate: "/%s/metric/keygen/{%s}"}
-	QueryTssMetrics          = Query{Key: "tss_metric", EndpointTemplate: "/%s/metrics"}
-	QueryBlock               = Query{Key: "block", EndpointTemplate: "/%s/block"}
 
 )
 
@@ -47,7 +44,4 @@ var Queries = []Query{
 	QueryKeysignArray,
 	QueryKeysignArrayPubkey,
 	QueryKeygensPubkey,
-	QueryTssMetrics,
-	QueryTssKeygenMetrics,
-	QueryBlock,
 }

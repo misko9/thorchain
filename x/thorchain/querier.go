@@ -76,11 +76,6 @@ func NewQuerier(mgr *Mgrs, kbs cosmos.KeybaseStore) cosmos.Querier {
 		case q.QueryKeygensPubkey.Key:
 			return queryKeygen(ctx, kbs, path[1:], req, mgr)
 
-		case q.QueryTssKeygenMetrics.Key:
-			return queryTssKeygenMetric(ctx, path[1:], req, mgr)
-		case q.QueryTssMetrics.Key:
-			return queryTssMetric(ctx, path[1:], req, mgr)
-		
 		default:
 			return optionalQuery(ctx, path, req, mgr)
 		}
@@ -2826,30 +2821,29 @@ func (qs queryServer) querySwapQueue(ctx cosmos.Context, req *types.QuerySwapQue
 	return &types.QuerySwapQueueResponse{SwapQueue: result}, nil
 }
 
-func queryTssKeygenMetric(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
-	var pubKeys common.PubKeys
-	if len(path) > 0 {
-		pkey, err := common.NewPubKey(path[0])
-		if err != nil {
-			return nil, fmt.Errorf("fail to parse pubkey(%s) err:%w", path[0], err)
-		}
-		pubKeys = append(pubKeys, pkey)
+func (qs queryServer) queryTssKeygenMetric(ctx cosmos.Context, req *types.QueryTssKeygenMetricRequest) (*types.QueryTssKeygenMetricResponse, error) {
+	if len(req.PubKey) == 0 {
+		return nil, fmt.Errorf("missing pub_key parameter")
 	}
+	pkey, err := common.NewPubKey(req.PubKey)
+	if err != nil {
+		return nil, fmt.Errorf("fail to parse pubkey(%s) err:%w", req.PubKey, err)
+	}
+	
 	var result []*types.TssKeygenMetric
-	for _, pkey := range pubKeys {
-		m, err := mgr.Keeper().GetTssKeygenMetric(ctx, pkey)
-		if err != nil {
-			return nil, fmt.Errorf("fail to get tss keygen metric for pubkey(%s):%w", pkey, err)
-		}
-		result = append(result, m)
+	m, err := qs.mgr.Keeper().GetTssKeygenMetric(ctx, pkey)
+	if err != nil {
+		return nil, fmt.Errorf("fail to get tss keygen metric for pubkey(%s):%w", pkey, err)
 	}
-	return jsonify(ctx, result)
+	result = append(result, m)
+	
+	return &types.QueryTssKeygenMetricResponse{Metrics: result}, nil
 }
 
-func queryTssMetric(ctx cosmos.Context, path []string, req abci.RequestQuery, mgr *Mgrs) ([]byte, error) {
+func (qs queryServer) queryTssMetric(ctx cosmos.Context, req *types.QueryTssMetricRequest) (*types.QueryTssMetricResponse, error) {
 	var pubKeys common.PubKeys
 	// get all active asgard
-	vaults, err := mgr.Keeper().GetAsgardVaultsByStatus(ctx, ActiveVault)
+	vaults, err := qs.mgr.Keeper().GetAsgardVaultsByStatus(ctx, ActiveVault)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get active asgards:%w", err)
 	}
@@ -2858,7 +2852,7 @@ func queryTssMetric(ctx cosmos.Context, path []string, req abci.RequestQuery, mg
 	}
 	var keygenMetrics []*types.TssKeygenMetric
 	for _, pkey := range pubKeys {
-		m, err := mgr.Keeper().GetTssKeygenMetric(ctx, pkey)
+		m, err := qs.mgr.Keeper().GetTssKeygenMetric(ctx, pkey)
 		if err != nil {
 			return nil, fmt.Errorf("fail to get tss keygen metric for pubkey(%s):%w", pkey, err)
 		}
@@ -2867,18 +2861,15 @@ func queryTssMetric(ctx cosmos.Context, path []string, req abci.RequestQuery, mg
 		}
 		keygenMetrics = append(keygenMetrics, m)
 	}
-	keysignMetric, err := mgr.Keeper().GetLatestTssKeysignMetric(ctx)
+	keysignMetric, err := qs.mgr.Keeper().GetLatestTssKeysignMetric(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get keysign metric:%w", err)
 	}
-	m := struct {
-		KeygenMetrics []*types.TssKeygenMetric `json:"keygen"`
-		KeysignMetric *types.TssKeysignMetric  `json:"keysign"`
-	}{
-		KeygenMetrics: keygenMetrics,
-		KeysignMetric: keysignMetric,
-	}
-	return jsonify(ctx, m)
+	
+	return &types.QueryTssMetricResponse{
+		Keygen: keygenMetrics,
+		Keysign: keysignMetric,
+	}, nil
 }
 
 func (qs queryServer) queryInvariants(ctx cosmos.Context, req *types.QueryInvariantsRequest) (*types.QueryInvariantsResponse, error) {
