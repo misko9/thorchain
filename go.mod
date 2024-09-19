@@ -55,7 +55,6 @@ require (
 	github.com/deckarep/golang-set v1.8.0
 	github.com/decred/dcrd/dcrec/edwards v1.0.0
 	github.com/decred/dcrd/dcrec/secp256k1 v1.0.4
-	github.com/didip/tollbooth v4.0.2+incompatible
 	github.com/eager7/dogd v0.0.0-20200427085516-2caf59f59dbb
 	github.com/eager7/doglog v0.0.0-20200427040431-a0db59f0a792
 	github.com/eager7/dogutil v0.0.0-20200427040807-200e961ba4b5
@@ -306,7 +305,6 @@ require (
 	github.com/opencontainers/runc v1.1.5 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/otiai10/primes v0.0.0-20180210170552-f6d2a1ba97c4 // indirect
-	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
 	github.com/petermattis/goid v0.0.0-20231207134359-e60b3f734c67 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
