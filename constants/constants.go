@@ -127,7 +127,7 @@ type ConstantValsByKeyname struct {
 	StringValues map[string]string `json:"string_values"`	
 }
 
-func (cv ConstantVals) GetConstantValByKeyname() ConstantValsByKeyname {
+func (cv ConstantVals) GetConstantValsByKeyname() ConstantValsByKeyname {
 	result := ConstantValsByKeyname{}
 	result.Int64Values = make(map[string]int64)
 	result.BoolValues = make(map[string]bool)
@@ -163,6 +163,6 @@ func (cv ConstantVals) GetConstantValByKeyname() ConstantValsByKeyname {
 
 // MarshalJSON marshal result to json format
 func (cv ConstantVals) MarshalJSON() ([]byte, error) {
-	result := cv.GetConstantValByKeyname()
+	result := cv.GetConstantValsByKeyname()
 	return json.MarshalIndent(result, "", "	")
 }

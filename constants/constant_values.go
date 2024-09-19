@@ -145,7 +145,7 @@ type ConstantValues interface {
 	GetInt64Value(name ConstantName) int64
 	GetBoolValue(name ConstantName) bool
 	GetStringValue(name ConstantName) string
-	GetConstantValByKeyname() ConstantValsByKeyname
+	GetConstantValsByKeyname() ConstantValsByKeyname
 }
 
 // GetConstantValues will return an  implementation of ConstantValues which provide ways to get constant values

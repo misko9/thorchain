@@ -2387,7 +2387,7 @@ func (qs queryServer) queryLastBlockHeights(ctx cosmos.Context, chain string) (*
 
 func (qs queryServer) queryConstantValues(ctx cosmos.Context, req *types.QueryConstantValuesRequest) (*types.QueryConstantValuesResponse, error) {
 	constAccessor := qs.mgr.GetConstants()
-	cv := constAccessor.GetConstantValByKeyname()
+	cv := constAccessor.GetConstantValsByKeyname()
 	
 	proto := types.QueryConstantValuesResponse{}
 	for k, v := range cv.Int64Values {
