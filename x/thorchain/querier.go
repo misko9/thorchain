@@ -3038,6 +3038,15 @@ func blockEvents(e sdk.Event) *types.BlockEvents {
 	return &events
 }
 
+func eventMap(e sdk.Event) map[string]string {
+	m := map[string]string{}
+	m["type"] = e.Type
+	for _, a := range e.Attributes {
+		m[string(a.Key)] = string(a.Value)
+	}
+	return m
+}
+
 func simulate(ctx cosmos.Context, mgr Manager, msg sdk.Msg) (sdk.Events, error) {
 	// use the first active node account as the signer
 	nodeAccounts, err := mgr.Keeper().ListActiveValidators(ctx)
