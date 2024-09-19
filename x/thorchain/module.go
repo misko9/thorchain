@@ -13,10 +13,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"cosmossdk.io/core/appmodule"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	//sdkRest "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 	abci "github.com/cometbft/cometbft/abci/types"
@@ -25,7 +23,6 @@ import (
 	"gitlab.com/thorchain/thornode/constants"
 
 	"gitlab.com/thorchain/thornode/x/thorchain/client/cli"
-	"gitlab.com/thorchain/thornode/x/thorchain/client/rest"
 	"gitlab.com/thorchain/thornode/x/thorchain/keeper"
 	"gitlab.com/thorchain/thornode/x/thorchain/types"
 )
@@ -75,14 +72,6 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncod
 	}
 	// Once json successfully marshalled, passes along to genesis.go
 	return ValidateGenesis(data)
-}
-
-// RegisterRESTRoutes register rest routes
-func (AppModuleBasic) RegisterRESTRoutes(ctx client.Context, rtr *mux.Router) {
-	rest.RegisterRoutes(ctx, rtr, StoreKey)
-	//sdkRest.RegisterTxRoutes(ctx, rtr)
-	//sdkRest.RegisterRoutes(ctx, rtr, StoreKey)
-	panic("x/thorchain RegisterRESTRoutes not implemented fully")
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the mint module.
@@ -146,34 +135,15 @@ func (AppModule) IsOnePerModuleType() {}
 
 func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
-// func (am AppModule) Route() cosmos.Route {
-// 	return cosmos.NewRoute(RouterKey, NewExternalHandler(am.mgr))
-// }
-
-// func (am AppModule) NewHandler() sdk.Handler {
-// 	return NewExternalHandler(am.mgr)
-// }
-
 func (am AppModule) QuerierRoute() string {
 	return types.QuerierRoute
 }
-
-// // LegacyQuerierHandler returns the capability module's Querier.
-// func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-// 	return NewQuerier(am.mgr, am.keybaseStore)
-// }
 
 // RegisterServices registers module services.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterMsgServer(cfg.MsgServer(), am.msgServer)
 	types.RegisterQueryServer(cfg.QueryServer(), am.queryServer)
 }
-
-// func (am AppModule) NewQuerierHandler() sdk.Querier {
-// 	return func(ctx cosmos.Context, path []string, req abci.RequestQuery) ([]byte, error) {
-// 		return nil, nil
-// 	}
-// }
 
 // TODO: rename BeginBlock functions to PreBlock functions
 func (am AppModule) PreBlock(ctx sdk.Context, req *abci.RequestFinalizeBlock) error {
